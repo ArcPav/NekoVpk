@@ -118,6 +118,392 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Scan" xml:space="preserve">
-    <value>Reload addons</value>
+    <value>Reload</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="AllSelect" xml:space="preserve">
+    <value>All Select</value>
+  </data>
+  <data name="RefreshToolTip" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="ListSettings" xml:space="preserve">
+    <value>List Settings</value>
+  </data>
+  <data name="AutoSizeAllColumns" xml:space="preserve">
+    <value>Auto Size All Columns</value>
+  </data>
+  <data name="ColumnTag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="ColumnType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ColumnAddedTime" xml:space="preserve">
+    <value>Added time</value>
+  </data>
+  <data name="ColumnSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="AllSelectToolTip" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SelectAllToolTip" xml:space="preserve">
+    <value>Enable all addons in the list</value>
+  </data>
+  <data name="Deselect" xml:space="preserve">
+    <value>Deselect</value>
+  </data>
+  <data name="DeselectAllToolTip" xml:space="preserve">
+    <value>Disable all addons in the list</value>
+  </data>
+  <data name="InvertSelection" xml:space="preserve">
+    <value>Invert Selection</value>
+  </data>
+  <data name="InvertSelectionToolTip" xml:space="preserve">
+    <value>Invert enabled/disabled state of addons</value>
+  </data>
+  <data name="TagsFilter" xml:space="preserve">
+    <value>Tags Filter</value>
+  </data>
+  <data name="ResetTags" xml:space="preserve">
+    <value>Reset Tags</value>
+  </data>
+  <data name="SearchWorkshop" xml:space="preserve">
+    <value>Search Workshop</value>
+  </data>
+  <data name="CancelDownload" xml:space="preserve">
+    <value>Cancel Download</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Open Directory</value>
+  </data>
+  <data name="DeleteAddon" xml:space="preserve">
+    <value>Delete Addon</value>
+  </data>
+  <data name="OpenWebpage" xml:space="preserve">
+    <value>Open Webpage</value>
+  </data>
+  <data name="DownloadAddon" xml:space="preserve">
+    <value>Download Addon</value>
+  </data>
+  <data name="ColumnEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="ColumnTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ColumnSource" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="ColumnAuthor" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="ColumnLastUpdate" xml:space="preserve">
+    <value>Last update</value>
+  </data>
+  <data name="ColumnSub" xml:space="preserve">
+    <value>Sub</value>
+  </data>
+  <data name="UnknownException" xml:space="preserve">
+    <value>Unknown Exception</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DownloadToAddons" xml:space="preserve">
+    <value>Download to Addons</value>
+  </data>
+  <data name="Downloaded" xml:space="preserve">
+    <value>Downloaded</value>
+  </data>
+  <data name="SettingsWindowTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingGameDir" xml:space="preserve">
+    <value>Game Directory</value>
+  </data>
+  <data name="SettingWebApiKey" xml:space="preserve">
+    <value>API Key</value>
+  </data>
+  <data name="GoToApplyPage" xml:space="preserve">
+    <value>Go to apply page</value>
+  </data>
+  <data name="SteamApiKeyRequired" xml:space="preserve">
+    <value>*🌐Required for the online search function</value>
+  </data>
+  <data name="CompressionLevel" xml:space="preserve">
+    <value>Compression level</value>
+  </data>
+  <data name="CompFast" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="CompLow" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="CompNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="CompHigh" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="CompUltra" xml:space="preserve">
+    <value>Ultra</value>
+  </data>
+  <data name="IgnoreVpkErrors" xml:space="preserve">
+    <value>Ignore VPK Errors</value>
+  </data>
+  <data name="ClearSearchAfterDownload" xml:space="preserve">
+    <value>Clear searchbox after download</value>
+  </data>
+  <data name="SaveColumnWidths" xml:space="preserve">
+    <value>Save column width adjustments</value>
+  </data>
+  <data name="UI_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LangAuto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="LangZh" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="LangEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LangJa" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="UI_FontAndSize" xml:space="preserve">
+    <value>Font &amp; Size</value>
+  </data>
+  <data name="SelectFont" xml:space="preserve">
+    <value>Select font...</value>
+  </data>
+  <data name="ChangeBackground" xml:space="preserve">
+    <value>Background (Refresh after close) - Stretch:</value>
+  </data>
+  <data name="BgUniformToFill" xml:space="preserve">
+    <value>UniformToFill (Default)</value>
+  </data>
+  <data name="BgUniformToFillTip" xml:space="preserve">
+    <value>No distortion, no borders, edges cropped</value>
+  </data>
+  <data name="BgUniform" xml:space="preserve">
+    <value>Uniform</value>
+  </data>
+  <data name="BgUniformTip" xml:space="preserve">
+    <value>No distortion, full image, black borders</value>
+  </data>
+  <data name="BgFill" xml:space="preserve">
+    <value>Fill</value>
+  </data>
+  <data name="BgFillTip" xml:space="preserve">
+    <value>Fills screen, image will be distorted</value>
+  </data>
+  <data name="BgNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="BgNoneTip" xml:space="preserve">
+    <value>Original size, no scaling</value>
+  </data>
+  <data name="BgImageWatermark" xml:space="preserve">
+    <value>Recommend image with resolution close to window</value>
+  </data>
+  <data name="FileBtn" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="SelectImageBtnTip" xml:space="preserve">
+    <value>Select Image</value>
+  </data>
+  <data name="FolderBtn" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="RandomFolderImageTip" xml:space="preserve">
+    <value>Random image from folder</value>
+  </data>
+  <data name="ClearBtn" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="BackgroundBrightnessLabel" xml:space="preserve">
+    <value>Background Brightness:</value>
+  </data>
+  <data name="MsgBoxYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="MsgBoxNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="MsgBoxOk" xml:space="preserve">
+    <value>Got it</value>
+  </data>
+  <data name="AddonDirNotFoundMsg" xml:space="preserve">
+    <value>Cannot find addons folder: {0}</value>
+  </data>
+  <data name="ApplyFailedMsg" xml:space="preserve">
+    <value>{0}
+
+{1} is in use. Close the game or programs and try again.</value>
+  </data>
+  <data name="ApplyFailedTitle" xml:space="preserve">
+    <value>Apply Failed</value>
+  </data>
+  <data name="DeleteConfirmTitle" xml:space="preserve">
+    <value>Delete Confirmation</value>
+  </data>
+  <data name="DeleteFailedMsg" xml:space="preserve">
+    <value>Failed to delete {0}:
+{1}</value>
+  </data>
+  <data name="DeleteFailedTitle" xml:space="preserve">
+    <value>Delete Failed</value>
+  </data>
+  <data name="DeleteMultiMsg" xml:space="preserve">
+    <value>Are you sure you want to delete the {0} selected addons?</value>
+  </data>
+  <data name="DeleteSingleMsg" xml:space="preserve">
+    <value>Are you sure you want to delete "{0}"? 
+File: {1}</value>
+  </data>
+  <data name="DeleteWarningSuffix" xml:space="preserve">
+    <value>
+This action cannot be undone.</value>
+  </data>
+  <data name="DownloadFailedTitle" xml:space="preserve">
+    <value>Download Failed</value>
+  </data>
+  <data name="DownloadingState" xml:space="preserve">
+    <value>Downloading...</value>
+  </data>
+  <data name="ImportErrorMsg" xml:space="preserve">
+    <value>Failed to import '{0}': {1}</value>
+  </data>
+  <data name="ImportErrorTitle" xml:space="preserve">
+    <value>Import Error</value>
+  </data>
+  <data name="InvalidDirMsg" xml:space="preserve">
+    <value>Unexpected game directory structure.</value>
+  </data>
+  <data name="InvalidDirTitle" xml:space="preserve">
+    <value>Invalid Directory</value>
+  </data>
+  <data name="MissingKeyMsg" xml:space="preserve">
+    <value>Configure API Key in settings to use online search.</value>
+  </data>
+  <data name="MissingKeyTitle" xml:space="preserve">
+    <value>Missing API Key</value>
+  </data>
+  <data name="NoDownloadLinkMsg" xml:space="preserve">
+    <value>Download link not found. Try subscribing manually.</value>
+  </data>
+  <data name="ReadVpkFailedMsg" xml:space="preserve">
+    <value>File: {0}
+{1}
+Do you want to see this error next time?</value>
+  </data>
+  <data name="ReadVpkFailedTitle" xml:space="preserve">
+    <value>Read VPK Failed</value>
+  </data>
+  <data name="SearchLocalWatermark" xml:space="preserve">
+    <value>Search Local Addons</value>
+  </data>
+  <data name="SearchWorkshopWatermark" xml:space="preserve">
+    <value>Search Workshop (Enter)</value>
+  </data>
+  <data name="SelectBgFolderTitle" xml:space="preserve">
+    <value>Select Background Folder</value>
+  </data>
+  <data name="SelectBgImageTitle" xml:space="preserve">
+    <value>Select Background</value>
+  </data>
+  <data name="SelectGameDirTitle" xml:space="preserve">
+    <value>Select Game Directory</value>
+  </data>
+  <data name="SwitchFailedMsg" xml:space="preserve">
+    <value>{0}
+Please check if the file is being used by another program.</value>
+  </data>
+  <data name="SwitchFailedTitle" xml:space="preserve">
+    <value>Switch Failed</value>
+  </data>
+  <data name="ConfirmOverwriteMsg" xml:space="preserve">
+    <value>{0} already exists. Do you want to overwrite it?</value>
+  </data>
+  <data name="ConfirmOverwriteTitle" xml:space="preserve">
+    <value>Confirm Overwrite</value>
+  </data>
+  <data name="ConflictDialogTitle" xml:space="preserve">
+    <value>Conflict</value>
+  </data>
+  <data name="ConflictCoveredBy" xml:space="preserve">
+    <value>File conflicts detected:</value>
+  </data>
+  <data name="ConflictSpecificFiles" xml:space="preserve">
+    <value>Specific conflicts:</value>
+  </data>
+  <data name="ConflictMoreFiles" xml:space="preserve">
+    <value>... and {0} more files</value>
+  </data>
+  <data name="ConflictDialogDisable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="SearchFailedTitle" xml:space="preserve">
+    <value>Search Failed</value>
+  </data>
+  <data name="CollectionMode" xml:space="preserve">
+    <value>Collection mode</value>
+  </data>
+  <data name="BackToCollection" xml:space="preserve">
+    <value>Back to Collections</value>
+  </data>
+  <data name="DownloadCollection" xml:space="preserve">
+    <value>Download Collection</value>
+  </data>
+  <data name="CollectionItemCount" xml:space="preserve">
+    <value>Contains {0} items</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="JumpConfirmTitle" xml:space="preserve">
+    <value>Jump Confirmation</value>
+  </data>
+  <data name="JumpConfirmMsg" xml:space="preserve">
+    <value>Continue to link?</value>
+  </data>
+  <data name="ColumnFavorite" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="EnableConflictDetection" xml:space="preserve">
+    <value>Mod Conflict Detection</value>
+  </data>
+  <data name="SortOrder" xml:space="preserve">
+    <value>Sort Order</value>
+  </data>
+  <data name="SortTrend" xml:space="preserve">
+    <value>Most Popular</value>
+  </data>
+  <data name="SortTopRated" xml:space="preserve">
+    <value>Top Rated</value>
+  </data>
+  <data name="SortRecent" xml:space="preserve">
+    <value>Most Recent</value>
+  </data>
+  <data name="SortUpdated" xml:space="preserve">
+    <value>Last Updated</value>
   </data>
 </root>

@@ -120,4 +120,390 @@
   <data name="Scan" xml:space="preserve">
     <value>Nya!</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="AllSelect" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="RefreshToolTip" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="ListSettings" xml:space="preserve">
+    <value>列表设置</value>
+  </data>
+  <data name="AutoSizeAllColumns" xml:space="preserve">
+    <value>自动调整列表</value>
+  </data>
+  <data name="ColumnTag" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="ColumnType" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="ColumnAddedTime" xml:space="preserve">
+    <value>添加时间</value>
+  </data>
+  <data name="ColumnSize" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="AllSelectToolTip" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>勾选</value>
+  </data>
+  <data name="SelectAllToolTip" xml:space="preserve">
+    <value>启用列表所有模组</value>
+  </data>
+  <data name="Deselect" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="DeselectAllToolTip" xml:space="preserve">
+    <value>禁用列表所有模组</value>
+  </data>
+  <data name="InvertSelection" xml:space="preserve">
+    <value>反选</value>
+  </data>
+  <data name="InvertSelectionToolTip" xml:space="preserve">
+    <value>禁用启用的模组 启用禁用的模组</value>
+  </data>
+  <data name="TagsFilter" xml:space="preserve">
+    <value>标签过滤</value>
+  </data>
+  <data name="ResetTags" xml:space="preserve">
+    <value>重置标签</value>
+  </data>
+  <data name="SearchWorkshop" xml:space="preserve">
+    <value>搜索创意工坊</value>
+  </data>
+  <data name="CancelDownload" xml:space="preserve">
+    <value>取消下载</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>打开目录</value>
+  </data>
+  <data name="DeleteAddon" xml:space="preserve">
+    <value>删除模组</value>
+  </data>
+  <data name="OpenWebpage" xml:space="preserve">
+    <value>跳转网页</value>
+  </data>
+  <data name="DownloadAddon" xml:space="preserve">
+    <value>下载模组</value>
+  </data>
+  <data name="ColumnEnable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="ColumnTitle" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="ColumnSource" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="ColumnAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="ColumnLastUpdate" xml:space="preserve">
+    <value>最后更新</value>
+  </data>
+  <data name="ColumnSub" xml:space="preserve">
+    <value>订阅数</value>
+  </data>
+  <data name="UnknownException" xml:space="preserve">
+    <value>未知异常</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="DownloadToAddons" xml:space="preserve">
+    <value>下载到 Addons 文件夹</value>
+  </data>
+  <data name="Downloaded" xml:space="preserve">
+    <value>已下载</value>
+  </data>
+  <data name="SettingsWindowTitle" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="SettingGameDir" xml:space="preserve">
+    <value>游戏目录</value>
+  </data>
+  <data name="SettingWebApiKey" xml:space="preserve">
+    <value>API Key</value>
+  </data>
+  <data name="GoToApplyPage" xml:space="preserve">
+    <value>跳转到申请页</value>
+  </data>
+  <data name="SteamApiKeyRequired" xml:space="preserve">
+    <value>*🌐要使用在线搜索功能必须填写此项</value>
+  </data>
+  <data name="CompressionLevel" xml:space="preserve">
+    <value>压缩等级</value>
+  </data>
+  <data name="CompFast" xml:space="preserve">
+    <value>极速</value>
+  </data>
+  <data name="CompLow" xml:space="preserve">
+    <value>低</value>
+  </data>
+  <data name="CompNormal" xml:space="preserve">
+    <value>标准</value>
+  </data>
+  <data name="CompHigh" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="CompUltra" xml:space="preserve">
+    <value>极限</value>
+  </data>
+  <data name="IgnoreVpkErrors" xml:space="preserve">
+    <value>忽略 VPK 读取错误</value>
+  </data>
+  <data name="ClearSearchAfterDownload" xml:space="preserve">
+    <value>下载完成后清空搜索框</value>
+  </data>
+  <data name="SaveColumnWidths" xml:space="preserve">
+    <value>记住对列表视图的调整</value>
+  </data>
+  <data name="UI_Language" xml:space="preserve">
+    <value>界面语言</value>
+  </data>
+  <data name="LangAuto" xml:space="preserve">
+    <value>跟随系统</value>
+  </data>
+  <data name="LangZh" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="LangEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LangJa" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="UI_FontAndSize" xml:space="preserve">
+    <value>界面字体与大小</value>
+  </data>
+  <data name="SelectFont" xml:space="preserve">
+    <value>选择字体...</value>
+  </data>
+  <data name="ChangeBackground" xml:space="preserve">
+    <value>更换背景 (关闭设置后刷新) - 填充方式:</value>
+  </data>
+  <data name="BgUniformToFill" xml:space="preserve">
+    <value>UniformToFill (默认)</value>
+  </data>
+  <data name="BgUniformToFillTip" xml:space="preserve">
+    <value>不会变形 没有黑边 但图片边缘会被裁剪</value>
+  </data>
+  <data name="BgUniform" xml:space="preserve">
+    <value>Uniform</value>
+  </data>
+  <data name="BgUniformTip" xml:space="preserve">
+    <value>不会变形 完整显示 但周围会有黑边</value>
+  </data>
+  <data name="BgFill" xml:space="preserve">
+    <value>Fill (填充)</value>
+  </data>
+  <data name="BgFillTip" xml:space="preserve">
+    <value>强制填满屏幕 图片会变形</value>
+  </data>
+  <data name="BgNone" xml:space="preserve">
+    <value>None (无)</value>
+  </data>
+  <data name="BgNoneTip" xml:space="preserve">
+    <value>原始大小 不进行缩放</value>
+  </data>
+  <data name="BgImageWatermark" xml:space="preserve">
+    <value>推荐使用分辨率接近窗口的图片</value>
+  </data>
+  <data name="FileBtn" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="SelectImageBtnTip" xml:space="preserve">
+    <value>选择图片</value>
+  </data>
+  <data name="FolderBtn" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="RandomFolderImageTip" xml:space="preserve">
+    <value>随机文件夹里的图片</value>
+  </data>
+  <data name="ClearBtn" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="BackgroundBrightnessLabel" xml:space="preserve">
+    <value>背景亮度:</value>
+  </data>
+  <data name="MsgBoxYes" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="MsgBoxNo" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="MsgBoxOk" xml:space="preserve">
+    <value>了解</value>
+  </data>
+  <data name="AddonDirNotFoundMsg" xml:space="preserve">
+    <value>找不到游戏模组文件夹 {0}</value>
+  </data>
+  <data name="ApplyFailedMsg" xml:space="preserve">
+    <value>{0}
+
+{1} 被其他程序使用中 关闭游戏或可能的程序后重试</value>
+  </data>
+  <data name="ApplyFailedTitle" xml:space="preserve">
+    <value>应用失败</value>
+  </data>
+  <data name="DeleteConfirmTitle" xml:space="preserve">
+    <value>删除确认</value>
+  </data>
+  <data name="DeleteFailedMsg" xml:space="preserve">
+    <value>无法删除 {0}:
+{1}</value>
+  </data>
+  <data name="DeleteFailedTitle" xml:space="preserve">
+    <value>删除失败</value>
+  </data>
+  <data name="DeleteMultiMsg" xml:space="preserve">
+    <value>要删除选中的 {0} 个模组吗?</value>
+  </data>
+  <data name="DeleteSingleMsg" xml:space="preserve">
+    <value>要删除 "{0}" 吗? 
+文件: {1}</value>
+  </data>
+  <data name="DeleteWarningSuffix" xml:space="preserve">
+    <value>
+注意! 该操作无法撤销</value>
+  </data>
+  <data name="DownloadFailedTitle" xml:space="preserve">
+    <value>下载失败</value>
+  </data>
+  <data name="DownloadingState" xml:space="preserve">
+    <value>下载中...</value>
+  </data>
+  <data name="ImportErrorMsg" xml:space="preserve">
+    <value>导入 '{0}' 失败: {1}</value>
+  </data>
+  <data name="ImportErrorTitle" xml:space="preserve">
+    <value>导入异常</value>
+  </data>
+  <data name="InvalidDirMsg" xml:space="preserve">
+    <value>非预期的游戏目录结构</value>
+  </data>
+  <data name="InvalidDirTitle" xml:space="preserve">
+    <value>错误的目录</value>
+  </data>
+  <data name="MissingKeyMsg" xml:space="preserve">
+    <value>在设置中配置API密钥才能使用在线搜索功能</value>
+  </data>
+  <data name="MissingKeyTitle" xml:space="preserve">
+    <value>缺少 API 密钥</value>
+  </data>
+  <data name="NoDownloadLinkMsg" xml:space="preserve">
+    <value>没有找到下载链接 请尝试手动订阅</value>
+  </data>
+  <data name="ReadVpkFailedMsg" xml:space="preserve">
+    <value>文件：{0}
+{1}
+下次启动还要提示这类错误吗?</value>
+  </data>
+  <data name="ReadVpkFailedTitle" xml:space="preserve">
+    <value>读取VPK失败</value>
+  </data>
+  <data name="SearchLocalWatermark" xml:space="preserve">
+    <value>搜索本地模组</value>
+  </data>
+  <data name="SearchWorkshopWatermark" xml:space="preserve">
+    <value>搜索工坊模组(Enter)</value>
+  </data>
+  <data name="SelectBgFolderTitle" xml:space="preserve">
+    <value>选择背景文件夹</value>
+  </data>
+  <data name="SelectBgImageTitle" xml:space="preserve">
+    <value>选择背景</value>
+  </data>
+  <data name="SelectGameDirTitle" xml:space="preserve">
+    <value>选择游戏目录</value>
+  </data>
+  <data name="SwitchFailedMsg" xml:space="preserve">
+    <value>{0}
+请检查是否有其它程序占用文件</value>
+  </data>
+  <data name="SwitchFailedTitle" xml:space="preserve">
+    <value>切换失败</value>
+  </data>
+  <data name="ConfirmOverwriteMsg" xml:space="preserve">
+    <value>{0} 已存在 是否覆盖？</value>
+  </data>
+  <data name="ConfirmOverwriteTitle" xml:space="preserve">
+    <value>确认覆盖</value>
+  </data>
+  <data name="ConflictDialogTitle" xml:space="preserve">
+    <value>发生冲突</value>
+  </data>
+  <data name="ConflictCoveredBy" xml:space="preserve">
+    <value>与以下模组冲突:</value>
+  </data>
+  <data name="ConflictSpecificFiles" xml:space="preserve">
+    <value>具体冲突:</value>
+  </data>
+  <data name="ConflictMoreFiles" xml:space="preserve">
+    <value>... 等共 {0} 个文件</value>
+  </data>
+  <data name="ConflictDialogDisable" xml:space="preserve">
+    <value>禁用</value>
+  </data>
+  <data name="SearchFailedTitle" xml:space="preserve">
+    <value>搜索失败</value>
+  </data>
+  <data name="CollectionMode" xml:space="preserve">
+    <value>合集模式</value>
+  </data>
+  <data name="BackToCollection" xml:space="preserve">
+    <value>返回合集列表</value>
+  </data>
+  <data name="DownloadCollection" xml:space="preserve">
+    <value>下载合集模组</value>
+  </data>
+  <data name="CollectionItemCount" xml:space="preserve">
+    <value>包含 {0} 个项目</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="JumpConfirmTitle" xml:space="preserve">
+    <value>跳转确认</value>
+  </data>
+  <data name="JumpConfirmMsg" xml:space="preserve">
+    <value>你确定要前往以下链接吗?</value>
+  </data>
+  <data name="ColumnFavorite" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="EnableConflictDetection" xml:space="preserve">
+    <value>模组冲突检测</value>
+  </data>
+  <data name="SortOrder" xml:space="preserve">
+    <value>热度排序</value>
+  </data>
+  <data name="SortTrend" xml:space="preserve">
+    <value>最热门</value>
+  </data>
+  <data name="SortTopRated" xml:space="preserve">
+    <value>最受好评</value>
+  </data>
+  <data name="SortRecent" xml:space="preserve">
+    <value>最新</value>
+  </data>
+  <data name="SortUpdated" xml:space="preserve">
+    <value>最近更新</value>
+  </data>
 </root>

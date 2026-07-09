@@ -32,5 +32,17 @@
     <Setting Name="UserFontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">14</Value>
     </Setting>
+    <Setting Name="SaveColumnWidths" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DataGridColumnWidths" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Language" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Auto</Value>
+    </Setting>
+    <Setting Name="EnableConflictDetection" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

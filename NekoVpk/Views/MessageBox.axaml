@@ -1,0 +1,148 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lang="clr-namespace:NekoVpk.Lang"
+        x:Class="NekoVpk.Views.CustomMessageBox"
+        Title="Prompt"
+        Width="380" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        SystemDecorations="None" 
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        FontFamily="{Binding UserFont}"
+        FontSize="{Binding UserFontSize}">
+    <Window.Styles>
+        <Style Selector="Button.DialogBtn">
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="MinHeight" Value="28"/>
+            <Setter Property="MinWidth" Value="60"/> 
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransformOrigin" Value="50%,50%"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.DialogBtn:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.03)"/>
+        </Style>
+        <Style Selector="Button.DialogBtn:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.96)"/>
+        </Style>
+        <Style Selector="Button.Primary">
+            <Setter Property="Background" Value="#2563EB"/> 
+            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="Button.Primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3B82F6"/>
+            <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+        </Style>
+        <Style Selector="Button.Primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#1D4ED8"/>
+        </Style>
+        <Style Selector="Button.Secondary">
+            <Setter Property="Background" Value="#2A2A2C"/>
+            <Setter Property="BorderBrush" Value="#30FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3A3A3D"/>
+            <Setter Property="BorderBrush" Value="#50FFFFFF"/>
+        </Style>
+        <Style Selector="Button.Secondary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#1C1C1E"/>
+        </Style>
+        <Style Selector="Rectangle.SweepingLight">
+            <Setter Property="RenderTransformOrigin" Value="50%,50%"/>
+            <Style.Animations>
+                <Animation Duration="0:0:5" IterationCount="INFINITE">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Button.Danger">
+            <Setter Property="Background" Value="#DC2626"/> 
+            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="Button.Danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#EF4444"/>
+            <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+        </Style>
+        <Style Selector="Button.Danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#B91C1C"/>
+        </Style>
+    </Window.Styles>
+    <Grid Margin="24">
+        <Border CornerRadius="12" 
+                BoxShadow="0 10 30 0 #99000000" 
+                ClipToBounds="True"> 
+            <Panel>
+                <Border Background="#35FFFFFF" />
+                <Canvas HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Rectangle x:Name="SweepLightRect"
+                               Classes="SweepingLight"
+                               Canvas.Left="-400" Canvas.Top="-400"
+                               Width="800" Height="800">
+                        <Rectangle.RenderTransform>
+                            <RotateTransform />
+                        </Rectangle.RenderTransform>
+                        <Rectangle.Fill>
+                            <ConicGradientBrush Center="50%,50%">
+                                <GradientStop Offset="0" Color="Transparent"/>
+                                <GradientStop Offset="0.6" Color="Transparent"/>
+                                <GradientStop Offset="0.95" Color="#4D2563EB"/>
+                                <GradientStop Offset="1" Color="Transparent"/>
+                            </ConicGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Canvas>
+                <Border CornerRadius="11" Margin="2"
+                        Background="#D81C1C1E" 
+                        ClipToBounds="True">
+                    <Grid RowDefinitions="Auto, *, Auto">
+                        <Panel Grid.Row="0" PointerPressed="TitleBar_PointerPressed" Background="Transparent">
+                            <Rectangle Fill="Transparent" Height="40"/>
+                            <TextBlock x:Name="TitleBlock" Text="Title" 
+                                       VerticalAlignment="Center" Margin="20,10,0,0" 
+                                       FontWeight="Bold" FontSize="15" Foreground="#F5F5F5"/>
+                        </Panel>
+                        <Grid Grid.Row="1" ColumnDefinitions="Auto, *" Margin="20,12,20,24">
+                            <TextBlock x:Name="IconBlock" Grid.Column="0" Text="⚠️" FontSize="25" 
+                                    VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                    Margin="0,0,12,0" IsVisible="False"/>
+                            <ScrollViewer Grid.Column="1" MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="MessageBlock" Text="Message Content" 
+                                        TextWrapping="Wrap" Foreground="#E2E2E2" FontSize="14" 
+                                        VerticalAlignment="Top" LineHeight="22"/>
+                            </ScrollViewer>
+                        </Grid>
+                        <StackPanel Grid.Row="2" x:Name="ButtonPanel" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12" Margin="20,0,20,20">
+                            <Button x:Name="YesBtn" Classes="DialogBtn Primary" Click="Button_Click">
+                                <TextBlock x:Name="YesBtnText" Text="{Binding [MsgBoxYes], Source={x:Static lang:I18nManager.Instance}}" Foreground="White" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" />
+                            </Button>
+                            <Button x:Name="OkBtn" Classes="DialogBtn Primary" Click="Button_Click" IsVisible="False">
+                                <TextBlock x:Name="OkBtnText" Text="{Binding [MsgBoxOk], Source={x:Static lang:I18nManager.Instance}}" Foreground="White" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" />
+                            </Button>
+                            <Button x:Name="NoBtn" Classes="DialogBtn Secondary" Click="Button_Click">
+                                <TextBlock x:Name="NoBtnText" Text="{Binding [MsgBoxNo], Source={x:Static lang:I18nManager.Instance}}" Foreground="#E0E0E0" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Panel>
+        </Border>
+    </Grid>
+</Window>

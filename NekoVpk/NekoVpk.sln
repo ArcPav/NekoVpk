@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NekoVpk", "NekoVpk.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NekoVpk.Desktop", "..\NekoVpk.Desktop\NekoVpk.Desktop.csproj", "{7CC3E3E6-437C-41C1-BFBB-19AED9EA8EAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValvePak", "..\..\ValvePak\ValvePak\ValvePak\ValvePak.csproj", "{BE76CC4D-AF66-4353-A914-392108648005}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValveKeyValue", "..\ValveKeyValue\ValveKeyValue\ValveKeyValue\ValveKeyValue.csproj", "{43E978ED-936D-2FCC-AA4A-BD0289D401F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValveKeyValue", "..\..\ValveKeyValue\ValveKeyValue\ValveKeyValue\ValveKeyValue.csproj", "{5D9ECFC3-C5D2-4EAB-A30A-8FD9DCC03572}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValvePak", "..\ValvePak\ValvePak\ValvePak\ValvePak.csproj", "{A93CAF47-E0E9-5FFC-681F-B6F38CF2FB59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{7CC3E3E6-437C-41C1-BFBB-19AED9EA8EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CC3E3E6-437C-41C1-BFBB-19AED9EA8EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CC3E3E6-437C-41C1-BFBB-19AED9EA8EAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE76CC4D-AF66-4353-A914-392108648005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE76CC4D-AF66-4353-A914-392108648005}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE76CC4D-AF66-4353-A914-392108648005}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE76CC4D-AF66-4353-A914-392108648005}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D9ECFC3-C5D2-4EAB-A30A-8FD9DCC03572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D9ECFC3-C5D2-4EAB-A30A-8FD9DCC03572}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D9ECFC3-C5D2-4EAB-A30A-8FD9DCC03572}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D9ECFC3-C5D2-4EAB-A30A-8FD9DCC03572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43E978ED-936D-2FCC-AA4A-BD0289D401F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43E978ED-936D-2FCC-AA4A-BD0289D401F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43E978ED-936D-2FCC-AA4A-BD0289D401F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43E978ED-936D-2FCC-AA4A-BD0289D401F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93CAF47-E0E9-5FFC-681F-B6F38CF2FB59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93CAF47-E0E9-5FFC-681F-B6F38CF2FB59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93CAF47-E0E9-5FFC-681F-B6F38CF2FB59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93CAF47-E0E9-5FFC-681F-B6F38CF2FB59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

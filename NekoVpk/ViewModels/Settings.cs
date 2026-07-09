@@ -16,6 +16,39 @@ namespace NekoVpk.ViewModels
             .OrderBy(x => x)
             .ToList();
 
+        public int LanguageIndex
+        {
+            get
+            {
+                string lang = NekoSettings.Default.Language;
+                return lang switch
+                {
+                    "zh-CN" => 1,
+                    "en-US" => 2,
+                    "ja-JP" => 3,
+                    _ => 0
+                };
+            }
+            set
+            {
+                string lang = value switch
+                {
+                    1 => "zh-CN",
+                    2 => "en-US",
+                    3 => "ja-JP",
+                    _ => "Auto"
+                };
+                
+                if (NekoSettings.Default.Language != lang)
+                {
+                    NekoSettings.Default.Language = lang;
+                    NekoVpk.Lang.I18nManager.Instance.SetLanguage(lang);
+                    this.RaisePropertyChanged(nameof(LanguageIndex));
+                    NekoSettings.Default.Save();
+                }
+            }
+        }
+
         public string UserFont
         {
             get => NekoSettings.Default.UserFont;
@@ -25,8 +58,22 @@ namespace NekoVpk.ViewModels
                 {
                     NekoSettings.Default.UserFont = value;
                     this.RaisePropertyChanged(nameof(UserFont));
+                    this.RaisePropertyChanged(nameof(UserFontFamily));
                     NekoSettings.Default.Save();
                 }
+            }
+        }
+
+        public FontFamily UserFontFamily
+        {
+            get
+            {
+                var fontName = NekoSettings.Default.UserFont;
+                if (string.IsNullOrWhiteSpace(fontName))
+                {
+                    return FontFamily.Default;
+                }
+                return new FontFamily(fontName);
             }
         }
 
@@ -96,6 +143,34 @@ namespace NekoVpk.ViewModels
                 {
                     NekoSettings.Default.ClearSearchAfterDownload = value;
                     this.RaisePropertyChanged(nameof(ClearSearchAfterDownload));
+                    NekoSettings.Default.Save();
+                }
+            }
+        }
+
+        public bool SaveColumnWidths
+        {
+            get => NekoSettings.Default.SaveColumnWidths;
+            set
+            {
+                if (NekoSettings.Default.SaveColumnWidths != value)
+                {
+                    NekoSettings.Default.SaveColumnWidths = value;
+                    this.RaisePropertyChanged(nameof(SaveColumnWidths));
+                    NekoSettings.Default.Save();
+                }
+            }
+        }
+
+        public bool EnableConflictDetection
+        {
+            get => NekoSettings.Default.EnableConflictDetection;
+            set
+            {
+                if (NekoSettings.Default.EnableConflictDetection != value)
+                {
+                    NekoSettings.Default.EnableConflictDetection = value;
+                    this.RaisePropertyChanged(nameof(EnableConflictDetection));
                     NekoSettings.Default.Save();
                 }
             }

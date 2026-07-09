@@ -15,23 +15,9 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        Title = $"NekoVpk {App.Version}{App.VersionSuffix}  Starfelll&ArcPav";
-        if (Background is SolidColorBrush brush)
-        {
-            if (ActualTransparencyLevel == WindowTransparencyLevel.AcrylicBlur || ActualTransparencyLevel == WindowTransparencyLevel.Blur)
-            {
-                brush.Opacity = 0.6;
-            }
-            else if (ActualTransparencyLevel == WindowTransparencyLevel.None)
-            {
-                brush.Opacity = 1;
-            }
-            else
-            {
-                brush.Opacity = 0;
-            }
-        }
+        Title = $"NekoVpk {App.Version}{App.VersionSuffix}  Starfelll & ArcPav";
 
+        NekoVpk.Lang.I18nManager.Instance.SetLanguage(NekoSettings.Default.Language);
 
         var initialPosition = this.Position;
         var trackerNamespace = string.Join("_", Screens.All.Select(s => s.WorkingArea.Size.ToString()));

@@ -8,23 +8,42 @@
         x:Class="NekoVpk.Views.MainWindow"
         Icon="/Assets/NekoVpk.ico"
         Title="NekoVpk"
-		Width="1366" Height="768"
-		WindowStartupLocation="CenterScreen"
-		TransparencyLevelHint="Mica,AcrylicBlur,Blur,None"
-		xmlns:lang="clr-namespace:NekoVpk.Lang"
+        Width="1366" Height="768"
+        WindowStartupLocation="CenterScreen"
+        TransparencyLevelHint="Mica,AcrylicBlur,Blur,None"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Background="Transparent"
+        xmlns:lang="clr-namespace:NekoVpk.Lang"
         FontFamily="{Binding UserFont}"
         FontSize="{Binding UserFontSize}">
-	    <Panel>
-		    <Panel.Background>
-			    <ImageBrush Source="/Assets/NekoVpk.ico"
-                    AlignmentX="Right"
-                    AlignmentY="Bottom"
-                    TileMode="None"
-                    Stretch="None"
-                    Opacity="0.25"
-		            SourceRect="-10 0 256 259"/>
-		    </Panel.Background>
-			<views:MainView/>
-        </Panel>
-		
+    <Grid>
+        <Image Source="{Binding BackgroundImage}" Stretch="{Binding BackgroundStretch}" IsHitTestVisible="False"/>
+        <Rectangle Fill="Black" Opacity="{Binding BackgroundDimOpacity}" IsHitTestVisible="False"/>
+        <Grid RowDefinitions="25, *">
+            <StackPanel Grid.Row="0" 
+                        Orientation="Horizontal" 
+                        Spacing="10" 
+                        Margin="15,7,0,0" 
+                        IsHitTestVisible="False">
+                <Image Source="/Assets/NekoVpk.ico" Width="16" Height="16" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}" 
+                           VerticalAlignment="Center" 
+                           FontSize="12"
+                           Foreground="{DynamicResource TextBlockDefaultForeground}"/>
+            </StackPanel>
+            <Panel Grid.Row="1">
+                <Panel.Background>
+                    <ImageBrush Source="/Assets/NekoVpk.ico"
+                                AlignmentX="Right"
+                                AlignmentY="Bottom"
+                                TileMode="None"
+                                Stretch="None"
+                                Opacity="0.25"
+                                SourceRect="-10 0 256 259"/>
+                </Panel.Background>
+                <views:MainView x:Name="MyMainView"/>
+            </Panel>
+        </Grid>
+    </Grid>
 </Window>

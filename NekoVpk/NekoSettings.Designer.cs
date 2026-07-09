@@ -142,5 +142,53 @@ namespace NekoVpk {
                 this["UserFontSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveColumnWidths {
+            get {
+                return ((bool)(this["SaveColumnWidths"]));
+            }
+            set {
+                this["SaveColumnWidths"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DataGridColumnWidths {
+            get {
+                return ((string)(this["DataGridColumnWidths"]));
+            }
+            set {
+                this["DataGridColumnWidths"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Auto")]
+        public string Language {
+            get {
+                return ((string)(this["Language"]));
+            }
+            set {
+                this["Language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableConflictDetection {
+            get {
+                return ((bool)(this["EnableConflictDetection"]));
+            }
+            set {
+                this["EnableConflictDetection"] = value;
+            }
+        }
     }
 }

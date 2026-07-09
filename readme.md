@@ -1,13 +1,13 @@
 <h1 align="center">
   <br>
-  <img src="https://github.com/Starfelll/NekoVpk/blob/main/image/NekoVpk-128.png" alt="NekoVpk" width="128">
+  <img src="image/NekoVpk-128.png" alt="NekoVpk" width="128">
   <br>
   NekoVpk
   <br>
 </h1>
 <h4 align="center">🧰 Left4Dead2 addon manager </h4>
 <h1 align="center">
-  <img src="https://github.com/Starfelll/NekoVpk/blob/main/image/%7B92AF4B24-ECB7-4f37-A7EF-2452A7E1151B%7D.png" width="800">
+  <img src="image/0.1.6.0_Preview.png" width="800">
 </h1>
 
 ## 🐈feature
@@ -16,7 +16,8 @@
 * Read addoninfo
 * Enable or disable addon
 * Disable certain content in the addon, which is useful for survivor mods.
-* ![](https://github.com/Starfelll/NekoVpk/blob/main/image/%7B5B7F3754-AEAB-478f-90C3-D0D2934D8D8A%7D.png)
+* ![](image/{5B7F3754-AEAB-478f-90C3-D0D2934D8D8A}.png)
+* ![](image/change_neko7z.png)
 
 
 ## Special Dependencies
@@ -25,6 +26,18 @@ https://github.com/Starfelll/ValveKeyValue/tree/nekovpk
 
 
 ## changelog
+#### v0.1.6
+- **Localization**: Added multi-language support (English, Chinese, Japanese).
+- **Conflict Detection**: Added addon conflict detection. Conflicting mods are highlighted in red; double-clicking displays specific conflicting files and priority.
+- **Collection Mode**: Added Workshop Collection mode. Toggle to search for collections, single-click to view summaries, and double-click to browse the addons inside.
+- **Archive Management**: Added support for handling multiple `.neko7z` packages (e.g., `1.neko7z`, `2.neko7z`) when selectively enabling/disabling addon contents, removing the previous limit of a single `0.neko7z` file.
+- **Workshop Filtering**: Added sorting options (Trending, Top Rated, Most Recent, Recently Updated) to the online mode.
+- **Workshop Search**: Pasting a full Workshop URL into the search bar now directly triggers the download.
+- **Workshop UI**: Added support for rendering GIF previews and parsing BBCode in descriptions.
+- **Workshop UI**: Relocated the download button to sit above the addon description for easier access.
+- **Tag Filtering**: Improved tag filtering to allow selecting main category tags (not just specific sub-tags).
+- **List Settings**: Columns now auto-resize. Added options to toggle the visibility of specific columns (Tag, Type, Added time, Size).
+- **UI/UX**: Optimized various UI elements and confirmation dialogs.
 #### v0.1.5
 - Fixed the issue that files would be lost when only one disabled vpk content was left.
 - Setting: added option "Compression level".
