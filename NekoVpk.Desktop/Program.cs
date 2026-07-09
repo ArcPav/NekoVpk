@@ -63,7 +63,7 @@ class Program
         //AutoUpdater.AppCastURL = @"https://raw.githubusercontent.com/Starfelll/NekoVpk_release/main/AppUpdate.xml";
         return;
 #else
-        AutoUpdater.AppCastURL = @"https://raw.githubusercontent.com/Starfelll/NekoVpk/main/AppUpdate.xml";
+        AutoUpdater.AppCastURL = @"https://raw.githubusercontent.com/ArcPav/NekoVpk/main/AppUpdate.xml";
 #endif
         AutoUpdater.UpdateMode = Mode.Normal;
         //var path = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;

@@ -12,9 +12,9 @@ public partial class App : Application
 {
     public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-    public const string Version = "0.1.5.3";
+    public const string Version = "0.1.6.0";
 
-    public const string VersionSuffix = "-Beta";
+    public const string VersionSuffix = "_Beta";
 
     public override void Initialize()
     {

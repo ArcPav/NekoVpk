@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Product>Valve Pak Library</Product>
+    <Description>Fully fledged library to work with Valve's Pak (VPK) archives</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>steam valve archive pak vpk csgo dota2 tf2</PackageTags>
+    <PackageReleaseNotes>View release notes at https://github.com/ValveResourceFormat/ValvePak/releases</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ValvePak.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Hashing" Version="10.0.2" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\Misc\logo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

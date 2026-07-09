@@ -1,9 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:anim="https://github.com/whistyun/AnimatedImage.Avalonia"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:NekoVpk.ViewModels"
              xmlns:lang="clr-namespace:NekoVpk.Lang"
+             xmlns:views="clr-namespace:NekoVpk.Views"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
@@ -15,15 +17,119 @@
   <Design.DataContext>
     <vm:MainViewModel />
   </Design.DataContext>
-  <Panel>
-    <Panel>
-      <Image Source="{Binding BackgroundImage}"
-             Stretch="{Binding BackgroundStretch}"/>
-      <Rectangle Fill="Black"
-                 Opacity="{Binding BackgroundDimOpacity}"
-                 IsHitTestVisible="False"/>
-    </Panel>
-    <Grid RowDefinitions="auto,auto,*" Margin="13 10 10 10">
+  <UserControl.Styles>
+    <Style Selector="DataGridRow" x:DataType="vm:AddonAttribute">
+      <Setter Property="Background" Value="{Binding ConflictBackgroundBrush}"/>
+      <Setter Property="Tag" Value="{Binding ConflictState}"/>
+    </Style>
+    <Style Selector="Label.Breathing">
+      <Style.Animations>
+        <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="0.3"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="1.0"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="DataGridRow:selected[Tag=Normal]">
+      <Style.Animations>
+        <Animation Duration="0:0:1.5" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="#152B579A"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="#402B579A"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="DataGridRow:selected[Tag=Conflict]">
+      <Style.Animations>
+        <Animation Duration="0:0:0.5" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="#25FF0000"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="#50FF0000"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="ListBoxItem:selected">
+      <Style.Animations>
+        <Animation Duration="0:0:1.5" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="#152B579A"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="#402B579A"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Button.Breathing, Button:not(.Primary):flyout-open">
+      <Style.Animations>
+        <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="#20FFFFFF"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="#40FFFFFF"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Button.Primary:flyout-open">
+      <Style.Animations>
+        <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="#30A9FF"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="#50C8FF"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="ContextMenu">
+      <Setter Property="Background" Value="#C0000000"/> 
+      <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+    </Style>
+    <Style Selector="FlyoutPresenter">
+      <Setter Property="Background" Value="#C0000000"/>
+      <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+    </Style>
+    <Style Selector="MenuFlyoutPresenter">
+      <Setter Property="Background" Value="#C0000000"/>
+      <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+    </Style>
+    <Style Selector="MenuItem">
+      <Setter Property="Background" Value="Transparent"/>
+    </Style>
+  </UserControl.Styles>
+  <Panel Background="Transparent">
+    <Grid RowDefinitions="auto,auto,*" Margin="13 1 10 10">
       <DockPanel Grid.Row="0">
         <StackPanel DockPanel.Dock="Right"
                     Margin="10"
@@ -35,46 +141,101 @@
                   Theme="{DynamicResource SolidButton}"
                   Height="32"
                   Margin="20 0 0 0"
-                  Content="{x:Static lang:Resources.Scan}"
-                  ToolTip.Tip="Refresh"
+                  Content="{Binding [Scan], Source={x:Static lang:I18nManager.Instance}}"
+                  ToolTip.Tip="{Binding [RefreshToolTip], Source={x:Static lang:I18nManager.Instance}}"
                   Click="Button_Click"/>
-          <Button Click="Settings_Button_Click">Settings</Button>
-          <Menu VerticalAlignment="Center">
-            <MenuItem Header="All Select ▼">
-              <MenuItem Header="勾选" Click="MenuItem_SelectAll_Click"/>
-              <MenuItem Header="取消" Click="MenuItem_DeselectAll_Click"/>
-              <MenuItem Header="反选" Click="MenuItem_InvertSelection_Click"/>
-            </MenuItem>
-          </Menu>
+          <Button Click="Settings_Button_Click" 
+                  Content="{Binding [Settings], Source={x:Static lang:I18nManager.Instance}}"
+                  ToolTip.Tip="{Binding [Settings], Source={x:Static lang:I18nManager.Instance}}"/>
+          <Button Content="☰" 
+                  Height="32" 
+                  ToolTip.Tip="{Binding [ListSettings], Source={x:Static lang:I18nManager.Instance}}">
+            <Button.Flyout>
+              <Flyout Placement="Bottom">
+                <StackPanel Spacing="5" MinWidth="100">
+                  <Button Content="{Binding [AutoSizeAllColumns], Source={x:Static lang:I18nManager.Instance}}"
+                          HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Left"
+                          Background="Transparent"
+                          Click="Menu_AutoSizeAllColumns_Click"/>
+                  <Separator Height="1" Background="Gray" Opacity="0.3" Margin="0,5"/>
+                  <CheckBox Content="{Binding [ColumnTag], Source={x:Static lang:I18nManager.Instance}}" IsChecked="{Binding ShowColumnTag}"/>
+                  <CheckBox Content="{Binding [ColumnType], Source={x:Static lang:I18nManager.Instance}}" IsChecked="{Binding ShowColumnType}"/>
+                  <CheckBox Content="{Binding [ColumnAddedTime], Source={x:Static lang:I18nManager.Instance}}" IsChecked="{Binding ShowColumnAddedTime}"/>
+                  <CheckBox Content="{Binding [ColumnSize], Source={x:Static lang:I18nManager.Instance}}" IsChecked="{Binding ShowColumnSize}"/>
+                </StackPanel>
+              </Flyout>
+            </Button.Flyout>
+          </Button>
+          <Button Content="{Binding [AllSelect], Source={x:Static lang:I18nManager.Instance}}" 
+                  ToolTip.Tip="{Binding [AllSelectToolTip], Source={x:Static lang:I18nManager.Instance}}">
+            <Button.Flyout>
+              <MenuFlyout Placement="Bottom">
+                <MenuItem Header="{Binding [Select], Source={x:Static lang:I18nManager.Instance}}" 
+                          Click="MenuItem_SelectAll_Click"
+                          ToolTip.Tip="{Binding [SelectAllToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                          FontFamily="{Binding UserFont}" 
+                          FontSize="{Binding UserFontSize}"/>
+                <MenuItem Header="{Binding [Deselect], Source={x:Static lang:I18nManager.Instance}}" 
+                          Click="MenuItem_DeselectAll_Click"
+                          ToolTip.Tip="{Binding [DeselectAllToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                          FontFamily="{Binding UserFont}" 
+                          FontSize="{Binding UserFontSize}"/>
+                <MenuItem Header="{Binding [InvertSelection], Source={x:Static lang:I18nManager.Instance}}" 
+                          Click="MenuItem_InvertSelection_Click"
+                          ToolTip.Tip="{Binding [InvertSelectionToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                          FontFamily="{Binding UserFont}" 
+                          FontSize="{Binding UserFontSize}"/>
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
         </StackPanel>
         <StackPanel DockPanel.Dock="Left" 
                     VerticalAlignment="Center" 
                     Orientation="Horizontal" 
                     Spacing="10">
+          <Button Content="&lt;"
+                  Height="32"
+                  Click="Button_ExitCollection_Click"
+                  IsVisible="{Binding IsInCollectionDetail}"
+                  ToolTip.Tip="{Binding [BackToCollection], Source={x:Static lang:I18nManager.Instance}}"/>
           <TextBox Text="{Binding SearchKeywords}"
                    InnerLeftContent="{Binding SearchWatermark}"
                    Width="600"
                    Height="32"
                    KeyUp="TextBox_AddonSearch_KeyUp"
                    TextChanged="TextBox_AddonSearch_TextChanged"/>
-          
           <Button Content="🏷️" 
                   Height="32" 
-                  ToolTip.Tip="Tags Filter"
+                  ToolTip.Tip="{Binding [TagsFilter], Source={x:Static lang:I18nManager.Instance}}"
                   IsVisible="{Binding IsOnlineMode}">
             <Button.Flyout>
               <Flyout Placement="Bottom">
-                <Border Width="300" Height="400">
-                  <Grid RowDefinitions="*, auto">
+                <Border Width="300" Height="450">
+                  <Grid RowDefinitions="*, auto, auto">
                     <ScrollViewer Grid.Row="0">
-                      <ItemsControl ItemsSource="{Binding WorkshopTagCategories}">
+                      <StackPanel Margin="0,0,0,10">
+                        <StackPanel Margin="0,0,0,10" IsVisible="{Binding !IsInCollectionDetail}">
+                          <TextBlock Text="{Binding [SortOrder], Source={x:Static lang:I18nManager.Instance}, FallbackValue='排序顺序'}" FontWeight="Bold" Margin="0,0,0,5" />
+                          <ComboBox ItemsSource="{Binding SortOptions}" 
+                                    SelectedItem="{Binding SelectedSortOption}"
+                                    HorizontalAlignment="Stretch">
+                              <ComboBox.ItemTemplate>
+                                  <DataTemplate>
+                                      <TextBlock Text="{Binding DisplayName}"/>
+                                  </DataTemplate>
+                              </ComboBox.ItemTemplate>
+                          </ComboBox>
+                        </StackPanel>
+                        <Separator Height="1" Background="Gray" Opacity="0.3" Margin="0,0,0,10" IsVisible="{Binding !IsInCollectionDetail}"/>
+                        <ItemsControl ItemsSource="{Binding WorkshopTagCategories}">
                         <ItemsControl.ItemTemplate>
                           <DataTemplate>
                             <StackPanel Margin="0,0,0,10">
-                              <TextBlock Text="{Binding Header}" 
-                                         FontWeight="Bold" 
-                                         Foreground="{DynamicResource SystemAccentColor}"
-                                         Margin="0,0,0,5"/>
+                              <CheckBox Content="{Binding MainTag.Display}" 
+                                IsChecked="{Binding MainTag.IsSelected}"
+                                FontWeight="Bold" 
+                                Margin="0,0,0,5"/>
                               <ItemsControl ItemsSource="{Binding Tags}">
                                 <ItemsControl.ItemsPanel>
                                   <ItemsPanelTemplate>
@@ -93,9 +254,16 @@
                           </DataTemplate>
                         </ItemsControl.ItemTemplate>
                       </ItemsControl>
+                      </StackPanel>
                     </ScrollViewer>
-                    <Button Grid.Row="1" 
-                            Content="重置标签" 
+                    <ToggleButton Grid.Row="1"
+                                  Content="{Binding [CollectionMode], Source={x:Static lang:I18nManager.Instance}}"
+                                  IsChecked="{Binding IsCollectionMode}"
+                                  HorizontalAlignment="Stretch"
+                                  HorizontalContentAlignment="Center"
+                                  Margin="0,5,0,0"/>
+                    <Button Grid.Row="2" 
+                            Content="{Binding [ResetTags], Source={x:Static lang:I18nManager.Instance}}" 
                             HorizontalAlignment="Stretch" 
                             HorizontalContentAlignment="Center"
                             Click="Button_ResetTags_Click"
@@ -105,9 +273,8 @@
               </Flyout>
             </Button.Flyout>
           </Button>
-
           <ToggleButton Content="🌐"
-                        ToolTip.Tip="Search Workshop"
+                        ToolTip.Tip="{Binding [SearchWorkshop], Source={x:Static lang:I18nManager.Instance}}"
                         IsChecked="{Binding IsOnlineMode}"
                         Height="32" 
                         VerticalAlignment="Center"/>
@@ -126,7 +293,7 @@
                       HorizontalContentAlignment="Center"
                       VerticalContentAlignment="Center"
                       Click="Button_CancelDownload_Click"
-                      ToolTip.Tip="取消下载"/>
+                      ToolTip.Tip="{Binding [CancelDownload], Source={x:Static lang:I18nManager.Instance}}"/>
           </StackPanel>
         </StackPanel>
       </DockPanel>
@@ -140,8 +307,50 @@
             RowDefinitions="*"
             MinHeight="360">
         <Panel Grid.Column="0">
+            <ListBox Name="CollectionListView"
+                     ItemsSource="{Binding CollectionList}"
+                     IsVisible="{Binding ShowCollectionList}"
+                     Background="Transparent"
+                     SelectionChanged="CollectionListView_SelectionChanged"
+                     DoubleTapped="CollectionListView_DoubleTapped">
+              <ListBox.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="{Binding [OpenWebpage], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="CollectionList_Menu_OpenPage"/>
+                  <MenuItem Header="{Binding [DownloadCollection], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="CollectionList_Menu_Download"
+                            IsVisible="{Binding !#CollectionListView.SelectedItem.IsInstalled}"/>
+                  <MenuItem Header="{Binding [Downloaded], Source={x:Static lang:I18nManager.Instance}}"
+                            IsEnabled="False"
+                            IsVisible="{Binding #CollectionListView.SelectedItem.IsInstalled}"/>
+                </ContextMenu>
+              </ListBox.ContextMenu>
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="120, *" RowDefinitions="auto, auto, *" Margin="5">
+                    <Image Grid.RowSpan="3" Grid.Column="0"
+                           Width="120" Height="120" Stretch="UniformToFill"
+                           Source="{Binding PreviewBitmap}"/>
+                    <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*, auto" Margin="10,0,0,5">
+                      <TextBlock Grid.Column="0" Text="{Binding Title}" FontWeight="Bold" FontSize="18" TextTrimming="CharacterEllipsis"/>
+                      <TextBlock Grid.Column="1" Text="{Binding Stars}" Foreground="#FFD700" FontSize="16" Margin="10,0,10,0" VerticalAlignment="Center"/>
+                    </Grid>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,5">
+                      <TextBlock Text="{Binding AuthorName}" Foreground="LightGray" Margin="0,0,15,0"/>
+                      <TextBlock Text="{Binding ItemCountString}" Foreground="LightGray"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Grid.Column="1" 
+                               Text="{Binding Description}" 
+                               TextWrapping="Wrap" 
+                               TextTrimming="CharacterEllipsis" 
+                               Foreground="Gray" Margin="10,0,0,0"/>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
             <DataGrid Name="AddonList"
                       ItemsSource="{Binding Addons}"
+                      IsVisible="{Binding ShowDataGrid}"
                       HorizontalScrollBarVisibility="Auto"
                       IsReadOnly="False"
                       AutoGenerateColumns="False"
@@ -155,39 +364,38 @@
                       Sorting="DataGrid_Sorting">
               <DataGrid.ContextMenu>
                 <ContextMenu>
-                  <MenuItem Header="打开目录"
+                  <MenuItem Header="{Binding [OpenDirectory], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_LocateFile"
                             IsVisible="{Binding #AddonList.SelectedItem.IsInstalled}"/>
-                  <MenuItem Header="删除模组"
+                  <MenuItem Header="{Binding [DeleteAddon], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_Delete"
                             IsVisible="{Binding !DataContext.IsOnlineMode, ElementName=RootView}"/>
-                  <MenuItem Header="跳转网页"
+                  <MenuItem Header="{Binding [OpenWebpage], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_OpenPage"
                             IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}"/>
-                  <MenuItem Header="下载模组"
+                  <MenuItem Header="{Binding [DownloadAddon], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_Download"
                             IsVisible="{Binding !#AddonList.SelectedItem.IsInstalled}"/>
                 </ContextMenu>
               </DataGrid.ContextMenu>
               <DataGrid.Columns>
-                <DataGridTextColumn Header="" Width="0"/>
-                <DataGridCheckBoxColumn Header="Enable"
+                <DataGridCheckBoxColumn Header="{Binding [ColumnEnable], Source={x:Static lang:I18nManager.Instance}}"
                                         Binding="{Binding Enable}"
                                         Width="85"
                                         IsVisible="{Binding !DataContext.IsOnlineMode, ElementName=RootView}"/>   
-                <DataGridTextColumn Header="Title"
+                <DataGridTextColumn Header="{Binding [ColumnTitle], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding Title}"
                                     Width="360"/>
-                <DataGridTextColumn Header="Source"
+                <DataGridTextColumn Header="{Binding [ColumnSource], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding Source}"
                                     Width="auto"/>
-                <DataGridTextColumn Header="Author"
+                <DataGridTextColumn Header="{Binding [ColumnAuthor], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding Author}"
                                     Width="100"/>
-                <DataGridTemplateColumn Header="Tag"
+                <DataGridTemplateColumn Header="{Binding [ColumnTag], Source={x:Static lang:I18nManager.Instance}}"
                                         Width="130"
                                         SortMemberPath="TagsOrde"
-                                        IsVisible="{Binding !DataContext.IsOnlineMode, ElementName=RootView}">
+                                        IsVisible="{Binding IsTagColumnVisible}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                       <ItemsControl ItemsSource="{Binding Tags}">
@@ -211,28 +419,30 @@
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Type"
+                <DataGridTextColumn Header="{Binding [ColumnType], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding Type}"
-                                    Width="100"/>
-                <DataGridTextColumn Header="Added time"
+                                    Width="100"
+                                    IsVisible="{Binding IsTypeColumnVisible}"/>
+                <DataGridTextColumn Header="{Binding [ColumnAddedTime], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding CreationTimeStr}"
                                     SortMemberPath="CreationTime"
-                                    IsVisible="{Binding !DataContext.IsOnlineMode, ElementName=RootView}"/>
-                <DataGridTextColumn Header="Size"
+                                    IsVisible="{Binding IsAddedTimeColumnVisible}"/>
+                <DataGridTextColumn Header="{Binding [ColumnSize], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding FileSize}"
                                     SortMemberPath="FileSizeRaw"
-                                    Width="90"/>
-                <DataGridTextColumn Header="Last update"
+                                    Width="90"
+                                    IsVisible="{Binding IsSizeColumnVisible}"/>
+                <DataGridTextColumn Header="{Binding [ColumnLastUpdate], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding LastUpdateStr}"
                                     SortMemberPath="LastUpdate"
                                     IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}"/>
-                <DataGridTextColumn Header="Sub"
+                <DataGridTextColumn Header="{Binding [ColumnSub], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding Subscriptions}"
                                     Width="65"
                                     IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}"/>
               </DataGrid.Columns>
             </DataGrid>
-            <TextBlock Text="未知异常"
+            <TextBlock Text="{Binding [UnknownException], Source={x:Static lang:I18nManager.Instance}}"
                        FontSize="24"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
@@ -243,106 +453,174 @@
         </Panel>
         <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
         <ScrollViewer Grid.Column="2" AllowAutoHide="True">
-          <StackPanel Name="AddonDetailPanel"
-                      Orientation="Vertical"
-                      IsVisible="False">
-            <Border Background="{StaticResource ThemeBackgroundBrush}"
-                    Margin="10">
-              <Image Name="AddonImage"
-                     MaxHeight="128"
-                     MinWidth="256"/>
-            </Border>
-            <Grid Margin="10"
-                  RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto"
-                  ColumnDefinitions="*">
-              <TextBox Grid.Row="0"
-                       InnerLeftContent="Title"
-                       Text="{Binding #AddonList.SelectedItem.Title}"
-                       Classes="s1 Small Bordered"/>
-              <TextBox Grid.Row="1"
-                       InnerLeftContent="Version"
-                       Text="{Binding #AddonList.SelectedItem.Version}"
-                       Classes="s1 Small Bordered"/>
-              <TextBox Grid.Row="2"
-                       InnerLeftContent="Author"
-                       Text="{Binding #AddonList.SelectedItem.Author}"
-                       Classes="s1 Small Bordered"/>
-              <TextBox Grid.Row="3"
-                       InnerLeftContent="File"
-                       Text="{Binding #AddonList.SelectedItem.FileName}"
-                       Classes="s1 Small Bordered"/>
-              <TextBox Grid.Row="4"
-                       Classes="TextArea"
-                       Text="{Binding #AddonList.SelectedItem.Description}"
-                       Padding="10 8"
-                       TextWrapping="WrapWithOverflow"/>
-              <StackPanel Grid.Row="5">
-                <ItemsControl ItemsSource="{Binding #AddonList.SelectedItem.Tags}">
-                  <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                      <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                  </ItemsControl.ItemsPanel>
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                      <Label Theme="{StaticResource TagLabel}"
-                             Content="{Binding Name}"
-                             Margin="2"
-                             Classes="Large"
-                             Classes.Ghost="{Binding !Enable}"
-                             Loaded="AssetTag_Label_Loaded"
-                             Tapped="AssetTag_Tapped"/>
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Grid Name="AssetTagModifiedPanel"
-                      ColumnDefinitions="*,*"
-                      Margin="2">
-                  <Button Grid.Column="0"
-                          Classes="Danger"
-                          Margin="0 0 1 0"
-                          Click="Button_AssetTagModifiedPanel_Apply">
-                    Apply
-                  </Button>
-                  <Button Grid.Column="1"
-                          Classes="Secondary"
-                          Margin="1 0 0 0"
-                          Click="Button_AssetTagModifiedPanel_Cancel">
-                    Cancel
-                  </Button>
+          <Panel>
+            <Panel IsVisible="{Binding ShowDataGrid}">
+              <StackPanel Name="AddonDetailPanel"
+                          Orientation="Vertical"
+                          IsVisible="{Binding !!#AddonList.SelectedItem}"
+                          DataContext="{Binding #AddonList.SelectedItem}">
+                <Border Background="{StaticResource ThemeBackgroundBrush}"
+                        Margin="10">
+                  <Image Name="AddonImage"
+                         MaxHeight="128"
+                         MinWidth="256"/>
+                </Border>
+                <Grid Margin="10"
+                      RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto"
+                      ColumnDefinitions="*">
+                  <TextBox Grid.Row="0"
+                           InnerLeftContent="{Binding [ColumnTitle], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding Title}"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox Grid.Row="1"
+                           InnerLeftContent="{Binding [Version], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding Version}"
+                           IsVisible="{Binding !DataContext.IsOnlineMode, ElementName=RootView}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox Grid.Row="1"
+                           InnerLeftContent="{Binding [ColumnLastUpdate], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding LastUpdateStr}"
+                           IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox Grid.Row="2"
+                           InnerLeftContent="{Binding [ColumnAuthor], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding Author}"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox Grid.Row="3"
+                           InnerLeftContent="{Binding [File], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding FileName}"
+                           Classes="s1 Small Bordered"/>
+                  <StackPanel Grid.Row="4" Margin="2,10,2,5" IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}">
+                      <Button Classes="Accent"
+                              HorizontalAlignment="Stretch"
+                              HorizontalContentAlignment="Center"
+                              IsVisible="{Binding !IsInstalled}"
+                              Click="Button_Download_Click">
+                          <StackPanel Orientation="Horizontal" Spacing="5">
+                              <TextBlock Text="☁"/>
+                              <TextBlock Text="{Binding [DownloadToAddons], Source={x:Static lang:I18nManager.Instance}}"/>
+                          </StackPanel>
+                      </Button>
+                      <Button IsEnabled="False"
+                              HorizontalAlignment="Stretch"
+                              HorizontalContentAlignment="Center"
+                              IsVisible="{Binding IsInstalled}">
+                          <StackPanel Orientation="Horizontal" Spacing="5">
+                              <TextBlock Text="✔"/>
+                              <TextBlock Text="{Binding [Downloaded], Source={x:Static lang:I18nManager.Instance}}"/>
+                          </StackPanel>
+                      </Button>
+                  </StackPanel>
+                  <ScrollViewer Grid.Row="5" MaxHeight="300" Margin="0,5">
+                      <SelectableTextBlock views:SteamBBCodeHelper.BBCode="{Binding Description}"
+                                           TextWrapping="Wrap"
+                                           Padding="10 8"/>
+                  </ScrollViewer>
+                  <Panel Grid.Row="6"
+                         HorizontalAlignment="Center"
+                         Margin="3,10,3,10">
+                    <HyperlinkButton NavigateUri="{Binding Url}">
+                      <TextBlock Text="{Binding Url}"
+                                 TextDecorations="Underline"/>
+                    </HyperlinkButton>
+                  </Panel>
+                  <StackPanel Grid.Row="7">
+                    <ComboBox ItemsSource="{Binding Variants}"
+                              SelectedItem="{Binding ActiveVariant}"
+                              IsVisible="{Binding HasMultipleVariants}"
+                              SelectionChanged="VariantComboBox_SelectionChanged"
+                              Margin="2,0,2,10"
+                              HorizontalAlignment="Stretch">
+                      <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                          <TextBlock Text="{Binding DisplayName}"/>
+                        </DataTemplate>
+                      </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ItemsControl ItemsSource="{Binding Tags}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Grid>
+                            <Label Theme="{StaticResource TagLabel}"
+                                  Content="{Binding Name}"
+                                  Margin="2"
+                                  Classes="Large"
+                                  Foreground="Transparent"
+                                  Classes.Ghost="{Binding !Enable}"
+                                  Classes.Breathing="{Binding IsModified}"
+                                  Loaded="AssetTag_Label_Loaded"/>
+                            <Label Theme="{StaticResource TagLabel}"
+                                  Content="{Binding Name}"
+                                  Margin="2"
+                                  Classes="Large"
+                                  Background="Transparent"
+                                  BorderBrush="Transparent"
+                                  Classes.Ghost="{Binding !Enable}"
+                                  Loaded="AssetTag_Label_Loaded"
+                                  Tapped="AssetTag_Tapped"/>
+                          </Grid>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Grid Name="AssetTagModifiedPanel"
+                          ColumnDefinitions="*,*"
+                          Margin="2">
+                      <Button Grid.Column="0"
+                              Classes="Danger"
+                              Margin="0 0 1 0"
+                              Content="{Binding [Apply], Source={x:Static lang:I18nManager.Instance}}"
+                              Click="Button_AssetTagModifiedPanel_Apply"/>
+                      <Button Grid.Column="1"
+                              Classes="Secondary"
+                              Margin="1 0 0 0"
+                              Content="{Binding [Cancel], Source={x:Static lang:I18nManager.Instance}}"
+                              Click="Button_AssetTagModifiedPanel_Cancel"/>
+                    </Grid>
+                  </StackPanel>
                 </Grid>
               </StackPanel>
-              <StackPanel Grid.Row="6" Margin="2,10,2,5" IsVisible="{Binding IsOnlineMode}">
-                  <Button Classes="Accent"
-                          HorizontalAlignment="Stretch"
-                          HorizontalContentAlignment="Center"
-                          IsVisible="{Binding !#AddonList.SelectedItem.IsInstalled}"
-                          Click="Button_Download_Click">
-                      <StackPanel Orientation="Horizontal" Spacing="5">
-                          <TextBlock Text="☁"/>
-                          <TextBlock Text="Download to Addons"/>
-                      </StackPanel>
-                  </Button>
-                  <Button IsEnabled="False"
-                          HorizontalAlignment="Stretch"
-                          HorizontalContentAlignment="Center"
-                          IsVisible="{Binding #AddonList.SelectedItem.IsInstalled}">
-                      <StackPanel Orientation="Horizontal" Spacing="5">
-                          <TextBlock Text="✔"/>
-                          <TextBlock Text="Downloaded"/>
-                      </StackPanel>
-                  </Button>
+            </Panel>
+            <Panel IsVisible="{Binding ShowCollectionList}">
+              <StackPanel Name="CollectionDetailPanel"
+                          Orientation="Vertical"
+                          IsVisible="{Binding !!#CollectionListView.SelectedItem}"
+                          DataContext="{Binding #CollectionListView.SelectedItem}">
+              <Grid Margin="10" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto" ColumnDefinitions="*">
+                <TextBox Grid.Row="0" InnerLeftContent="{Binding [ColumnTitle], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding Title}" Classes="s1 Small Bordered" IsReadOnly="True"/>
+                <TextBox Grid.Row="1" InnerLeftContent="{Binding [ColumnAuthor], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding AuthorName}" Classes="s1 Small Bordered" IsReadOnly="True"/>
+                <TextBox Grid.Row="2" InnerLeftContent="{Binding [ColumnFavorite], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding Favorited}" Classes="s1 Small Bordered" IsReadOnly="True"/>
+                <StackPanel Grid.Row="3" Margin="2,10,2,5">
+                    <Button Classes="Accent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsVisible="{Binding !IsInstalled}" Click="Button_DownloadCollection_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Text="☁"/>
+                            <TextBlock Text="{Binding [DownloadCollection], Source={x:Static lang:I18nManager.Instance}}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button IsEnabled="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsVisible="{Binding IsInstalled}">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Text="✔"/>
+                            <TextBlock Text="{Binding [Downloaded], Source={x:Static lang:I18nManager.Instance}}"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <TextBox Grid.Row="4" InnerLeftContent="{Binding [ColumnTag], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding Tags}" Classes="s1 Small Bordered" IsReadOnly="True" Margin="0,5,0,0"/>
+                <TextBox Grid.Row="5" InnerLeftContent="{Binding [ColumnAddedTime], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding TimeCreatedStr}" Classes="s1 Small Bordered" IsReadOnly="True" Margin="0,5,0,0"/>
+                <TextBox Grid.Row="6" InnerLeftContent="{Binding [ColumnLastUpdate], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding TimeUpdatedStr}" Classes="s1 Small Bordered" IsReadOnly="True" Margin="0,5,0,0"/>
+
+                <ScrollViewer Grid.Row="7" MaxHeight="300" Margin="0,5">
+                    <SelectableTextBlock views:SteamBBCodeHelper.BBCode="{Binding DescriptionBBCode}" TextWrapping="Wrap" Padding="10 8"/>
+                </ScrollViewer>
+              </Grid>
               </StackPanel>
-              <Panel Grid.Row="7"
-                     HorizontalAlignment="Center"
-                     Margin="3">
-                <HyperlinkButton NavigateUri="{Binding #AddonList.SelectedItem.Url}">
-                  <TextBlock Text="{Binding #AddonList.SelectedItem.Url}"
-                             TextDecorations="Underline"/>
-                </HyperlinkButton>
-              </Panel>
-            </Grid>
-          </StackPanel>
+            </Panel>
+          </Panel>
         </ScrollViewer>
       </Grid>
     </Grid>

@@ -4,8 +4,8 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <Title>NekoVpk</Title>
-    <Authors>Starfelll</Authors>
-    <PackageProjectUrl>https://github.com/Starfelll/NekoVpk</PackageProjectUrl>
+    <Authors>Starfelll,ArcPav</Authors>
+    <PackageProjectUrl>https://github.com/ArcPav/NekoVpk</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
@@ -16,12 +16,10 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
 
-  
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
-  
   <ItemGroup>
     <AvaloniaResource Remove="Assets\logo_steam.png" />
   </ItemGroup>
@@ -29,8 +27,8 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.11" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.11" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.8" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.11" />
+    <PackageReference Include="AnimatedImage.Avalonia" Version="2.1.4" />
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
@@ -41,6 +39,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="6.0.7" />
     <PackageReference Include="OSVersionExt" Version="4.0.0" />
+    <PackageReference Include="ReactiveUI.Avalonia" Version="11.3.8" />
     <PackageReference Include="Semi.Avalonia" Version="11.3.7.2" />
     <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.3.7.2" />
     <PackageReference Include="Squid-Box.SevenZipSharp" Version="1.6.2.24" />
@@ -50,11 +49,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ValveKeyValue\ValveKeyValue\ValveKeyValue\ValveKeyValue.csproj" />
-    <ProjectReference Include="..\..\ValvePak\ValvePak\ValvePak\ValvePak.csproj" />
+    <ProjectReference Include="..\ValveKeyValue\ValveKeyValue\ValveKeyValue\ValveKeyValue.csproj" />
+    <ProjectReference Include="..\ValvePak\ValvePak\ValvePak\ValvePak.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Lang\Resources.ja-JP.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
+    </Compile>
     <Compile Update="Lang\Resources.zh-CN.Designer.cs">
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -73,6 +77,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Lang\Resources.ja-JP.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ja-JP.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Lang\Resources.zh-CN.resx">
       <LastGenOutput>Resources.zh-CN.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>

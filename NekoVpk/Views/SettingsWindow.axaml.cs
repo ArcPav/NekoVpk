@@ -12,6 +12,8 @@ namespace NekoVpk.Views
         public SettingsWindow()
         {
             InitializeComponent();
+            this.Bind(Window.FontFamilyProperty, new Avalonia.Data.Binding(nameof(ViewModels.Settings.UserFontFamily)));
+            this.Bind(Window.FontSizeProperty, new Avalonia.Data.Binding(nameof(ViewModels.Settings.UserFontSize)));
             //ComboBox_CompressionLevel.ItemsSource = Enum.GetValues(typeof(SevenZip.CompressionLevel));
         }
 
@@ -20,7 +22,7 @@ namespace NekoVpk.Views
             var storage = this.StorageProvider;
             var result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Title = "选择背景",
+                Title = NekoVpk.Lang.I18nManager.Instance["SelectBgImageTitle"], 
                 FileTypeFilter = new[] { FilePickerFileTypes.ImageAll },
                 AllowMultiple = false
             });
@@ -31,6 +33,7 @@ namespace NekoVpk.Views
                 if (DataContext is ViewModels.Settings vm)
                 {
                     vm.BackgroundImagePath = path;
+                    vm.BackgroundBrightness = 50;
                 }
             }
         }
@@ -40,7 +43,7 @@ namespace NekoVpk.Views
             var storage = this.StorageProvider;
             var result = await storage.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
-                Title = "选择背景文件夹",
+                Title = NekoVpk.Lang.I18nManager.Instance["SelectBgFolderTitle"],
                 AllowMultiple = false
             });
 
@@ -50,6 +53,7 @@ namespace NekoVpk.Views
                 if (DataContext is ViewModels.Settings vm)
                 {
                     vm.BackgroundImagePath = path;
+                    vm.BackgroundBrightness = 50;
                 }
             }
         }
@@ -68,7 +72,7 @@ namespace NekoVpk.Views
             }
             var result = await storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
             {
-                Title = "Select Game Directory",
+                Title = NekoVpk.Lang.I18nManager.Instance["SelectGameDirTitle"],
                 AllowMultiple = false,
                 SuggestedStartLocation = suggestedStartLocation
             });
@@ -104,7 +108,7 @@ namespace NekoVpk.Views
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"打开申请页面失败: {ex.Message}");
+                //System.Diagnostics.Debug.WriteLine($"打开申请页面失败: {ex.Message}");
             }
         }
     }

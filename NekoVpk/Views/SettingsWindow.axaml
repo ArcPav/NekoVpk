@@ -2,148 +2,182 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:NekoVpk.ViewModels"
+        xmlns:lang="clr-namespace:NekoVpk.Lang"
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="600"
         x:Class="NekoVpk.Views.SettingsWindow"
-        xmlns:vm="clr-namespace:NekoVpk.ViewModels"
         x:DataType="vm:Settings"
-        Title="NekoSettings"
+        FontFamily="{Binding UserFont}"
+        FontSize="{Binding UserFontSize}"
+        Title="{Binding [SettingsWindowTitle], Source={x:Static lang:I18nManager.Instance}}"
         Width="700" Height="600"
         WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Mica,AcrylicBlur,Blur,None"
         Background="{DynamicResource SystemRegionBrush}"
-        Icon="/Assets/NekoVpk.ico">
+        Icon="/Assets/NekoVpk.ico"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
     <Design.DataContext>
         <vm:Settings />
     </Design.DataContext>
-    <ScrollViewer>
-        <StackPanel Margin="16" Spacing="20">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBox Name="GameDir" Text="{Binding GameDir}" InnerLeftContent="GameDir" 
-                         TextWrapping="NoWrap" Width="600" Height="32" IsUndoEnabled="True"/>
-                <Button Classes="Tertiary" Height="32" Click="Browser_Click" Margin="5,0,0,0">...</Button>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Spacing="5">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBox Text="{Binding SteamApiKey}" 
-                             InnerLeftContent="Steam Web API Key"
-                             PasswordChar="{Binding ApiKeyPasswordChar}"
-                             Width="600" Height="32">
-                        <TextBox.InnerRightContent>
-                            <ToggleButton IsChecked="{Binding IsApiKeyVisible}"
-                                          Background="Transparent"
-                                          BorderThickness="0"
-                                          Padding="4"
-                                          Margin="0,0,5,0"
-                                          Cursor="Hand">
-                                <ToggleButton.Content>
-                                    <TextBlock Text="👁" FontSize="16" VerticalAlignment="Center"/>
-                                </ToggleButton.Content>
-                            </ToggleButton>
-                        </TextBox.InnerRightContent>
-                    </TextBox>
-
-                    <Button Classes="Tertiary" Height="32" Margin="5,0,0,0"
-                            ToolTip.Tip="点击跳转申请页面"
-                            Click="OpenSteamApiKey_Click">
-                        <TextBlock Text="?" FontWeight="Bold"/>
-                    </Button>
-                </StackPanel>
-                <TextBlock Text="*🌐要使用在线搜索功能必须填写此项 | This is required for the online search function" 
-                           Foreground="#FF5555" FontSize="11" Margin="0,2,0,0"/>
-            </StackPanel>
-
-            <Separator Height="1" Background="{DynamicResource SystemControlForegroundBaseLowBrush}" Margin="0,5"/>
-
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Label VerticalAlignment="Center" Margin="0,0,10,0">Compression level</Label>
-                <ComboBox Name="ComboBox_CompressionLevel" Width="120" SelectedIndex="{Binding CompressionLevel}">
-                    <ComboBoxItem>Fast</ComboBoxItem>
-                    <ComboBoxItem>Low</ComboBoxItem>
-                    <ComboBoxItem>Normal</ComboBoxItem>
-                    <ComboBoxItem>High</ComboBoxItem>
-                    <ComboBoxItem>Ultra</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-            <CheckBox IsChecked="{Binding IgnoreVpkErrors}">
-                忽略 VPK 读取错误 (Ignore VPK Errors)
-            </CheckBox>
-
-            <CheckBox IsChecked="{Binding ClearSearchAfterDownload}">
-                下载完成后清空搜索框 (Clear Searchbox After Download)
-            </CheckBox>
-            <Separator Height="1" Background="{DynamicResource SystemControlForegroundBaseLowBrush}" Margin="0,10"/>
-            <StackPanel Spacing="10">
-                <TextBlock Text="界面字体与大小 (Font &amp; Size)" FontWeight="Bold"/>
-                <Grid ColumnDefinitions="*, 10, Auto">
-                    <ComboBox Grid.Column="0"
-                              ItemsSource="{Binding InstalledFonts}" 
-                              SelectedItem="{Binding UserFont}"
-                              HorizontalAlignment="Stretch"
-                              MaxDropDownHeight="300"
-                              PlaceholderText="选择字体...">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" FontFamily="{Binding}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <NumericUpDown Grid.Column="2"
-                                   Value="{Binding UserFontSize}"
-                                   Minimum="10"
-                                   Maximum="36"
-                                   Increment="1"
-                                   Width="120"
-                                   FormatString="0 px"/>
-                </Grid>
-            </StackPanel>
-            <StackPanel Spacing="10">
-                <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                    <TextBlock Text="更换背景 (关闭设置后刷新) - 填充方式:" 
-                               FontWeight="Bold" 
-                               VerticalAlignment="Center"/>
-                    <ComboBox SelectedIndex="{Binding BackgroundStretchIndex}" 
-                              MinWidth="120"
-                              VerticalAlignment="Center">
-                        <ComboBoxItem Content="UniformToFill (默认)">
-                            <ToolTip.Tip>
-                                <TextBlock Text="不会变形 没有黑边 但图片边缘会被裁剪"/>
-                            </ToolTip.Tip>
-                        </ComboBoxItem>
-
-                        <ComboBoxItem Content="Uniform">
-                            <ToolTip.Tip>
-                                <TextBlock Text="不会变形 完整显示 但周围会有黑边"/>
-                            </ToolTip.Tip>
-                        </ComboBoxItem>
-                        <ComboBoxItem Content="Fill">
-                            <ToolTip.Tip>
-                                <TextBlock Text="强制填满屏幕 图片会变形"/>
-                            </ToolTip.Tip>
-                        </ComboBoxItem>
-                        <ComboBoxItem Content="None">
-                            <ToolTip.Tip>
-                                <TextBlock Text="原始大小 不进行缩放"/>
-                            </ToolTip.Tip>
-                        </ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
-                <Grid ColumnDefinitions="*,Auto">
-                    <TextBox Text="{Binding BackgroundImagePath}" Watermark="推荐使用分辨率接近窗口的图片" IsReadOnly="True"/>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="5,0,0,0">
-                        <Button Content="文件" ToolTip.Tip="选择图片" 
-                                Command="{Binding $parent[Window].SelectBackgroundImage}"/>
-                        <Button Content="文件夹" ToolTip.Tip="随机文件夹里的图片" 
-                                Command="{Binding $parent[Window].SelectBackgroundFolder}" Margin="5,0,0,0"/>
-                        <Button Content="清除" Command="{Binding ClearBackground}" Margin="5,0,0,0"/>
-                    </StackPanel>
-                </Grid>
-                <TextBlock Text="{Binding BackgroundBrightness, StringFormat='背景亮度: {0:0}%'}" Margin="0,5,0,0"/>
-                <Slider Value="{Binding BackgroundBrightness}" 
-                        Minimum="0" 
-                        Maximum="100" 
-                        Margin="0,0,0,10"
-                        IsEnabled="{Binding BackgroundImagePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
-            </StackPanel>
+    <Grid RowDefinitions="32, *">
+        <StackPanel Grid.Row="0" 
+                    Orientation="Horizontal" 
+                    Spacing="10" 
+                    Margin="15,0,0,0" 
+                    IsHitTestVisible="False">
+            <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}" 
+                       VerticalAlignment="Center" 
+                       FontSize="12"
+                       Foreground="{DynamicResource TextBlockDefaultForeground}"/>
         </StackPanel>
-    </ScrollViewer>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="16" Spacing="20">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBox Name="GameDir" Text="{Binding GameDir}" 
+                             InnerLeftContent="{Binding [SettingGameDir], Source={x:Static lang:I18nManager.Instance}}" 
+                             TextWrapping="NoWrap" Width="600" Height="32" IsUndoEnabled="True"/>
+                    <Button Classes="Tertiary" Height="32" Click="Browser_Click" Margin="5,0,0,0">...</Button>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Spacing="5">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBox Text="{Binding SteamApiKey}" 
+                                 InnerLeftContent="{Binding [SettingWebApiKey], Source={x:Static lang:I18nManager.Instance}}"
+                                 PasswordChar="{Binding ApiKeyPasswordChar}"
+                                 Width="600" Height="32">
+                            <TextBox.InnerRightContent>
+                                <ToggleButton IsChecked="{Binding IsApiKeyVisible}"
+                                              Background="Transparent"
+                                              BorderThickness="0"
+                                              Padding="4"
+                                              Margin="0,0,5,0"
+                                              Cursor="Hand">
+                                    <ToggleButton.Content>
+                                        <TextBlock Text="👁" FontSize="16" VerticalAlignment="Center"/>
+                                    </ToggleButton.Content>
+                                </ToggleButton>
+                            </TextBox.InnerRightContent>
+                        </TextBox>
+                        <Button Classes="Tertiary" Height="32" Margin="5,0,0,0"
+                                ToolTip.Tip="{Binding [GoToApplyPage], Source={x:Static lang:I18nManager.Instance}}"
+                                Click="OpenSteamApiKey_Click">
+                            <TextBlock Text="?" FontWeight="Bold"/>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="{Binding [SteamApiKeyRequired], Source={x:Static lang:I18nManager.Instance}}" 
+                               Foreground="#FF5555" FontSize="11" Margin="0,2,0,0"/>
+                </StackPanel>
+                <Separator Height="1" Background="{DynamicResource SystemControlForegroundBaseLowBrush}" Margin="0,5"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Label VerticalAlignment="Center" Margin="0,0,10,0" 
+                           Content="{Binding [CompressionLevel], Source={x:Static lang:I18nManager.Instance}}"/>
+                    <ComboBox Name="ComboBox_CompressionLevel" Width="120" SelectedIndex="{Binding CompressionLevel}">
+                        <ComboBoxItem Content="{Binding [CompFast], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <ComboBoxItem Content="{Binding [CompLow], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <ComboBoxItem Content="{Binding [CompNormal], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <ComboBoxItem Content="{Binding [CompHigh], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <ComboBoxItem Content="{Binding [CompUltra], Source={x:Static lang:I18nManager.Instance}}"/>
+                    </ComboBox>
+                </StackPanel>
+                <CheckBox IsChecked="{Binding IgnoreVpkErrors}" 
+                          Content="{Binding [IgnoreVpkErrors], Source={x:Static lang:I18nManager.Instance}}"/>
+                <CheckBox IsChecked="{Binding ClearSearchAfterDownload}" 
+                          Content="{Binding [ClearSearchAfterDownload], Source={x:Static lang:I18nManager.Instance}}"/>
+                <CheckBox IsChecked="{Binding SaveColumnWidths}" 
+                          Content="{Binding [SaveColumnWidths], Source={x:Static lang:I18nManager.Instance}}"/>
+                <CheckBox IsChecked="{Binding EnableConflictDetection}" 
+                          Content="{Binding [EnableConflictDetection], Source={x:Static lang:I18nManager.Instance}}"/>
+                <Separator Height="1" Background="{DynamicResource SystemControlForegroundBaseLowBrush}" Margin="0,10"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Label VerticalAlignment="Center" Margin="0,0,10,0" 
+                           Content="{Binding [UI_Language], Source={x:Static lang:I18nManager.Instance}}"/>
+                    <ComboBox Width="150" SelectedIndex="{Binding LanguageIndex}">
+                        <ComboBoxItem Content="{Binding [LangAuto], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <ComboBoxItem Content="{Binding [LangZh], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <ComboBoxItem Content="{Binding [LangEn], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <ComboBoxItem Content="{Binding [LangJa], Source={x:Static lang:I18nManager.Instance}}"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Spacing="10">
+                    <TextBlock Text="{Binding [UI_FontAndSize], Source={x:Static lang:I18nManager.Instance}}" FontWeight="Bold"/>
+                    <Grid ColumnDefinitions="*, 10, Auto">
+                        <ComboBox Grid.Column="0"
+                                  ItemsSource="{Binding InstalledFonts}" 
+                                  SelectedItem="{Binding UserFont}"
+                                  HorizontalAlignment="Stretch"
+                                  MaxDropDownHeight="300"
+                                  PlaceholderText="{Binding [SelectFont], Source={x:Static lang:I18nManager.Instance}}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" FontFamily="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <NumericUpDown Grid.Column="2"
+                                       Value="{Binding UserFontSize}"
+                                       Minimum="10"
+                                       Maximum="36"
+                                       Increment="1"
+                                       Width="120"
+                                       FormatString="0 px"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding [ChangeBackground], Source={x:Static lang:I18nManager.Instance}}" 
+                                   FontWeight="Bold" 
+                                   VerticalAlignment="Center"/>
+                        <ComboBox SelectedIndex="{Binding BackgroundStretchIndex}" 
+                                  MinWidth="120"
+                                  VerticalAlignment="Center">
+                            <ComboBoxItem Content="{Binding [BgUniformToFill], Source={x:Static lang:I18nManager.Instance}}">
+                                <ToolTip.Tip>
+                                    <TextBlock Text="{Binding [BgUniformToFillTip], Source={x:Static lang:I18nManager.Instance}}"/>
+                                </ToolTip.Tip>
+                            </ComboBoxItem>
+                            <ComboBoxItem Content="{Binding [BgUniform], Source={x:Static lang:I18nManager.Instance}}">
+                                <ToolTip.Tip>
+                                    <TextBlock Text="{Binding [BgUniformTip], Source={x:Static lang:I18nManager.Instance}}"/>
+                                </ToolTip.Tip>
+                            </ComboBoxItem>
+                            <ComboBoxItem Content="{Binding [BgFill], Source={x:Static lang:I18nManager.Instance}}">
+                                <ToolTip.Tip>
+                                    <TextBlock Text="{Binding [BgFillTip], Source={x:Static lang:I18nManager.Instance}}"/>
+                                </ToolTip.Tip>
+                            </ComboBoxItem>
+                            <ComboBoxItem Content="{Binding [BgNone], Source={x:Static lang:I18nManager.Instance}}">
+                                <ToolTip.Tip>
+                                    <TextBlock Text="{Binding [BgNoneTip], Source={x:Static lang:I18nManager.Instance}}"/>
+                                </ToolTip.Tip>
+                            </ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Text="{Binding BackgroundImagePath}" 
+                                 Watermark="{Binding [BgImageWatermark], Source={x:Static lang:I18nManager.Instance}}" 
+                                 IsReadOnly="True"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="5,0,0,0">
+                            <Button Content="{Binding [FileBtn], Source={x:Static lang:I18nManager.Instance}}" 
+                                    ToolTip.Tip="{Binding [SelectImageBtnTip], Source={x:Static lang:I18nManager.Instance}}" 
+                                    Command="{Binding $parent[Window].SelectBackgroundImage}"/>
+                            <Button Content="{Binding [FolderBtn], Source={x:Static lang:I18nManager.Instance}}" 
+                                    ToolTip.Tip="{Binding [RandomFolderImageTip], Source={x:Static lang:I18nManager.Instance}}" 
+                                    Command="{Binding $parent[Window].SelectBackgroundFolder}" Margin="5,0,0,0"/>
+                            <Button Content="{Binding [ClearBtn], Source={x:Static lang:I18nManager.Instance}}" 
+                                    Command="{Binding ClearBackground}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <TextBlock Text="{Binding [BackgroundBrightnessLabel], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <TextBlock Text="{Binding BackgroundBrightness, StringFormat=' {0:0}%'}"/>
+                    </StackPanel>
+                    <Slider Value="{Binding BackgroundBrightness}" 
+                            Minimum="0" 
+                            Maximum="100" 
+                            Margin="0,0,0,10"
+                            IsEnabled="{Binding BackgroundImagePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Window>

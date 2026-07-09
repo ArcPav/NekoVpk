@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Scan" xml:space="preserve">
+    <value>再読み込み</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="AllSelect" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="RefreshToolTip" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="ListSettings" xml:space="preserve">
+    <value>リスト設定</value>
+  </data>
+  <data name="AutoSizeAllColumns" xml:space="preserve">
+    <value>列幅を自動調整</value>
+  </data>
+  <data name="ColumnTag" xml:space="preserve">
+    <value>タグ</value>
+  </data>
+  <data name="ColumnType" xml:space="preserve">
+    <value>タイプ</value>
+  </data>
+  <data name="ColumnAddedTime" xml:space="preserve">
+    <value>追加日時</value>
+  </data>
+  <data name="ColumnSize" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="AllSelectToolTip" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="SelectAllToolTip" xml:space="preserve">
+    <value>リスト内のすべてのアドオンを有効にする</value>
+  </data>
+  <data name="Deselect" xml:space="preserve">
+    <value>選択解除</value>
+  </data>
+  <data name="DeselectAllToolTip" xml:space="preserve">
+    <value>リスト内のすべてのアドオンを無効にする</value>
+  </data>
+  <data name="InvertSelection" xml:space="preserve">
+    <value>選択を反転</value>
+  </data>
+  <data name="InvertSelectionToolTip" xml:space="preserve">
+    <value>有効/無効なアドオンを反転させる</value>
+  </data>
+  <data name="TagsFilter" xml:space="preserve">
+    <value>タグフィルター</value>
+  </data>
+  <data name="ResetTags" xml:space="preserve">
+    <value>タグをリセット</value>
+  </data>
+  <data name="SearchWorkshop" xml:space="preserve">
+    <value>ワークショップを検索</value>
+  </data>
+  <data name="CancelDownload" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>フォルダを開く</value>
+  </data>
+  <data name="DeleteAddon" xml:space="preserve">
+    <value>アドオンを削除</value>
+  </data>
+  <data name="OpenWebpage" xml:space="preserve">
+    <value>Webページを開く</value>
+  </data>
+  <data name="DownloadAddon" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="ColumnEnable" xml:space="preserve">
+    <value>有効</value>
+  </data>
+  <data name="ColumnTitle" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="ColumnSource" xml:space="preserve">
+    <value>ソース</value>
+  </data>
+  <data name="ColumnAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="ColumnLastUpdate" xml:space="preserve">
+    <value>最終更新</value>
+  </data>
+  <data name="ColumnSub" xml:space="preserve">
+    <value>登録数</value>
+  </data>
+  <data name="UnknownException" xml:space="preserve">
+    <value>不明なエラー</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>バージョン</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>適用</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="DownloadToAddons" xml:space="preserve">
+    <value>Addonsフォルダにダウンロード</value>
+  </data>
+  <data name="Downloaded" xml:space="preserve">
+    <value>ダウンロード済み</value>
+  </data>
+  <data name="SettingsWindowTitle" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="SettingGameDir" xml:space="preserve">
+    <value>ゲームディレクトリ</value>
+  </data>
+  <data name="SettingWebApiKey" xml:space="preserve">
+    <value>API Key</value>
+  </data>
+  <data name="GoToApplyPage" xml:space="preserve">
+    <value>申請ページへ移動</value>
+  </data>
+  <data name="SteamApiKeyRequired" xml:space="preserve">
+    <value>*🌐オンライン検索機能を使用するには入力必須です</value>
+  </data>
+  <data name="CompressionLevel" xml:space="preserve">
+    <value>圧縮レベル</value>
+  </data>
+  <data name="CompFast" xml:space="preserve">
+    <value>高速</value>
+  </data>
+  <data name="CompLow" xml:space="preserve">
+    <value>低</value>
+  </data>
+  <data name="CompNormal" xml:space="preserve">
+    <value>標準</value>
+  </data>
+  <data name="CompHigh" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="CompUltra" xml:space="preserve">
+    <value>最高</value>
+  </data>
+  <data name="IgnoreVpkErrors" xml:space="preserve">
+    <value>VPKの読み込みエラーを無視する</value>
+  </data>
+  <data name="ClearSearchAfterDownload" xml:space="preserve">
+    <value>ダウンロード完了後に検索ボックスをクリアする</value>
+  </data>
+  <data name="SaveColumnWidths" xml:space="preserve">
+    <value>リストの表示幅の調整を保存する</value>
+  </data>
+  <data name="UI_Language" xml:space="preserve">
+    <value>言語 (Language)</value>
+  </data>
+  <data name="LangAuto" xml:space="preserve">
+    <value>システムに従う</value>
+  </data>
+  <data name="LangZh" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="LangEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LangJa" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="UI_FontAndSize" xml:space="preserve">
+    <value>フォントとサイズ</value>
+  </data>
+  <data name="SelectFont" xml:space="preserve">
+    <value>フォントを選択...</value>
+  </data>
+  <data name="ChangeBackground" xml:space="preserve">
+    <value>背景 (設定を閉じた後に更新) - ストレッチ設定:</value>
+  </data>
+  <data name="BgUniformToFill" xml:space="preserve">
+    <value>UniformToFill (デフォルト)</value>
+  </data>
+  <data name="BgUniformToFillTip" xml:space="preserve">
+    <value>変形なし、黒枠なし、画像の端がトリミングされます</value>
+  </data>
+  <data name="BgUniform" xml:space="preserve">
+    <value>Uniform</value>
+  </data>
+  <data name="BgUniformTip" xml:space="preserve">
+    <value>変形なし、画像全体を表示、周囲に黒枠が生じます</value>
+  </data>
+  <data name="BgFill" xml:space="preserve">
+    <value>Fill (塗りつぶし)</value>
+  </data>
+  <data name="BgFillTip" xml:space="preserve">
+    <value>画面全体を強制的に塗りつぶし、画像は変形します</value>
+  </data>
+  <data name="BgNone" xml:space="preserve">
+    <value>None (なし)</value>
+  </data>
+  <data name="BgNoneTip" xml:space="preserve">
+    <value>元のサイズ、スケーリングなし</value>
+  </data>
+  <data name="BgImageWatermark" xml:space="preserve">
+    <value>ウィンドウの解像度に近い画像を推奨します</value>
+  </data>
+  <data name="FileBtn" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="SelectImageBtnTip" xml:space="preserve">
+    <value>画像を選択</value>
+  </data>
+  <data name="FolderBtn" xml:space="preserve">
+    <value>フォルダ</value>
+  </data>
+  <data name="RandomFolderImageTip" xml:space="preserve">
+    <value>フォルダ内の画像をランダムに表示</value>
+  </data>
+  <data name="ClearBtn" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="BackgroundBrightnessLabel" xml:space="preserve">
+    <value>背景の明るさ:</value>
+  </data>
+  <data name="MsgBoxYes" xml:space="preserve">
+    <value>はい</value>
+  </data>
+  <data name="MsgBoxNo" xml:space="preserve">
+    <value>いいえ</value>
+  </data>
+  <data name="MsgBoxOk" xml:space="preserve">
+    <value>了解</value>
+  </data>
+  <data name="AddonDirNotFoundMsg" xml:space="preserve">
+    <value>ゲームのアドオンフォルダが見つかりません: {0}</value>
+  </data>
+  <data name="ApplyFailedMsg" xml:space="preserve">
+    <value>{0}
+
+{1} は他のプログラムによって使用されています。ゲームやプログラムを閉じてから再試行してください。</value>
+  </data>
+  <data name="ApplyFailedTitle" xml:space="preserve">
+    <value>適用失敗</value>
+  </data>
+  <data name="DeleteConfirmTitle" xml:space="preserve">
+    <value>削除の確認</value>
+  </data>
+  <data name="DeleteFailedMsg" xml:space="preserve">
+    <value>{0} を削除できません:
+{1}</value>
+  </data>
+  <data name="DeleteFailedTitle" xml:space="preserve">
+    <value>削除失敗</value>
+  </data>
+  <data name="DeleteMultiMsg" xml:space="preserve">
+    <value>選択した {0} 個のアドオンを削除しますか?</value>
+  </data>
+  <data name="DeleteSingleMsg" xml:space="preserve">
+    <value>"{0}" を削除しますか? 
+ファイル: {1}</value>
+  </data>
+  <data name="DeleteWarningSuffix" xml:space="preserve">
+    <value>
+注意! この操作は元に戻せません。</value>
+  </data>
+  <data name="DownloadFailedTitle" xml:space="preserve">
+    <value>ダウンロード失敗</value>
+  </data>
+  <data name="DownloadingState" xml:space="preserve">
+    <value>ダウンロード中...</value>
+  </data>
+  <data name="ImportErrorMsg" xml:space="preserve">
+    <value>'{0}' のインポートに失敗しました: {1}</value>
+  </data>
+  <data name="ImportErrorTitle" xml:space="preserve">
+    <value>インポートエラー</value>
+  </data>
+  <data name="InvalidDirMsg" xml:space="preserve">
+    <value>予期しないゲームディレクトリ構造です。</value>
+  </data>
+  <data name="InvalidDirTitle" xml:space="preserve">
+    <value>無効なディレクトリ</value>
+  </data>
+  <data name="MissingKeyMsg" xml:space="preserve">
+    <value>オンライン検索機能を使用するには、設定でAPIキーを設定してください。</value>
+  </data>
+  <data name="MissingKeyTitle" xml:space="preserve">
+    <value>APIキーがありません</value>
+  </data>
+  <data name="NoDownloadLinkMsg" xml:space="preserve">
+    <value>ダウンロードリンクが見つかりません。手動でサブスクライブしてみてください。</value>
+  </data>
+  <data name="ReadVpkFailedMsg" xml:space="preserve">
+    <value>ファイル: {0}
+{1}
+次回起動時にもこのエラーを表示しますか?</value>
+  </data>
+  <data name="ReadVpkFailedTitle" xml:space="preserve">
+    <value>VPK読み込み失敗</value>
+  </data>
+  <data name="SearchLocalWatermark" xml:space="preserve">
+    <value>ローカルアドオンを検索</value>
+  </data>
+  <data name="SearchWorkshopWatermark" xml:space="preserve">
+    <value>ワークショップを検索 (Enter)</value>
+  </data>
+  <data name="SelectBgFolderTitle" xml:space="preserve">
+    <value>背景フォルダを選択</value>
+  </data>
+  <data name="SelectBgImageTitle" xml:space="preserve">
+    <value>背景を選択</value>
+  </data>
+  <data name="SelectGameDirTitle" xml:space="preserve">
+    <value>ゲームディレクトリを選択</value>
+  </data>
+  <data name="SwitchFailedMsg" xml:space="preserve">
+    <value>{0}
+他のプログラムがファイルを使用していないか確認してください。</value>
+  </data>
+  <data name="SwitchFailedTitle" xml:space="preserve">
+    <value>切り替え失敗</value>
+  </data>
+  <data name="ConfirmOverwriteMsg" xml:space="preserve">
+    <value>{0} は既に存在します 上書きしますか？</value>
+  </data>
+  <data name="ConfirmOverwriteTitle" xml:space="preserve">
+    <value>上書き確認</value>
+  </data>
+  <data name="ConflictDialogTitle" xml:space="preserve">
+    <value>競合発生</value>
+  </data>
+  <data name="ConflictCoveredBy" xml:space="preserve">
+    <value>以下のアドオンと競合しています:</value>
+  </data>
+  <data name="ConflictSpecificFiles" xml:space="preserve">
+    <value>具体的な競合ファイル:</value>
+  </data>
+  <data name="ConflictMoreFiles" xml:space="preserve">
+    <value>... 他 {0} 個のファイル</value>
+  </data>
+  <data name="ConflictDialogDisable" xml:space="preserve">
+    <value>無効化</value>
+  </data>
+  <data name="SearchFailedTitle" xml:space="preserve">
+    <value>検索失敗</value>
+  </data>
+  <data name="CollectionMode" xml:space="preserve">
+    <value>コレクションモード</value>
+  </data>
+  <data name="BackToCollection" xml:space="preserve">
+    <value>コレクション一覧に戻る</value>
+  </data>
+  <data name="DownloadCollection" xml:space="preserve">
+    <value>コレクション内のModをダウンロード</value>
+  </data>
+  <data name="CollectionItemCount" xml:space="preserve">
+    <value>{0}個のアイテムが含まれています</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>開く</value>
+  </data>
+  <data name="JumpConfirmTitle" xml:space="preserve">
+    <value>リダイレクトの確認</value>
+  </data>
+  <data name="JumpConfirmMsg" xml:space="preserve">
+    <value>以下のリンクを開きますか？</value>
+  </data>
+  <data name="ColumnFavorite" xml:space="preserve">
+    <value>お気に入り</value>
+  </data>
+  <data name="EnableConflictDetection" xml:space="preserve">
+    <value>Mod競合検出</value>
+  </data>
+  <data name="SortOrder" xml:space="preserve">
+    <value>並び替え</value>
+  </data>
+  <data name="SortTrend" xml:space="preserve">
+    <value>最も人気</value>
+  </data>
+  <data name="SortTopRated" xml:space="preserve">
+    <value>高評価</value>
+  </data>
+  <data name="SortRecent" xml:space="preserve">
+    <value>最新</value>
+  </data>
+  <data name="SortUpdated" xml:space="preserve">
+    <value>最新の更新</value>
+  </data>
+</root>

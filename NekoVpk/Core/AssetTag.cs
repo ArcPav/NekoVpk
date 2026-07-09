@@ -71,6 +71,12 @@ namespace NekoVpk.Core
             get => _Enable; set => this.RaiseAndSetIfChanged(ref _Enable, value);
         }
 
+        bool _IsModified;
+        public bool IsModified
+        {
+            get => _IsModified; set => this.RaiseAndSetIfChanged(ref _IsModified, value);
+        }
+
         public AssetTag(int index, bool enable = true)
         {
             _Enable = enable;

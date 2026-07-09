@@ -15,9 +15,21 @@ namespace NekoVpk.ViewModels
         Local
     }
 
+    public class NekoVariant : ReactiveObject
+    {
+        public string Id { get; }
+        public string Name { get; }
+        public string DisplayName => string.IsNullOrEmpty(Name) ? $"{Id}.neko7z" : $"{Id}.neko7z ({Name})";
+
+        public NekoVariant(string id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+    }
+
     public class AddonAttribute : ViewModelBase
     {
-
         public static List<AddonAttribute> dirty = [];
 
         protected AddonInfo AddonInfo;
@@ -37,6 +49,24 @@ namespace NekoVpk.ViewModels
                 }
             }
         }
+
+        public HashSet<string> ModifiedFiles { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+        private bool _hasConflict;
+        public bool HasConflict
+        {
+            get => _hasConflict;
+            set 
+            {
+                this.RaiseAndSetIfChanged(ref _hasConflict, value);
+                this.RaisePropertyChanged(nameof(ConflictBackgroundBrush));
+                this.RaisePropertyChanged(nameof(ConflictState));
+            }
+        }
+
+        public string ConflictState => HasConflict ? "Conflict" : "Normal";
+
+        public string ConflictBackgroundBrush => HasConflict ? "#1AFF0000" : "Transparent";
 
         private bool _isInstalled;
         public bool IsInstalled
@@ -94,6 +124,28 @@ namespace NekoVpk.ViewModels
 
         public AssetTag[] Tags { get; set; } = [];
 
+        public string CurrentActiveVariantId { get; set; } = "0";
+
+        private List<NekoVariant> _variants = [];
+        public List<NekoVariant> Variants
+        {
+            get => _variants;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _variants, value);
+                this.RaisePropertyChanged(nameof(HasMultipleVariants));
+            }
+        }
+
+        private NekoVariant? _activeVariant;
+        public NekoVariant? ActiveVariant
+        {
+            get => _activeVariant;
+            set => this.RaiseAndSetIfChanged(ref _activeVariant, value);
+        }
+
+        public bool HasMultipleVariants => _variants != null && _variants.Count > 1;
+
         public DateTime ModificationTime { get; set; }
 
         DateTime _CreationTime;
@@ -125,7 +177,7 @@ namespace NekoVpk.ViewModels
             get
             {
                 if (FileSizeRaw <= 0) return "";
-                string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+                string[] sizes = ["B", "KB", "MB", "GB", "TB"];
                 double len = FileSizeRaw;
                 int order = 0;
                 while (len >= 1024 && order < sizes.Length - 1)
