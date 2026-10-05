@@ -21,6 +21,7 @@ using Avalonia;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
 using System.Text.RegularExpressions;
+using Avalonia.VisualTree;
 
 namespace NekoVpk.Views;
 
@@ -39,6 +40,12 @@ public partial class MainView : UserControl
     public MainView()
     {
         InitializeComponent();
+
+        FolderGridView.AddHandler(InputElement.PointerPressedEvent, FolderGridView_PointerPressed,
+            Avalonia.Interactivity.RoutingStrategies.Tunnel);
+
+        AddHandler(InputElement.PointerPressedEvent, MainView_PointerPressed,
+            Avalonia.Interactivity.RoutingStrategies.Tunnel, handledEventsToo: true);
 
         DragDrop.SetAllowDrop(this, true);
         AddHandler(DragDrop.DragEnterEvent, OnDragEnter);
@@ -87,10 +94,20 @@ public partial class MainView : UserControl
         {
             vm.PropertyChanged -= ViewModel_PropertyChanged;
             vm.PropertyChanged += ViewModel_PropertyChanged;
+            vm.SearchCompleted -= ViewModel_SearchCompleted;
+            vm.SearchCompleted += ViewModel_SearchCompleted;
             
             ReloadAddonList();
         }
         base.OnDataContextChanged(e);
+    }
+
+    private void ViewModel_SearchCompleted(object? sender, EventArgs e)
+    {
+        if (NekoSettings.Default?.AutoSizeColumnsOnSearch == true)
+        {
+            AutoSizeAllColumns();
+        }
     }
 
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -160,7 +177,6 @@ public partial class MainView : UserControl
             }
             catch (Exception ex)
             {
-                // Debug.WriteLine($"读取 VPK 失败: {ex.Message}");
                 pak = null;
             }
 
@@ -250,7 +266,7 @@ public partial class MainView : UserControl
             {
                 foreach (var cached in _imageCache.Values)
                 {
-                    if (cached is IDisposable disposable)
+                    if (cached is IDisposable disposable && !ReferenceEquals(cached, AddonImage.Source))
                     {
                         disposable.Dispose();
                     }
@@ -266,10 +282,10 @@ public partial class MainView : UserControl
 
             if (isGif)
             {
-                var tempFile = Path.Combine(Path.GetTempPath(), "nekovpk_cache_" + url.GetHashCode().ToString("X8") + ".gif");
+                var tempFile = TempCache.GetGifPath(url);
                 if (!File.Exists(tempFile))
                 {
-                    await Task.Run(() => File.WriteAllBytes(tempFile, imageBytes), token);
+                    await Task.Run(() => TempCache.WriteFile(tempFile, imageBytes), token);
                 }
                 
                 _imageCache[url] = tempFile;
@@ -299,13 +315,19 @@ public partial class MainView : UserControl
         }
         catch (Exception ex)
         {
-            // Debug.WriteLine($"加载预览图失败: {ex.Message}");
         }
     }
 
-    private void Button_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void Button_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        ReloadAddonList();
+        if (DataContext is MainViewModel vm && vm.IsOnlineMode)
+        {
+            await vm.SearchWorkshopAsync();
+        }
+        else
+        {
+            ReloadAddonList();
+        }
     }
 
     private void ReloadAddonList()
@@ -326,29 +348,7 @@ public partial class MainView : UserControl
     {
         if (e.EditAction == DataGridEditAction.Commit)
         {
-            AddonList addonList = new();
-            addonList.Load(NekoSettings.Default.GameDir);
-            bool modified = false;
-            foreach (var v in AddonAttribute.dirty)
-            {
-                if (v.Enable.HasValue)
-                {
-                    modified = true;
-                    string keyForAddonList = v.FileName;
-                    if (v.Source == AddonSource.WorkShop)
-                    {
-                        keyForAddonList = "workshop\\" + v.FileName;
-                    }
-                    addonList.SetEnable(keyForAddonList, (bool)v.Enable);
-                }
-            }
-
-            if (modified)
-            {
-                addonList.Save(NekoSettings.Default.GameDir);
-                if (DataContext is MainViewModel vm)
-                    vm.CheckConflicts();
-            }
+            SaveDirtyChanges();
         }
     }
 
@@ -378,12 +378,19 @@ public partial class MainView : UserControl
                 return;
             }
 
-            Process.Start(new ProcessStartInfo() {
-                FileName = "explorer.exe",
-                Arguments = $"/select, \"{fileInfo.FullName}\"",
-                UseShellExecute = true,
-                Verb = "open"
-            });
+            try
+            {
+                Process.Start(new ProcessStartInfo() {
+                    FileName = "explorer.exe",
+                    Arguments = $"/select, \"{fileInfo.FullName}\"",
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
     }
 
@@ -418,12 +425,9 @@ public partial class MainView : UserControl
                 }
             }
 
-            if (anySuccess)
+            if (anySuccess && NekoSettings.Default.ClearSearchAfterDownload)
             {
-                if (NekoSettings.Default.ClearSearchAfterDownload)
-                {
-                    vm.SearchKeywords = string.Empty;
-                }
+                vm.SearchKeywords = string.Empty;
                 vm.IsOnlineMode = false;
             }
         }
@@ -468,188 +472,317 @@ public partial class MainView : UserControl
 
     private async void AddonList_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
+        if (e.Source is Visual sourceVisual)
+        {
+            if (sourceVisual.FindAncestorOfType<DataGridRow>() == null)
+            {
+                return;
+            }
+
+            var cell = sourceVisual as DataGridCell ?? sourceVisual.FindAncestorOfType<DataGridCell>();
+            if (cell?.Content is CheckBox)
+            {
+                return;
+            }
+        }
+
         if (Environment.TickCount64 - _lastDoubleClickTime < 500)
         {
             return;
         }
         _lastDoubleClickTime = Environment.TickCount64;
 
-        foreach (var item in AddonList.SelectedItems)
+        var selectedItemsSnapshot = AddonList.SelectedItems.Cast<object>().ToList();
+        foreach (var item in selectedItemsSnapshot)
         {
             if (item is AddonAttribute att)
             {
-                if (att.HasConflict)
-                {
-                    if (DataContext is MainViewModel vm)
-                    {
-                        var enabledAddons = vm.Addons.Cast<AddonAttribute>().Where(a => a.Enable == true && a != att).ToList();
-                        
-                        var conflictData = await Task.Run(() =>
-                        {
-                            var priorities = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                            string listPath = System.IO.Path.Combine(vm.GameDir, "addonlist.txt");
-                            if (System.IO.File.Exists(listPath))
-                            {
-                                var lines = System.IO.File.ReadAllLines(listPath);
-                                int index = 1;
-                                foreach (var line in lines)
-                                {
-                                    var trimmed = line.Trim();
-                                    if (trimmed.StartsWith("\"") && trimmed.Contains(".vpk", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        var parts = trimmed.Split('"', StringSplitOptions.RemoveEmptyEntries);
-                                        if (parts.Length >= 1)
-                                        {
-                                            string key = parts[0].Replace('/', '\\');
-                                            if (!priorities.ContainsKey(key)) priorities[key] = index++;
-                                        }
-                                    }
-                                }
-                            }
-
-                            string attKey = att.Source == AddonSource.WorkShop ? "workshop\\" + att.FileName : att.FileName;
-                            string prioStr = priorities.TryGetValue(attKey, out int p) ? p.ToString() : "?";
-
-                            var conflictModEntries = new List<(int Priority, string Title)>();
-                            var conflictFiles = new HashSet<string>();
-
-                            foreach (var other in enabledAddons)
-                            {
-                                var overlaps = att.ModifiedFiles.Intersect(other.ModifiedFiles).ToList();
-                                if (overlaps.Count > 0)
-                                {
-                                    string otherKey = other.Source == AddonSource.WorkShop ? "workshop\\" + other.FileName : other.FileName;
-                                    int otherPrio = priorities.TryGetValue(otherKey, out int op) ? op : 999;
-                                    
-                                    conflictModEntries.Add((otherPrio, other.Title));
-                                    foreach (var f in overlaps) conflictFiles.Add(f);
-                                }
-                            }
-
-                            var orderedMods = conflictModEntries.OrderBy(x => x.Priority)
-                                .Select(x => $"[{(x.Priority == 999 ? "?" : x.Priority.ToString())}] {x.Title}")
-                                .ToList();
-
-                            var actualFiles = conflictFiles.Where(f => !f.EndsWith("/") && !f.EndsWith("\\")).OrderBy(f => f).ToList();
-                            var groupedFiles = actualFiles.Take(10).GroupBy(f => System.IO.Path.GetDirectoryName(f)?.Replace('\\', '/') ?? "");
-
-                            var displayLines = new List<string>();
-                            foreach (var group in groupedFiles)
-                            {
-                                string dir = string.IsNullOrEmpty(group.Key) ? "/" : group.Key + "/";
-                                displayLines.Add($"{dir}");
-                                foreach (var file in group)
-                                {
-                                    displayLines.Add($"  {System.IO.Path.GetFileName(file)}");
-                                }
-                            }
-
-                            return new { 
-                                CurrentPriorityStr = prioStr, 
-                                ConflictMods = orderedMods, 
-                                DisplayLines = displayLines, 
-                                FileCount = actualFiles.Count 
-                            };
-                        });
-
-                        string msg = $"{i18n["ConflictCoveredBy"]}\n{string.Join("\n", conflictData.ConflictMods)}\n\n{i18n["ConflictSpecificFiles"]}\n{string.Join("\n", conflictData.DisplayLines)}";
-                        
-                        if (conflictData.FileCount > 10)
-                        {
-                            msg += "\n\n" + string.Format(i18n["ConflictMoreFiles"], conflictData.FileCount);
-                        }
-
-                        var box = new CustomMessageBox(
-                            $"{i18n["ConflictDialogTitle"]} [{conflictData.CurrentPriorityStr}]", 
-                            msg, 
-                            i18n["ConflictDialogDisable"], 
-                            i18n["Cancel"], 
-                            i18n["Open"],
-                            isDanger: true)
-                        {
-                            DataContext = this.DataContext
-                        };
-
-                        if (this.VisualRoot is Window window)
-                        {
-                            var result = await box.ShowDialog<ButtonResult>(window);
-                            if (result == ButtonResult.Yes) 
-                            {
-                                att.Enable = false; 
-                                AddonAttribute.dirty.Add(att); 
-                                SaveDirtyChanges(); 
-                            }
-                            else if (result == ButtonResult.Ok)
-                            {
-                                if (att.Source == AddonSource.WorkShop)
-                                {
-                                    string localPath = att.GetAbsolutePath(NekoSettings.Default.GameDir);
-                                    if (!File.Exists(localPath))
-                                    {
-                                        if (!string.IsNullOrEmpty(att.WorkShopID))
-                                        {
-                                            var url = $"https://steamcommunity.com/sharedfiles/filedetails/?id={att.WorkShopID}";
-                                            Process.Start(new ProcessStartInfo
-                                            {
-                                                FileName = url,
-                                                UseShellExecute = true
-                                            });
-                                        }
-                                        return;
-                                    }
-                                }
-
-                                Process.Start(new ProcessStartInfo()
-                                {
-                                    FileName = att.GetAbsolutePath(NekoSettings.Default.GameDir),
-                                    UseShellExecute = true,
-                                    Verb = "open",
-                                });
-                            }
-                        }
-                    }
-                    return;
-                }
-
-                if (att.Source == AddonSource.WorkShop)
-                {
-                    string localPath = att.GetAbsolutePath(NekoSettings.Default.GameDir);
-                    if (!File.Exists(localPath))
-                    {
-                        if (!string.IsNullOrEmpty(att.WorkShopID))
-                        {
-                            var url = $"https://steamcommunity.com/sharedfiles/filedetails/?id={att.WorkShopID}";
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = url,
-                                UseShellExecute = true
-                            });
-                        }
-                        return;
-                    }
-                }
-
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = att.GetAbsolutePath(NekoSettings.Default.GameDir),
-                    UseShellExecute = true,
-                    Verb = "open",
-                });
+                bool hadConflict = att.HasConflict;
+                await OpenAddonInteractiveAsync(att);
+                if (hadConflict) break;
             }
         }
+    }
+
+    private static void TryShellStart(string fileName, string? verb = null)
+    {
+        try
+        {
+            var psi = new ProcessStartInfo { FileName = fileName, UseShellExecute = true };
+            if (verb != null) psi.Verb = verb;
+            Process.Start(psi);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+    }
+
+    private async Task OpenAddonInteractiveAsync(AddonAttribute att)
+    {
+        if (att.HasConflict)
+        {
+            if (DataContext is MainViewModel vm)
+            {
+                var enabledAddons = vm.Addons.Cast<AddonAttribute>().Where(a => a.Enable == true && a != att).ToList();
+
+                var conflictData = await Task.Run(() =>
+                {
+                    var priorities = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                    string listPath = System.IO.Path.Combine(vm.GameDir, "addonlist.txt");
+                    if (System.IO.File.Exists(listPath))
+                    {
+                        var lines = System.IO.File.ReadAllLines(listPath);
+                        int index = 1;
+                        foreach (var line in lines)
+                        {
+                            var trimmed = line.Trim();
+                            if (trimmed.StartsWith("\"") && trimmed.Contains(".vpk", StringComparison.OrdinalIgnoreCase))
+                            {
+                                var parts = trimmed.Split('"', StringSplitOptions.RemoveEmptyEntries);
+                                if (parts.Length >= 1)
+                                {
+                                    string key = parts[0].Replace('/', '\\');
+                                    if (!priorities.ContainsKey(key)) priorities[key] = index++;
+                                }
+                            }
+                        }
+                    }
+
+                    string attKey = att.Source == AddonSource.WorkShop ? "workshop\\" + att.FileName : att.FileName;
+                    string prioStr = priorities.TryGetValue(attKey, out int p) ? p.ToString() : "?";
+
+                    var conflictModEntries = new List<(int Priority, string Title)>();
+                    var conflictFiles = new HashSet<string>();
+
+                    foreach (var other in enabledAddons)
+                    {
+                        var overlaps = att.ModifiedFiles.Intersect(other.ModifiedFiles).ToList();
+                        if (overlaps.Count > 0)
+                        {
+                            string otherKey = other.Source == AddonSource.WorkShop ? "workshop\\" + other.FileName : other.FileName;
+                            int otherPrio = priorities.TryGetValue(otherKey, out int op) ? op : 999;
+
+                            conflictModEntries.Add((otherPrio, other.Title));
+                            foreach (var f in overlaps) conflictFiles.Add(f);
+                        }
+                    }
+
+                    var orderedMods = conflictModEntries.OrderBy(x => x.Priority)
+                        .Select(x => $"[{(x.Priority == 999 ? "?" : x.Priority.ToString())}] {x.Title}")
+                        .ToList();
+
+                    var actualFiles = conflictFiles.Where(f => !f.EndsWith("/") && !f.EndsWith("\\")).OrderBy(f => f).ToList();
+                    var groupedFiles = actualFiles.Take(10).GroupBy(f => System.IO.Path.GetDirectoryName(f)?.Replace('\\', '/') ?? "");
+
+                    var displayLines = new List<string>();
+                    foreach (var group in groupedFiles)
+                    {
+                        string dir = string.IsNullOrEmpty(group.Key) ? "/" : group.Key + "/";
+                        displayLines.Add($"{dir}");
+                        foreach (var file in group)
+                        {
+                            displayLines.Add($"  {System.IO.Path.GetFileName(file)}");
+                        }
+                    }
+
+                    return new {
+                        CurrentPriorityStr = prioStr,
+                        ConflictMods = orderedMods,
+                        DisplayLines = displayLines,
+                        FileCount = actualFiles.Count
+                    };
+                });
+
+                string msg = $"{i18n["ConflictCoveredBy"]}\n{string.Join("\n", conflictData.ConflictMods)}\n\n{i18n["ConflictSpecificFiles"]}\n{string.Join("\n", conflictData.DisplayLines)}";
+
+                if (conflictData.FileCount > 10)
+                {
+                    msg += "\n\n" + string.Format(i18n["ConflictMoreFiles"], conflictData.FileCount);
+                }
+
+                var box = new CustomMessageBox(
+                    $"{i18n["ConflictDialogTitle"]} [{conflictData.CurrentPriorityStr}]",
+                    msg,
+                    i18n["ConflictDialogDisable"],
+                    i18n["Cancel"],
+                    i18n["Open"],
+                    isDanger: true)
+                {
+                    DataContext = this.DataContext
+                };
+
+                if (this.VisualRoot is Window window)
+                {
+                    var result = await box.ShowDialog<ButtonResult>(window);
+                    if (result == ButtonResult.Yes)
+                    {
+                        att.Enable = false;
+                        AddonAttribute.dirty.Add(att);
+                        SaveDirtyChanges();
+                    }
+                    else if (result == ButtonResult.Ok)
+                    {
+                        if (att.Source == AddonSource.WorkShop)
+                        {
+                            string localPath = att.GetAbsolutePath(NekoSettings.Default.GameDir);
+                            if (!File.Exists(localPath))
+                            {
+                                if (!string.IsNullOrEmpty(att.WorkShopID))
+                                {
+                                    var url = $"https://steamcommunity.com/sharedfiles/filedetails/?id={att.WorkShopID}";
+                                    TryShellStart(url);
+                                }
+                                return;
+                            }
+                        }
+
+                        TryShellStart(att.GetAbsolutePath(NekoSettings.Default.GameDir), "open");
+                    }
+                }
+            }
+            return;
+        }
+
+        if (att.Source == AddonSource.WorkShop)
+        {
+            string localPath = att.GetAbsolutePath(NekoSettings.Default.GameDir);
+            if (!File.Exists(localPath))
+            {
+                if (!string.IsNullOrEmpty(att.WorkShopID))
+                {
+                    var url = $"https://steamcommunity.com/sharedfiles/filedetails/?id={att.WorkShopID}";
+                    TryShellStart(url);
+                }
+                return;
+            }
+        }
+
+        TryShellStart(att.GetAbsolutePath(NekoSettings.Default.GameDir), "open");
     }
 
     private async void Button_Download_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (DataContext is MainViewModel vm && AddonList.SelectedItem is AddonAttribute att)
         {
-            if (await vm.DownloadAddonAsync(att))
+            if (await vm.DownloadAddonAsync(att) && NekoSettings.Default.ClearSearchAfterDownload)
             {
-                if (NekoSettings.Default.ClearSearchAfterDownload)
-                {
-                    vm.SearchKeywords = string.Empty;
-                }
+                vm.SearchKeywords = string.Empty;
                 vm.IsOnlineMode = false;
+            }
+        }
+    }
+
+    private void AddonGridView_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        if (Environment.TickCount64 - _lastDoubleClickTime < 500)
+        {
+            return;
+        }
+        _lastDoubleClickTime = Environment.TickCount64;
+
+        if (AddonGridView.SelectedItem is AddonAttribute att)
+        {
+            if (att.IsInstalled)
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = att.GetAbsolutePath(NekoSettings.Default.GameDir),
+                        UseShellExecute = true,
+                        Verb = "open",
+                    });
+                }
+                catch { }
+            }
+            else if (!string.IsNullOrEmpty(att.Url))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = att.Url,
+                        UseShellExecute = true
+                    });
+                }
+                catch { }
+            }
+        }
+    }
+
+    private void AddonGridView_Menu_OpenPage(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (AddonGridView.SelectedItem is AddonAttribute att && !string.IsNullOrEmpty(att.Url))
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = att.Url,
+                    UseShellExecute = true
+                });
+            }
+            catch { }
+        }
+    }
+
+    private async void AddonGridView_Menu_Download(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm && AddonGridView.SelectedItems != null && AddonGridView.SelectedItems.Count > 0)
+        {
+            var selectedItems = AddonGridView.SelectedItems.Cast<AddonAttribute>().ToList();
+            bool anySuccess = false;
+
+            foreach (var att in selectedItems)
+            {
+                if (await vm.DownloadAddonAsync(att))
+                {
+                    anySuccess = true;
+                }
+            }
+
+            if (anySuccess && NekoSettings.Default.ClearSearchAfterDownload)
+            {
+                vm.SearchKeywords = string.Empty;
+                vm.IsOnlineMode = false;
+            }
+        }
+    }
+
+    private async void AddonGridView_Menu_Delete(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm && AddonGridView.SelectedItems != null && AddonGridView.SelectedItems.Count > 0)
+        {
+            var selectedItems = AddonGridView.SelectedItems.Cast<AddonAttribute>().ToList();
+            int count = selectedItems.Count;
+
+            string msg = count == 1
+                ? string.Format(i18n["DeleteSingleMsg"], selectedItems[0].Title, selectedItems[0].FileName)
+                : string.Format(i18n["DeleteMultiMsg"], count);
+
+            string title = i18n["DeleteConfirmTitle"];
+            string warning = i18n["DeleteWarningSuffix"];
+
+            var result = await ShowMessageBoxAsync(title, msg + warning, ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning, isDanger: true);
+
+            if (result == ButtonResult.Yes)
+            {
+                foreach (var att in selectedItems)
+                {
+                    try
+                    {
+                        vm.DeleteAddon(att);
+                    }
+                    catch (Exception ex)
+                    {
+                        string errTitle = i18n["DeleteFailedTitle"];
+                        string errMsg = string.Format(i18n["DeleteFailedMsg"], att.FileName, ex.Message);
+
+                        await ShowMessageBoxAsync(errTitle, errMsg, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -676,6 +809,26 @@ public partial class MainView : UserControl
 
     private readonly Dictionary<AssetTag, bool> ModifiedAssetTags = [];
 
+    private void SetAssetTagEnabled(AssetTag tag, bool enabled)
+    {
+        if (!ModifiedAssetTags.ContainsKey(tag))
+        {
+            ModifiedAssetTags[tag] = tag.Enable;
+        }
+
+        tag.Enable = enabled;
+
+        if (tag.Enable != ModifiedAssetTags[tag])
+        {
+            tag.IsModified = true;
+        }
+        else
+        {
+            tag.IsModified = false;
+            ModifiedAssetTags.Remove(tag);
+        }
+    }
+
     private void AssetTag_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (sender is Label label && label.DataContext is AssetTag tag)
@@ -683,21 +836,20 @@ public partial class MainView : UserControl
             if (tag.Type == null || !tag.Type.Contains("Survivor"))
                 return;
 
-            if (!ModifiedAssetTags.ContainsKey(tag))
+            SetAssetTagEnabled(tag, !tag.Enable);
+
+            if (tag.Enable && DataContext is MainViewModel vm && vm.SelectedAddon is AddonAttribute att)
             {
-                ModifiedAssetTags[tag] = tag.Enable;
-            }
-            
-            tag.Enable = !tag.Enable;
-            
-            if (tag.Enable != ModifiedAssetTags[tag])
-            {
-                tag.IsModified = true;
-            }
-            else
-            {
-                tag.IsModified = false;
-                ModifiedAssetTags.Remove(tag);
+                foreach (var other in att.Tags)
+                {
+                    if (other.Equals(tag) || !other.Enable)
+                        continue;
+
+                    if (AssetTagProperty.AreMutuallyExclusive(tag.Proporty, other.Proporty))
+                    {
+                        SetAssetTagEnabled(other, false);
+                    }
+                }
             }
 
             AssetTagModifiedPanel.IsVisible = ModifiedAssetTags.Count > 0;
@@ -721,7 +873,7 @@ public partial class MainView : UserControl
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
-                    string msg = string.Format(i18n["ApplyFailedMsg"], ex.Message, att.FileName);
+                    string msg = FormatApplyError(ex, att.FileName);
                     await ShowMessageBoxAsync(i18n["ApplyFailedTitle"], msg, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                     cb.SelectedItem = att.Variants.FirstOrDefault(v => v.Id == att.CurrentActiveVariantId);
                 }
@@ -732,6 +884,38 @@ public partial class MainView : UserControl
             }
         }
     }
+
+    private static void ReplaceVpkFile(FileInfo newFile, string originFilePath, DateTime creationTime, DateTime lastWriteTime)
+    {
+        string bakPath = Path.ChangeExtension(originFilePath, ".vpk.nekobak");
+        bool movedToBackup = false;
+        try
+        {
+            if (!NekoSettings.Default.SkipVariantBackup)
+            {
+                File.Move(originFilePath, bakPath, true);
+                movedToBackup = true;
+            }
+
+            newFile.Refresh();
+            newFile.LastWriteTime = lastWriteTime;
+            newFile.CreationTime = creationTime;
+            newFile.MoveTo(originFilePath, true);
+        }
+        catch
+        {
+            if (movedToBackup && !File.Exists(originFilePath) && File.Exists(bakPath))
+            {
+                try { File.Move(bakPath, originFilePath); } catch { }
+            }
+            throw;
+        }
+    }
+
+    private string FormatApplyError(Exception ex, string fileName)
+        => ex is IOException or UnauthorizedAccessException
+            ? string.Format(i18n["ApplyFailedMsg"], ex.Message, fileName)
+            : $"{ex.Message}\n\n{fileName}";
 
     private async Task ChangeVariantAsync(AddonAttribute att, string oldId, string newId, string gameDir)
     {
@@ -914,12 +1098,7 @@ public partial class MainView : UserControl
                 pkg.Write(outVpkFile.FullName, 1);
                 pkg.Dispose();
 
-                srcPakFile.MoveTo(Path.ChangeExtension(originFilePath, ".vpk.nekobak"), true);
-
-                outVpkFile.Refresh();
-                outVpkFile.LastWriteTime = srcPakFile.LastWriteTime;
-                outVpkFile.CreationTime = srcPakFile.CreationTime;
-                outVpkFile.MoveTo(originFilePath, true);
+                ReplaceVpkFile(outVpkFile, originFilePath, srcPakFile.CreationTime, srcPakFile.LastWriteTime);
             }
             finally
             {
@@ -1060,12 +1239,7 @@ public partial class MainView : UserControl
                 pkg.Write(tmpFile.FullName, 1);
                 pkg.Dispose();
 
-                srcPakFile.MoveTo(Path.ChangeExtension(originFilePath, ".vpk.nekobak"), true);
-
-                tmpFile.Refresh();
-                tmpFile.LastWriteTime = srcPakFile.LastWriteTime;
-                tmpFile.CreationTime = srcPakFile.CreationTime;
-                tmpFile.MoveTo(originFilePath, true);
+                ReplaceVpkFile(tmpFile, originFilePath, srcPakFile.CreationTime, srcPakFile.LastWriteTime);
 
                 foreach (var tag in ModifiedAssetTags.Keys)
                 {
@@ -1080,7 +1254,7 @@ public partial class MainView : UserControl
                 CancelAssetTagChange();
                 Debug.WriteLine(ex);
 
-                await ShowMessageBoxAsync("应用失败", $"{ex.Message}\n\n{att.FileName} 被其他程序使用中 关闭游戏或可能的程序后重试", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                await ShowMessageBoxAsync(i18n["ApplyFailedTitle"], FormatApplyError(ex, att.FileName), ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
             }
             finally
             {
@@ -1119,30 +1293,48 @@ public partial class MainView : UserControl
         }
     }
 
-    private void Button_AddonSearch_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void Button_AddonSearch_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (DataContext is MainViewModel vm && vm.IsOnlineMode)
         {
-            _ = vm.SearchWorkshopAsync();
+            await vm.SearchWorkshopAsync();
         }
         else
         {
             SubmitAddonSearch();
         }
+        if (NekoSettings.Default?.AutoSizeColumnsOnSearch == true)
+        {
+            AutoSizeAllColumns();
+        }
     }
 
-    private void TextBox_AddonSearch_KeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
+    private async void TextBox_AddonSearch_KeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
     {
         if (e.Key == Avalonia.Input.Key.Enter)
         {
-            if (DataContext is MainViewModel vm && vm.IsOnlineMode)
-            {
-                _ = vm.SearchWorkshopAsync();
-            }
-            else
-            {
-                SubmitAddonSearch();
-            }
+            await ExecuteSearchAsync();
+        }
+    }
+
+    private async void Button_Search_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        await ExecuteSearchAsync();
+    }
+
+    private async Task ExecuteSearchAsync()
+    {
+        if (DataContext is MainViewModel vm && vm.IsOnlineMode)
+        {
+            await vm.SearchWorkshopAsync();
+        }
+        else
+        {
+            SubmitAddonSearch();
+        }
+        if (NekoSettings.Default?.AutoSizeColumnsOnSearch == true)
+        {
+            AutoSizeAllColumns();
         }
     }
 
@@ -1152,6 +1344,27 @@ public partial class MainView : UserControl
         {
             SubmitAddonSearch();
         }
+    }
+
+    private async void Button_CheckUpdates_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        await vm.CheckUpdatesGlobalAsync();
+    }
+
+    private async void AddonList_Menu_CheckUpdates(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm && AddonList.SelectedItems != null && AddonList.SelectedItems.Count > 0)
+        {
+            var selectedItems = AddonList.SelectedItems.Cast<AddonAttribute>().ToList();
+            await vm.CheckUpdatesForAsync(selectedItems);
+        }
+    }
+
+    private void Button_ClearSearch_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        vm.SearchKeywords = string.Empty;
     }
 
     private void DataGrid_Sorting(object? sender, Avalonia.Controls.DataGridColumnEventArgs e)
@@ -1168,18 +1381,32 @@ public partial class MainView : UserControl
 
         if (this.VisualRoot is Window window)
         {
+            var settingsViewModel = new ViewModels.Settings();
+            settingsViewModel.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModels.Settings.BackgroundBrightness) && DataContext is MainViewModel main)
+                {
+                    main.RefreshBackgroundDim();
+                }
+            };
             var settingsWindow = new SettingsWindow()
             {
-                DataContext = new ViewModels.Settings(),
+                DataContext = settingsViewModel,
                 Background = window.Background,
             };
             
+            string oldGameDir = NekoSettings.Default.GameDir;
             await settingsWindow.ShowDialog(window);
             
             if (DataContext is MainViewModel vm)
             {
                 vm.UpdateBackground();
                 vm.CheckConflicts();
+
+                if (!vm.IsOnlineMode && NekoSettings.Default.GameDir != oldGameDir)
+                {
+                    ReloadAddonList();
+                }
             }
         }
 
@@ -1206,32 +1433,47 @@ public partial class MainView : UserControl
     {
         if (AddonAttribute.dirty.Count == 0) return;
 
-        AddonList addonList = new();
-        addonList.Load(NekoSettings.Default.GameDir);
-        bool modified = false;
-
-        foreach (var v in AddonAttribute.dirty)
+        bool saved = false;
+        try
         {
-            if (v.Enable.HasValue)
+            AddonList addonList = new();
+            addonList.Load(NekoSettings.Default.GameDir);
+            bool modified = false;
+
+            foreach (var v in AddonAttribute.dirty)
             {
-                modified = true;
-                string key = v.FileName;
-                if (v.Source == AddonSource.WorkShop)
+                if (v.Enable.HasValue && string.IsNullOrEmpty(v.SubFolder))
                 {
-                    key = "workshop\\" + v.FileName;
+                    modified = true;
+                    string key = v.FileName;
+                    if (v.Source == AddonSource.WorkShop)
+                    {
+                        key = "workshop\\" + v.FileName;
+                    }
+                    addonList.SetEnable(key, (bool)v.Enable);
                 }
-                addonList.SetEnable(key, (bool)v.Enable);
             }
-        }
 
-        if (modified)
+            if (modified)
+            {
+                addonList.Save(NekoSettings.Default.GameDir);
+            }
+
+            AddonAttribute.dirty.Clear();
+            saved = true;
+        }
+        catch (Exception ex)
         {
-            addonList.Save(NekoSettings.Default.GameDir);
-            if (DataContext is MainViewModel vm)
-                vm.CheckConflicts();
+            App.Logger.Error(ex);
+            _ = ShowMessageBoxAsync(
+                i18n["ApplyFailedTitle"],
+                string.Format(i18n["ApplyFailedMsg"], ex.Message, "addonlist.txt"),
+                ButtonEnum.Ok,
+                MsBox.Avalonia.Enums.Icon.Error);
         }
 
-        AddonAttribute.dirty.Clear();
+        if (saved && DataContext is MainViewModel vm)
+            vm.CheckConflicts();
     }
 
     private void MenuItem_SelectAll_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -1290,29 +1532,63 @@ public partial class MainView : UserControl
         }
     }
     
+    private async void Button_PrevPage_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+        {
+            await vm.GoToPrevPageAsync();
+        }
+    }
+
+    private async void Button_NextPage_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+        {
+            await vm.GoToNextPageAsync();
+        }
+    }
+
     private void Menu_AutoSizeAllColumns_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (AddonList?.Columns != null)
-        {
-            string? tagHeader = i18n?["ColumnTag"];
+        AutoSizeAllColumns();
+    }
 
-            foreach (var column in AddonList.Columns)
+    private void AutoSizeAllColumns()
+    {
+        if (AddonList?.Columns == null) return;
+
+        if (AddonList.Columns.Count > 0)
+        {
+            try { AddonList.ScrollIntoView(null, AddonList.Columns[0]); } catch { }
+        }
+
+        string? tagHeader = i18n?["ColumnTag"];
+        string? typeHeader = i18n?["ColumnType"];
+
+        foreach (var column in AddonList.Columns)
+        {
+            if (column == null) continue;
+
+            bool isTagColumn = (tagHeader != null && column.Header?.ToString() == tagHeader) || column.SortMemberPath == "TagsOrde";
+            bool isTypeColumn = (typeHeader != null && column.Header?.ToString() == typeHeader) || column.SortMemberPath == "TypeDisplay";
+
+            if (isTagColumn)
             {
-                if (column == null) continue;
-                
-                if ((tagHeader != null && column.Header?.ToString() == tagHeader) || column.SortMemberPath == "TagsOrde")
-                {
-                    column.Width = new Avalonia.Controls.DataGridLength(136, Avalonia.Controls.DataGridLengthUnitType.Pixel);
-                }
-                else
-                {
-                    column.Width = new Avalonia.Controls.DataGridLength(1, Avalonia.Controls.DataGridLengthUnitType.Auto);
-                }
+                column.Width = new Avalonia.Controls.DataGridLength(136, Avalonia.Controls.DataGridLengthUnitType.Pixel);
             }
-            if (NekoSettings.Default?.SaveColumnWidths == true)
+            else if (isTypeColumn)
             {
-                SaveColumnWidths();
+                column.Width = new Avalonia.Controls.DataGridLength(160, Avalonia.Controls.DataGridLengthUnitType.Pixel);
             }
+            else
+            {
+                column.Width = new Avalonia.Controls.DataGridLength(1, Avalonia.Controls.DataGridLengthUnitType.Auto);
+            }
+        }
+
+        if (NekoSettings.Default?.SaveColumnWidths == true)
+        {
+            SaveColumnWidths();
         }
     }
 
@@ -1381,11 +1657,507 @@ public partial class MainView : UserControl
         }
     }
 
+    private const string MoveMenuTag = "NekoMoveToFolder";
+
+    private void Button_ExitFolder_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+        {
+            vm.ExitFolder();
+        }
+    }
+
+    private void MainView_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.GetCurrentPoint(this).Properties.PointerUpdateKind != PointerUpdateKind.XButton1Pressed) return;
+        if (DataContext is not MainViewModel vm) return;
+
+        if (vm.IsInsideFolder) vm.ExitFolder();
+        else if (vm.IsInCollectionDetail) vm.ExitCollection();
+        else return;
+
+        e.Handled = true;
+    }
+
+    private AddonFolderItem? _folderMenuTarget;
+    private bool _folderPressedWithLeft;
+    private Flyout? _folderNameFlyout;
+
+    private void FolderGridView_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        _folderPressedWithLeft = e.GetCurrentPoint(FolderGridView).Properties.IsLeftButtonPressed;
+        _folderMenuTarget = (e.Source as StyledElement)?.DataContext as AddonFolderItem;
+    }
+
+    private void FolderGridView_Tapped(object? sender, TappedEventArgs e)
+    {
+        if (!_folderPressedWithLeft) return;
+        if (DataContext is not MainViewModel vm) return;
+        if (e.Source is not StyledElement { DataContext: AddonFolderItem { IsAddTile: true } item } source) return;
+
+        Control? anchor = (source as Visual)?.FindAncestorOfType<ListBoxItem>(true) ?? source as Control;
+        if (anchor != null)
+        {
+            item.IsNaming = true;
+
+            ShowFolderNameFlyout(anchor, i18n["NewFolder"], string.Empty, name => vm.CreateFolder(name));
+
+            if (_folderNameFlyout != null)
+            {
+                EventHandler? closedHandler = null;
+                closedHandler = (s, args) =>
+                {
+                    _folderNameFlyout.Closed -= closedHandler;
+                    item.IsNaming = false;
+                };
+                _folderNameFlyout.Closed += closedHandler;
+            }
+        }
+    }
+
+    private void FolderGridView_DoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (!_folderPressedWithLeft) return;
+        if (DataContext is not MainViewModel vm) return;
+        if (e.Source is StyledElement { DataContext: AddonFolderItem { IsFolder: true } item })
+        {
+            vm.EnterFolder(item.Name);
+        }
+    }
+
+    private void Menu_ThemeColor_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is not Control anchor) return;
+
+        string current = (NekoSettings.Default.ThemeColor ?? string.Empty).Trim();
+        bool hasCurrent = Rgb.TryParse(current, out var currentRgb);
+        bool followSystem = ThemeColor.IsSystem(current);
+
+        var flyout = new Flyout { Placement = PlacementMode.Right };
+
+        void ApplyTheme(string? hex)
+        {
+            NekoSettings.Default.ThemeColor = hex ?? string.Empty;
+            NekoSettings.Default.Save();
+            ThemeColor.Apply(hex);
+        }
+
+        var swatches = new WrapPanel { Width = 5 * 36 };
+        void AddSwatch(string? hex, string tip)
+        {
+            Rgb.TryParse(hex ?? ThemeColor.DefaultPreviewHex, out var rgb);
+            bool selected = hex == null ? !hasCurrent && !followSystem : hasCurrent && currentRgb == rgb;
+
+            var swatch = new Border
+            {
+                Width = 28,
+                Height = 28,
+                Margin = new Thickness(4),
+                CornerRadius = new CornerRadius(14),
+                Background = new SolidColorBrush(Color.FromRgb(rgb.R, rgb.G, rgb.B)),
+                BorderBrush = Brushes.White,
+                BorderThickness = new Thickness(selected ? 3 : 0),
+                Cursor = new Cursor(StandardCursorType.Hand)
+            };
+            ToolTip.SetTip(swatch, tip);
+            swatch.Tapped += (_, _) =>
+            {
+                ApplyTheme(hex);
+                flyout.Hide();
+            };
+            swatches.Children.Add(swatch);
+        }
+        AddSwatch(null, i18n["ThemeColorDefault"]);
+        foreach (var hex in ThemeColorMath.PresetHexes) AddSwatch(hex, hex);
+
+        var systemContent = new StackPanel { Orientation = Avalonia.Layout.Orientation.Horizontal, Spacing = 6 };
+        if (ThemeColor.TryGetSystemAccent(out var systemRgb))
+        {
+            systemContent.Children.Add(new Border
+            {
+                Width = 14,
+                Height = 14,
+                CornerRadius = new CornerRadius(7),
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                Background = new SolidColorBrush(Color.FromRgb(systemRgb.R, systemRgb.G, systemRgb.B))
+            });
+        }
+        systemContent.Children.Add(new TextBlock { Text = i18n["ThemeColorSystem"], VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+
+        var systemCheck = new CheckBox { Content = systemContent, IsChecked = followSystem };
+        systemCheck.Click += (_, _) =>
+        {
+            ApplyTheme(systemCheck.IsChecked == true ? ThemeColor.SystemValue : null);
+            flyout.Hide();
+        };
+
+        var box = new TextBox { Width = 120, MaxLength = 7, Watermark = "#RRGGBB", Text = hasCurrent ? currentRgb.ToHex() : string.Empty };
+        var okButton = new Button { Content = i18n["MsgBoxOk"] };
+        var error = new TextBlock
+        {
+            Width = 180,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = Brushes.IndianRed,
+            Text = i18n["ThemeColorInvalid"],
+            IsVisible = false
+        };
+
+        void SubmitCustom()
+        {
+            if (!Rgb.TryParse(box.Text, out var rgb))
+            {
+                error.IsVisible = true;
+                return;
+            }
+            ApplyTheme(rgb.ToHex());
+            flyout.Hide();
+        }
+        okButton.Click += (_, _) => SubmitCustom();
+        box.KeyDown += (_, args) =>
+        {
+            if (args.Key == Key.Enter)
+            {
+                args.Handled = true;
+                SubmitCustom();
+            }
+        };
+
+        var customRow = new StackPanel { Orientation = Avalonia.Layout.Orientation.Horizontal, Spacing = 6 };
+        customRow.Children.Add(box);
+        customRow.Children.Add(okButton);
+
+        var panel = new StackPanel { Spacing = 8 };
+        panel.Children.Add(new TextBlock { Text = i18n["ThemeColor"], FontWeight = FontWeight.Bold });
+        panel.Children.Add(swatches);
+        panel.Children.Add(systemCheck);
+        panel.Children.Add(customRow);
+        panel.Children.Add(error);
+
+        flyout.Content = panel;
+        flyout.ShowAt(anchor);
+    }
+
+    private void FolderMenu_SelectAll_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => ApplyFolderSelection(_ => true);
+    private void FolderMenu_DeselectAll_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => ApplyFolderSelection(_ => false);
+    private void FolderMenu_InvertSelection_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => ApplyFolderSelection(selected => !selected);
+
+    private void ApplyFolderSelection(Func<bool, bool> keep)
+    {
+        if (DataContext is not MainViewModel vm) return;
+
+        var selection = FolderGridView.Selection;
+        var wanted = AddonFolders.PickFolderIndices(
+            vm.FolderItems.Select(i => i.IsFolder).ToList(),
+            selection.IsSelected,
+            keep);
+
+        selection.BeginBatchUpdate();
+        try
+        {
+            selection.Clear();
+            foreach (int index in wanted) selection.Select(index);
+        }
+        finally
+        {
+            selection.EndBatchUpdate();
+        }
+    }
+
+    private void FolderGridView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+
+        var selected = FolderGridView.SelectedItems?.OfType<AddonFolderItem>().ToList()
+                       ?? new List<AddonFolderItem>();
+        vm.UpdateFolderDetail(selected);
+    }
+
+    private List<AddonFolderItem> GetSelectedFolderItems()
+    {
+        var list = FolderGridView.SelectedItems?.OfType<AddonFolderItem>().Where(i => i.IsFolder).ToList()
+                   ?? new List<AddonFolderItem>();
+        if (_folderMenuTarget is { IsFolder: true } target && !list.Contains(target))
+        {
+            list = [target];
+        }
+        return list;
+    }
+
+    private void FolderGridView_ContextMenu_Opening(object? sender, CancelEventArgs e)
+    {
+        if (sender is not ContextMenu menu || DataContext is not MainViewModel vm
+            || _folderMenuTarget is not { IsFolder: true })
+        {
+            e.Cancel = true;
+            return;
+        }
+
+        var selected = GetSelectedFolderItems();
+        if (selected.Count == 0)
+        {
+            e.Cancel = true;
+            return;
+        }
+
+        foreach (var old in menu.Items.OfType<MenuItem>().Where(m => MoveMenuTag.Equals(m.Tag)).ToList())
+        {
+            menu.Items.Remove(old);
+        }
+
+        foreach (var item in menu.Items.OfType<MenuItem>())
+        {
+            if (item.Tag is "open" or "rename") item.IsVisible = selected.Count == 1;
+        }
+
+        if (selected.Sum(i => i.ItemCount) > 0)
+        {
+            var names = selected.Select(i => i.Name).ToList();
+            var targets = new List<(string Label, string? Folder)> { ("addons", null) };
+            foreach (var folder in vm.GetMoveTargetFolders(names))
+            {
+                targets.Add((folder, folder));
+            }
+
+            var moveItem = new MenuItem { Header = i18n["MoveToFolder"], Tag = MoveMenuTag };
+            foreach (var (label, folder) in targets)
+            {
+                string? target = folder;
+                var sub = new MenuItem { Header = new TextBlock { Text = label } };
+                sub.Click += (_, _) => MoveFoldersContentTo(names, target);
+                moveItem.Items.Add(sub);
+            }
+            menu.Items.Insert(2, moveItem);
+        }
+    }
+
+    private void FolderMenu_Open(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var selected = GetSelectedFolderItems();
+        if (DataContext is MainViewModel vm && selected.Count == 1)
+        {
+            vm.EnterFolder(selected[0].Name);
+        }
+    }
+
+    private void FolderMenu_Rename(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var selected = GetSelectedFolderItems();
+        if (DataContext is not MainViewModel vm || selected.Count != 1) return;
+
+        var target = selected[0];
+        Control anchor = FolderGridView.ContainerFromItem(target) as Control ?? FolderGridView;
+        string oldName = target.Name;
+        ShowFolderNameFlyout(anchor, i18n["FolderRename"], oldName, name => vm.RenameFolder(oldName, name));
+    }
+
+    private async void FolderMenu_CheckUpdates(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var selected = GetSelectedFolderItems();
+        if (DataContext is MainViewModel vm && selected.Count > 0)
+        {
+            await vm.CheckUpdatesInFoldersAsync(selected.Select(i => i.Name).ToList());
+        }
+    }
+
+    private async void FolderMenu_Delete(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var selected = GetSelectedFolderItems();
+        if (DataContext is not MainViewModel vm || selected.Count == 0) return;
+
+        var names = selected.Select(i => i.Name).ToList();
+        int files = names.Sum(n => vm.CountFolderFiles(n));
+
+        string msg;
+        if (names.Count == 1)
+        {
+            msg = files == 0
+                ? string.Format(i18n["FolderDeleteEmptyMsg"], names[0])
+                : string.Format(i18n["FolderDeleteMsg"], names[0], files);
+        }
+        else
+        {
+            msg = string.Format(i18n["FolderDeleteMultiMsg"], names.Count, files);
+        }
+
+        var result = await ShowMessageBoxAsync(i18n["DeleteConfirmTitle"], msg, ButtonEnum.YesNo,
+            MsBox.Avalonia.Enums.Icon.Warning, isDanger: true);
+        if (result != ButtonResult.Yes) return;
+
+        foreach (var name in names)
+        {
+            string? error = vm.DeleteFolder(name);
+            if (error != null)
+            {
+                await ShowMessageBoxAsync(i18n["DeleteFailedTitle"], error, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                break;
+            }
+        }
+    }
+
+    private async void MoveFoldersContentTo(List<string> folders, string? target)
+    {
+        if (DataContext is not MainViewModel vm) return;
+
+        var overwrite = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var declined = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (folder, fileName) in vm.GetFolderMoveConflicts(folders, target))
+        {
+            string shown = folders.Count > 1 ? MainViewModel.MoveKey(folder, fileName) : fileName;
+            var answer = await ShowMessageBoxAsync(
+                i18n["ConfirmOverwriteTitle"],
+                string.Format(i18n["ConfirmOverwriteMsg"], shown),
+                ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning);
+
+            (answer == ButtonResult.Yes ? overwrite : declined).Add(MainViewModel.MoveKey(folder, fileName));
+        }
+
+        var errors = vm.MoveFolderContents(folders, target, overwrite, declined);
+        if (errors.Count > 0)
+        {
+            await ShowMessageBoxAsync(i18n["MoveFailedTitle"], string.Join("\n", errors),
+                ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Warning);
+        }
+    }
+
+    private void ShowFolderNameFlyout(Control anchor, string title, string initialText, Func<string?, string?> submit)
+    {
+        if (_folderNameFlyout?.IsOpen == true) return;
+
+        var box = new TextBox
+        {
+            Width = 240,
+            MaxLength = 64,
+            Text = initialText,
+            Watermark = i18n["NewFolderWatermark"]
+        };
+        var error = new TextBlock
+        {
+            Width = 240,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = Brushes.IndianRed,
+            IsVisible = false
+        };
+        var okButton = new Button
+        {
+            Content = i18n["MsgBoxOk"],
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right
+        };
+        var panel = new StackPanel { Spacing = 8 };
+        panel.Children.Add(new TextBlock { Text = title, FontWeight = FontWeight.Bold });
+        panel.Children.Add(box);
+        panel.Children.Add(error);
+        panel.Children.Add(okButton);
+
+        var flyout = new Flyout { Content = panel, Placement = PlacementMode.Bottom };
+        _folderNameFlyout = flyout;
+
+        void Submit()
+        {
+            string? message = submit(box.Text);
+            if (message != null)
+            {
+                error.Text = message;
+                error.IsVisible = true;
+                return;
+            }
+            flyout.Hide();
+        }
+
+        okButton.Click += (_, _) => Submit();
+        box.KeyDown += (_, args) =>
+        {
+            if (args.Key == Key.Enter)
+            {
+                args.Handled = true;
+                Submit();
+            }
+        };
+        flyout.Opened += (_, _) =>
+        {
+            box.Focus();
+            box.SelectAll();
+        };
+        flyout.ShowAt(anchor);
+    }
+
+    private List<AddonAttribute> GetMovableSelection()
+    {
+        if (AddonList.SelectedItems == null) return [];
+
+        return AddonList.SelectedItems.Cast<AddonAttribute>()
+            .Where(a => a.IsInstalled && !a.IsWorkshopSearchResult && a.Source == AddonSource.Local)
+            .ToList();
+    }
+
+    private void AddonList_ContextMenu_Opening(object? sender, CancelEventArgs e)
+    {
+        if (sender is not ContextMenu menu) return;
+
+        foreach (var old in menu.Items.OfType<MenuItem>().Where(m => MoveMenuTag.Equals(m.Tag)).ToList())
+        {
+            menu.Items.Remove(old);
+        }
+
+        if (DataContext is not MainViewModel vm || vm.IsOnlineMode) return;
+        if (vm.IsFolderMode && !vm.IsInsideFolder) return;
+
+        var movable = GetMovableSelection();
+        if (movable.Count == 0) return;
+
+        var targets = new List<(string Label, string? Folder)>();
+        if (vm.IsInsideFolder) targets.Add(("addons", null));
+        foreach (var folder in vm.GetMoveTargetFolders(vm.CurrentFolder))
+        {
+            targets.Add((folder, folder));
+        }
+        if (targets.Count == 0) return;
+
+        var moveItem = new MenuItem { Header = i18n["MoveToFolder"], Tag = MoveMenuTag };
+        foreach (var (label, folder) in targets)
+        {
+            string? target = folder;
+            var item = new MenuItem { Header = new TextBlock { Text = label } };
+            item.Click += (_, _) => MoveSelectedToFolder(movable, target);
+            moveItem.Items.Add(item);
+        }
+        menu.Items.Add(moveItem);
+    }
+
+    private async void MoveSelectedToFolder(List<AddonAttribute> addons, string? folder)
+    {
+        if (DataContext is not MainViewModel vm) return;
+
+        var plain = new List<AddonAttribute>();
+        var overwrite = new List<AddonAttribute>();
+        foreach (var addon in addons)
+        {
+            if (!vm.MoveTargetExists(addon, folder))
+            {
+                plain.Add(addon);
+                continue;
+            }
+
+            var answer = await ShowMessageBoxAsync(
+                i18n["ConfirmOverwriteTitle"],
+                string.Format(i18n["ConfirmOverwriteMsg"], addon.FileName),
+                ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning);
+            if (answer == ButtonResult.Yes) overwrite.Add(addon);
+        }
+
+        var errors = vm.MoveAddonsToFolder(plain, folder);
+        errors.AddRange(vm.MoveAddonsToFolder(overwrite, folder, overwrite: true));
+        if (errors.Count > 0)
+        {
+            await ShowMessageBoxAsync(i18n["MoveFailedTitle"], string.Join("\n", errors),
+                ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Warning);
+        }
+    }
+
     private async void OnDrop(object? sender, DragEventArgs e)
     {
         if (DataContext is MainViewModel vm && e.DataTransfer.TryGetFiles() is { } files)
         {
-            string targetDir = Path.Combine(vm.GameDir, "addons");
+            string targetDir = vm.AddonsTargetDir;
             
             if (!Directory.Exists(targetDir)) return;
 
@@ -1417,6 +2189,19 @@ public partial class MainView : UserControl
                         }
                             File.Move(localPath, destFile, true);
                             anyImported = true;
+
+                            try
+                            {
+                                string oldBakFile = Path.ChangeExtension(destFile, ".vpk.nekobak");
+                                if (File.Exists(oldBakFile))
+                                {
+                                    File.Delete(oldBakFile);
+                                }
+                            }
+                            catch (Exception bakEx)
+                            {
+                                Debug.WriteLine(bakEx);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -1658,6 +2443,10 @@ public class SteamBBCodeHelper
         }
     }
 
+    private static bool IsHostOrSubdomain(string host, string domain)
+        => host.Equals(domain, StringComparison.OrdinalIgnoreCase)
+           || host.EndsWith("." + domain, StringComparison.OrdinalIgnoreCase);
+
     private static Inline CreateLinkInline(string url, System.Collections.Generic.List<Inline>? innerInlines = null)
     {
         try 
@@ -1697,8 +2486,10 @@ public class SteamBBCodeHelper
             {
                 e.Handled = true;
 
-                bool isSteamLink = uri.Host.EndsWith("steamcommunity.com", StringComparison.OrdinalIgnoreCase) ||
-                                   uri.Host.EndsWith("steampowered.com", StringComparison.OrdinalIgnoreCase) ||
+                if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps) return;
+
+                bool isSteamLink = IsHostOrSubdomain(uri.Host, "steamcommunity.com") ||
+                                   IsHostOrSubdomain(uri.Host, "steampowered.com") ||
                                    uri.Host.Equals("s.team", StringComparison.OrdinalIgnoreCase);
 
                 if (!isSteamLink)
@@ -1726,7 +2517,7 @@ public class SteamBBCodeHelper
                 {
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                     {
-                        FileName = url,
+                        FileName = uri.AbsoluteUri,
                         UseShellExecute = true
                     });
                 }
@@ -1899,10 +2690,10 @@ public class SteamBBCodeHelper
 
             if (isGif)
             {
-                var tempFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "nekovpk_bbcode_" + url.GetHashCode().ToString("X8") + ".gif");
+                var tempFile = TempCache.GetGifPath(url);
                 if (!System.IO.File.Exists(tempFile))
                 {
-                    await System.Threading.Tasks.Task.Run(() => System.IO.File.WriteAllBytes(tempFile, bytes));
+                    await System.Threading.Tasks.Task.Run(() => TempCache.WriteFile(tempFile, bytes));
                 }
 
                 Avalonia.Threading.Dispatcher.UIThread.Post(() =>

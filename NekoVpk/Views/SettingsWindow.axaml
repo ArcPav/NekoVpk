@@ -17,6 +17,19 @@
         Icon="/Assets/NekoVpk.ico"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaTitleBarHeightHint="-1">
+    <Window.Styles>
+        <Style Selector="TextBox.apikey-error">
+            <Setter Property="BorderBrush" Value="#FF5555"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Background" Value="#1AFF0000"/>
+        </Style>
+        <Style Selector="TextBox.apikey-validating">
+            <Setter Property="Background" Value="#1AFFFF00"/>
+        </Style>
+        <Style Selector="TextBox.apikey-success">
+            <Setter Property="Background" Value="#1A00FF00"/>
+        </Style>
+    </Window.Styles>
     <Design.DataContext>
         <vm:Settings />
     </Design.DataContext>
@@ -35,27 +48,42 @@
             <StackPanel Margin="16" Spacing="20">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBox Name="GameDir" Text="{Binding GameDir}" 
-                             InnerLeftContent="{Binding [SettingGameDir], Source={x:Static lang:I18nManager.Instance}}" 
+                             Watermark="{Binding [SettingGameDir], Source={x:Static lang:I18nManager.Instance}}" 
                              TextWrapping="NoWrap" Width="600" Height="32" IsUndoEnabled="True"/>
                     <Button Classes="Tertiary" Height="32" Click="Browser_Click" Margin="5,0,0,0">...</Button>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Spacing="5">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBox Text="{Binding SteamApiKey}" 
-                                 InnerLeftContent="{Binding [SettingWebApiKey], Source={x:Static lang:I18nManager.Instance}}"
+                                 Watermark="{Binding [SettingWebApiKey], Source={x:Static lang:I18nManager.Instance}}"
                                  PasswordChar="{Binding ApiKeyPasswordChar}"
+                                 Classes.apikey-error="{Binding IsApiKeyInvalid}"
+                                 Classes.apikey-validating="{Binding IsApiKeyValidating}"
+                                 Classes.apikey-success="{Binding IsApiKeyValid}"
                                  Width="600" Height="32">
                             <TextBox.InnerRightContent>
-                                <ToggleButton IsChecked="{Binding IsApiKeyVisible}"
-                                              Background="Transparent"
-                                              BorderThickness="0"
-                                              Padding="4"
-                                              Margin="0,0,5,0"
-                                              Cursor="Hand">
-                                    <ToggleButton.Content>
-                                        <TextBlock Text="👁" FontSize="16" VerticalAlignment="Center"/>
-                                    </ToggleButton.Content>
-                                </ToggleButton>
+                                <StackPanel Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
+                                    <Button Command="{Binding ValidateApiKeyAsync}"
+                                            IsEnabled="{Binding CanValidateApiKey}"
+                                            ToolTip.Tip="{Binding ApiKeyValidationText}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="4"
+                                            Margin="0,0,2,0"
+                                            Cursor="Hand">
+                                        <TextBlock Text="↻" FontSize="16" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <ToggleButton IsChecked="{Binding IsApiKeyVisible}"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Padding="4"
+                                                  Margin="0,0,5,0"
+                                                  Cursor="Hand">
+                                        <ToggleButton.Content>
+                                            <TextBlock Text="👁" FontSize="16" VerticalAlignment="Center"/>
+                                        </ToggleButton.Content>
+                                    </ToggleButton>
+                                </StackPanel>
                             </TextBox.InnerRightContent>
                         </TextBox>
                         <Button Classes="Tertiary" Height="32" Margin="5,0,0,0"
@@ -81,12 +109,16 @@
                 </StackPanel>
                 <CheckBox IsChecked="{Binding IgnoreVpkErrors}" 
                           Content="{Binding [IgnoreVpkErrors], Source={x:Static lang:I18nManager.Instance}}"/>
+                <CheckBox IsChecked="{Binding SkipVariantBackup}" 
+                          Content="{Binding [SkipVariantBackup], Source={x:Static lang:I18nManager.Instance}}"/>
                 <CheckBox IsChecked="{Binding ClearSearchAfterDownload}" 
                           Content="{Binding [ClearSearchAfterDownload], Source={x:Static lang:I18nManager.Instance}}"/>
                 <CheckBox IsChecked="{Binding SaveColumnWidths}" 
                           Content="{Binding [SaveColumnWidths], Source={x:Static lang:I18nManager.Instance}}"/>
                 <CheckBox IsChecked="{Binding EnableConflictDetection}" 
                           Content="{Binding [EnableConflictDetection], Source={x:Static lang:I18nManager.Instance}}"/>
+                <CheckBox IsChecked="{Binding AutoSizeColumnsOnSearch}" 
+                          Content="{Binding [AutoSizeColumnsOnSearch], Source={x:Static lang:I18nManager.Instance}}"/>
                 <Separator Height="1" Background="{DynamicResource SystemControlForegroundBaseLowBrush}" Margin="0,10"/>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Label VerticalAlignment="Center" Margin="0,0,10,0" 
@@ -168,14 +200,16 @@
                         </StackPanel>
                     </Grid>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                        <TextBlock Text="{Binding [BackgroundBrightnessLabel], Source={x:Static lang:I18nManager.Instance}}"/>
+                        <TextBlock Text="{Binding [BackgroundBrightnessLabel], Source={x:Static lang:I18nManager.Instance}}"
+                                   IsVisible="{Binding BackgroundImagePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                        <TextBlock Text="{Binding [BackgroundTransparencyLabel], Source={x:Static lang:I18nManager.Instance}}"
+                                   IsVisible="{Binding BackgroundImagePath, Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
                         <TextBlock Text="{Binding BackgroundBrightness, StringFormat=' {0:0}%'}"/>
                     </StackPanel>
                     <Slider Value="{Binding BackgroundBrightness}" 
                             Minimum="0" 
                             Maximum="100" 
-                            Margin="0,0,0,10"
-                            IsEnabled="{Binding BackgroundImagePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                            Margin="0,0,0,10"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

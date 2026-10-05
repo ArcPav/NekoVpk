@@ -43,7 +43,7 @@
     <PackageReference Include="Semi.Avalonia" Version="11.3.7.2" />
     <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.3.7.2" />
     <PackageReference Include="Squid-Box.SevenZipSharp" Version="1.6.2.24" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.2" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
     <PackageReference Include="UTF.Unknown" Version="2.6.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.2" />
   </ItemGroup>
@@ -54,6 +54,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Lang\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Lang\Resources.ja-JP.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -63,16 +68,6 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="NekoSettings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>NekoSettings.settings</DependentUpon>
-    </Compile>
-    <Compile Update="Lang\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 

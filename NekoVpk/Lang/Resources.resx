@@ -150,6 +150,9 @@
   <data name="AllSelectToolTip" xml:space="preserve">
     <value>Select All</value>
   </data>
+  <data name="GridViewToolTip" xml:space="preserve">
+    <value>Grid view</value>
+  </data>
   <data name="Select" xml:space="preserve">
     <value>Select</value>
   </data>
@@ -176,6 +179,18 @@
   </data>
   <data name="SearchWorkshop" xml:space="preserve">
     <value>Search Workshop</value>
+  </data>
+  <data name="ItemsPerPageToolTip" xml:space="preserve">
+    <value>Items requested per page</value>
+  </data>
+  <data name="PrevPageToolTip" xml:space="preserve">
+    <value>Previous page</value>
+  </data>
+  <data name="NextPageToolTip" xml:space="preserve">
+    <value>Next page</value>
+  </data>
+  <data name="PageLabel" xml:space="preserve">
+    <value>Page</value>
   </data>
   <data name="CancelDownload" xml:space="preserve">
     <value>Cancel Download</value>
@@ -238,13 +253,34 @@
     <value>Game Directory</value>
   </data>
   <data name="SettingWebApiKey" xml:space="preserve">
-    <value>API Key</value>
+    <value>Steam Web API Key</value>
   </data>
   <data name="GoToApplyPage" xml:space="preserve">
     <value>Go to apply page</value>
   </data>
   <data name="SteamApiKeyRequired" xml:space="preserve">
     <value>*🌐Required for the online search function</value>
+  </data>
+  <data name="ApiKeyValidateHint" xml:space="preserve">
+    <value>Click to verify the key</value>
+  </data>
+  <data name="ApiKeyValidating" xml:space="preserve">
+    <value>Verifying...</value>
+  </data>
+  <data name="ApiKeyValidSuccess" xml:space="preserve">
+    <value>Verified</value>
+  </data>
+  <data name="ApiKeyValidFailed" xml:space="preserve">
+    <value>Failed - {0}</value>
+  </data>
+  <data name="ApiKeyErrorInvalid" xml:space="preserve">
+    <value>the key may be invalid or revoked</value>
+  </data>
+  <data name="ApiKeyErrorTimeout" xml:space="preserve">
+    <value>the request timed out</value>
+  </data>
+  <data name="ApiKeyErrorNetwork" xml:space="preserve">
+    <value>could not reach the network</value>
   </data>
   <data name="CompressionLevel" xml:space="preserve">
     <value>Compression level</value>
@@ -266,6 +302,9 @@
   </data>
   <data name="IgnoreVpkErrors" xml:space="preserve">
     <value>Ignore VPK Errors</value>
+  </data>
+  <data name="SkipVariantBackup" xml:space="preserve">
+    <value>Don't create backup when switching variant</value>
   </data>
   <data name="ClearSearchAfterDownload" xml:space="preserve">
     <value>Clear searchbox after download</value>
@@ -491,6 +530,9 @@ Please check if the file is being used by another program.</value>
   <data name="EnableConflictDetection" xml:space="preserve">
     <value>Mod Conflict Detection</value>
   </data>
+  <data name="AutoSizeColumnsOnSearch" xml:space="preserve">
+    <value>Auto-Fit Columns When List Updates</value>
+  </data>
   <data name="SortOrder" xml:space="preserve">
     <value>Sort Order</value>
   </data>
@@ -505,5 +547,149 @@ Please check if the file is being used by another program.</value>
   </data>
   <data name="SortUpdated" xml:space="preserve">
     <value>Last Updated</value>
+  </data>
+  <data name="CheckUpdatesToolTip" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="CheckUpdatesMenuItem" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="CheckUpdatesNoneTitle" xml:space="preserve">
+    <value>Update Check Complete</value>
+  </data>
+  <data name="CheckUpdatesNoneMsg" xml:space="preserve">
+    <value>No addons need updating.</value>
+  </data>
+  <data name="CheckUpdatesFoundTitle" xml:space="preserve">
+    <value>Updates Available</value>
+  </data>
+  <data name="CheckUpdatesConfirmMsg" xml:space="preserve">
+    <value>Update the following addons?</value>
+  </data>
+  <data name="CheckUpdatesMoreCount" xml:space="preserve">
+    <value>...and {0} more</value>
+  </data>
+  <data name="CheckUpdatesFailedTitle" xml:space="preserve">
+    <value>Update Check Failed</value>
+  </data>
+  <data name="CheckUpdatesDownloadFailedMsg" xml:space="preserve">
+    <value>The following addons failed to update:</value>
+  </data>
+  <data name="CheckUpdatesUnsupportedTitle" xml:space="preserve">
+    <value>Can't Check for Updates</value>
+  </data>
+  <data name="CheckUpdatesUnsupportedMsg" xml:space="preserve">
+    <value>This addon doesn't support update checking.</value>
+  </data>
+  <data name="CollectionPartialLoadMsg" xml:space="preserve">
+    <value>{0} batch(es) failed to load - the collection may be incomplete.</value>
+  </data>
+  <data name="FolderModeToolTip" xml:space="preserve">
+    <value>Folder mode</value>
+  </data>
+  <data name="BackToFolders" xml:space="preserve">
+    <value>Back to folders</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>New folder</value>
+  </data>
+  <data name="NewFolderWatermark" xml:space="preserve">
+    <value>Folder name</value>
+  </data>
+  <data name="FolderItemCount" xml:space="preserve">
+    <value>{0} VPK(s)</value>
+  </data>
+  <data name="FolderNameEmpty" xml:space="preserve">
+    <value>Please enter a folder name.</value>
+  </data>
+  <data name="FolderNameInvalid" xml:space="preserve">
+    <value>The folder name contains invalid characters.</value>
+  </data>
+  <data name="FolderNameReserved" xml:space="preserve">
+    <value>This name is reserved (workshop and SourceMod related folders are not shown).</value>
+  </data>
+  <data name="FolderNameExists" xml:space="preserve">
+    <value>A folder with this name already exists.</value>
+  </data>
+  <data name="CreateFolderFailedMsg" xml:space="preserve">
+    <value>Failed to create the folder: {0}</value>
+  </data>
+  <data name="MoveToFolder" xml:space="preserve">
+    <value>Move to</value>
+  </data>
+  <data name="MoveFailedTitle" xml:space="preserve">
+    <value>Move failed</value>
+  </data>
+  <data name="MoveFileExistsMsg" xml:space="preserve">
+    <value>"{0}" already exists in the target folder.</value>
+  </data>
+  <data name="MoveFailedMsg" xml:space="preserve">
+    <value>Failed to move "{0}": {1}</value>
+  </data>
+  <data name="FolderRename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="FolderDelete" xml:space="preserve">
+    <value>Delete folder</value>
+  </data>
+  <data name="FolderDeleteMsg" xml:space="preserve">
+    <value>Delete the folder "{0}" and everything inside it ({1} files)? This cannot be undone.</value>
+  </data>
+  <data name="FolderDeleteEmptyMsg" xml:space="preserve">
+    <value>Delete the empty folder "{0}"?</value>
+  </data>
+  <data name="DeleteFolderFailedMsg" xml:space="preserve">
+    <value>Failed to delete the folder: {0}</value>
+  </data>
+  <data name="RenameFolderFailedMsg" xml:space="preserve">
+    <value>Failed to rename the folder: {0}</value>
+  </data>
+  <data name="FolderDeleteMultiMsg" xml:space="preserve">
+    <value>Delete {0} folders and everything inside them ({1} files)? This cannot be undone.</value>
+  </data>
+  <data name="FolderInfoName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="FolderTypeText" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="FolderInfoModified" xml:space="preserve">
+    <value>Date modified</value>
+  </data>
+  <data name="FolderInfoVpkCount" xml:space="preserve">
+    <value>VPK files</value>
+  </data>
+  <data name="FolderSelectedCount" xml:space="preserve">
+    <value>{0} folders selected</value>
+  </data>
+  <data name="SearchButtonToolTip" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="FolderSelectItem" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="FolderSelectAllToolTip" xml:space="preserve">
+    <value>Select all folders</value>
+  </data>
+  <data name="FolderDeselectAllToolTip" xml:space="preserve">
+    <value>Clear the folder selection</value>
+  </data>
+  <data name="FolderInvertSelectionToolTip" xml:space="preserve">
+    <value>Invert the folder selection</value>
+  </data>
+  <data name="ThemeColor" xml:space="preserve">
+    <value>Theme color</value>
+  </data>
+  <data name="ThemeColorDefault" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="ThemeColorInvalid" xml:space="preserve">
+    <value>Enter a color such as #54A9FF.</value>
+  </data>
+  <data name="ThemeColorSystem" xml:space="preserve">
+    <value>Follow system accent color</value>
+  </data>
+  <data name="BackgroundTransparencyLabel" xml:space="preserve">
+    <value>Window transparency</value>
   </data>
 </root>

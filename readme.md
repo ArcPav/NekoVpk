@@ -26,6 +26,27 @@ https://github.com/Starfelll/ValveKeyValue/tree/nekovpk
 
 
 ## changelog
+#### v0.1.6.3
+- **Check for Updates**: Added an update checker for Workshop addons (toolbar button / context menu), usable on the whole library, the current selection, or selected folders. It compares the update date stored in each addon's `addoninfo.txt` with Steam's, lists outdated addons for confirmation, then replaces the vpk. Requires a Steam Web API key.
+- **Folder Mode**: Added a folder view for subfolders under `addons`. Create / rename / delete folders, multi-select, and move addons (single or batch) between folders; the preview image and backup file move along with the vpk. `workshop` and SourceMod-related folders are reserved and hidden.
+- **Workshop Browsing**: Added pagination (previous / next page) with a configurable page size (15 / 30 / 50 / 100), a grid / large-picture mode, and star ratings. A warning is shown when only part of a collection could be loaded.
+- **Download**: Downloaded addons now get the Workshop link and update date written into `addoninfo.txt` (created from Workshop metadata if missing). A preview image is saved alongside when the vpk has none.
+- **Settings**:
+  - Added a "Validate" button for the Steam Web API key.
+  - Added "Do not create backup when switching variant".
+  - Added "Auto-resize columns on refresh".
+  - Added theme color: presets, custom hex, or follow the system accent color.
+  - Added window transparency (shown when no background image is set).
+  - Settings are now stored in `%LocalAppData%\NekoVpk\settings.json`; the API key is encrypted with Windows DPAPI.
+- **Tags**: Added mutually exclusive tags (e.g. `L4N-Survivor` conflicts with every other survivor tag); enabling one automatically disables the conflicting ones. Built-in survivor tags are used if `TaggedAssets.jsonc` is missing. VPKs with a non-standard version number now show it as a tag.
+- **Improvements**:
+  - Auto-detect the text encoding of `addoninfo.txt` when reading and rewriting.
+  - Cached GIF previews are cleaned up on exit; leftovers older than one day are swept at startup.
+  - Image downloads are capped at 6 concurrent requests.
+  - Added a minimum window size (1100×500).
+- **Fixes**:
+  - Closing a dialog with the window's close button now counts as Cancel instead of leaving it hanging.
+  - Choosing the game directory no longer crashes when the saved path is invalid.
 #### v0.1.6
 - **Localization**: Added multi-language support (English, Chinese, Japanese).
 - **Conflict Detection**: Added addon conflict detection. Conflicting mods are highlighted in red; double-clicking displays specific conflicting files and priority.

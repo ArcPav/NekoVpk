@@ -95,8 +95,12 @@ public partial class CustomMessageBox : Window
         }
     }
 
+    private bool _resultSet = false;
+
     private void Button_Click(object? sender, RoutedEventArgs e)
     {
+        _resultSet = true;
+
         if (sender == YesBtn)
             Close(ButtonResult.Yes);
         else if (sender == NoBtn)
@@ -105,5 +109,18 @@ public partial class CustomMessageBox : Window
             Close(ButtonResult.Ok);
         else
             Close(ButtonResult.None);
+    }
+
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        if (!_resultSet)
+        {
+            _resultSet = true;
+            e.Cancel = true;
+            Close(ButtonResult.Cancel);
+            return;
+        }
+
+        base.OnClosing(e);
     }
 }

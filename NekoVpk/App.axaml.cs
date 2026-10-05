@@ -12,7 +12,7 @@ public partial class App : Application
 {
     public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-    public const string Version = "0.1.6.0";
+    public const string Version = "0.1.6.3";
 
     public const string VersionSuffix = "_Beta";
 
@@ -28,6 +28,8 @@ public partial class App : Application
         BindingPlugins.DataValidators.RemoveAt(0);
 
         //Lang.Resources.Culture = new CultureInfo("en");
+
+        NekoVpk.Core.ThemeColor.Apply(NekoSettings.Default.ThemeColor);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -46,6 +48,8 @@ public partial class App : Application
             };
         }
 
+        _ = System.Threading.Tasks.Task.Run(NekoVpk.Core.TempCache.SweepOld);
+
         base.OnFrameworkInitializationCompleted();
     }
     private void OnStartup(object? s, ControlledApplicationLifetimeStartupEventArgs e)
@@ -56,5 +60,6 @@ public partial class App : Application
     {
         //NekoSettings.Default.Reset();
         NekoSettings.Default.Save();
+        NekoVpk.Core.TempCache.CleanupSession();
     }
 }

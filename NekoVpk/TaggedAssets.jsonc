@@ -129,7 +129,8 @@
         "files": [
             "models/l4n/s/*/*.*"
         ],
-        "type": ["Survivor"]
+        "type": ["Survivor"],
+        "mutex": ["All"]
     }
     
     ,"Map": {

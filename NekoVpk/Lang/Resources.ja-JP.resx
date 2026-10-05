@@ -150,6 +150,9 @@
   <data name="AllSelectToolTip" xml:space="preserve">
     <value>すべて選択</value>
   </data>
+  <data name="GridViewToolTip" xml:space="preserve">
+    <value>グリッド表示</value>
+  </data>
   <data name="Select" xml:space="preserve">
     <value>選択</value>
   </data>
@@ -176,6 +179,18 @@
   </data>
   <data name="SearchWorkshop" xml:space="preserve">
     <value>ワークショップを検索</value>
+  </data>
+  <data name="ItemsPerPageToolTip" xml:space="preserve">
+    <value>1ページあたりの件数</value>
+  </data>
+  <data name="PrevPageToolTip" xml:space="preserve">
+    <value>前のページ</value>
+  </data>
+  <data name="NextPageToolTip" xml:space="preserve">
+    <value>次のページ</value>
+  </data>
+  <data name="PageLabel" xml:space="preserve">
+    <value>ページ</value>
   </data>
   <data name="CancelDownload" xml:space="preserve">
     <value>キャンセル</value>
@@ -238,13 +253,34 @@
     <value>ゲームディレクトリ</value>
   </data>
   <data name="SettingWebApiKey" xml:space="preserve">
-    <value>API Key</value>
+    <value>Steam Web API Key</value>
   </data>
   <data name="GoToApplyPage" xml:space="preserve">
     <value>申請ページへ移動</value>
   </data>
   <data name="SteamApiKeyRequired" xml:space="preserve">
     <value>*🌐オンライン検索機能を使用するには入力必須です</value>
+  </data>
+  <data name="ApiKeyValidateHint" xml:space="preserve">
+    <value>クリックしてキーの有効性を確認</value>
+  </data>
+  <data name="ApiKeyValidating" xml:space="preserve">
+    <value>検証中...</value>
+  </data>
+  <data name="ApiKeyValidSuccess" xml:space="preserve">
+    <value>検証成功</value>
+  </data>
+  <data name="ApiKeyValidFailed" xml:space="preserve">
+    <value>失敗 - {0}</value>
+  </data>
+  <data name="ApiKeyErrorInvalid" xml:space="preserve">
+    <value>キーが無効か失効している可能性があります</value>
+  </data>
+  <data name="ApiKeyErrorTimeout" xml:space="preserve">
+    <value>リクエストがタイムアウトしました</value>
+  </data>
+  <data name="ApiKeyErrorNetwork" xml:space="preserve">
+    <value>ネットワークに接続できませんでした</value>
   </data>
   <data name="CompressionLevel" xml:space="preserve">
     <value>圧縮レベル</value>
@@ -266,6 +302,9 @@
   </data>
   <data name="IgnoreVpkErrors" xml:space="preserve">
     <value>VPKの読み込みエラーを無視する</value>
+  </data>
+  <data name="SkipVariantBackup" xml:space="preserve">
+    <value>バリアント切り替え時にバックアップを作成しない</value>
   </data>
   <data name="ClearSearchAfterDownload" xml:space="preserve">
     <value>ダウンロード完了後に検索ボックスをクリアする</value>
@@ -491,6 +530,9 @@
   <data name="EnableConflictDetection" xml:space="preserve">
     <value>Mod競合検出</value>
   </data>
+  <data name="AutoSizeColumnsOnSearch" xml:space="preserve">
+    <value>更新時に列幅を自動調整</value>
+  </data>
   <data name="SortOrder" xml:space="preserve">
     <value>並び替え</value>
   </data>
@@ -505,5 +547,149 @@
   </data>
   <data name="SortUpdated" xml:space="preserve">
     <value>最新の更新</value>
+  </data>
+  <data name="CheckUpdatesToolTip" xml:space="preserve">
+    <value>アップデートを確認</value>
+  </data>
+  <data name="CheckUpdatesMenuItem" xml:space="preserve">
+    <value>更新を確認</value>
+  </data>
+  <data name="CheckUpdatesNoneTitle" xml:space="preserve">
+    <value>更新確認完了</value>
+  </data>
+  <data name="CheckUpdatesNoneMsg" xml:space="preserve">
+    <value>更新が必要なMODは見つかりませんでした</value>
+  </data>
+  <data name="CheckUpdatesFoundTitle" xml:space="preserve">
+    <value>更新が見つかりました</value>
+  </data>
+  <data name="CheckUpdatesConfirmMsg" xml:space="preserve">
+    <value>以下のMODを更新しますか:</value>
+  </data>
+  <data name="CheckUpdatesMoreCount" xml:space="preserve">
+    <value>...他{0}件</value>
+  </data>
+  <data name="CheckUpdatesFailedTitle" xml:space="preserve">
+    <value>更新確認に失敗しました</value>
+  </data>
+  <data name="CheckUpdatesDownloadFailedMsg" xml:space="preserve">
+    <value>以下のMODの更新に失敗しました:</value>
+  </data>
+  <data name="CheckUpdatesUnsupportedTitle" xml:space="preserve">
+    <value>更新を確認できません</value>
+  </data>
+  <data name="CheckUpdatesUnsupportedMsg" xml:space="preserve">
+    <value>このMODは更新確認に対応していません</value>
+  </data>
+  <data name="CollectionPartialLoadMsg" xml:space="preserve">
+    <value>{0} 件のバッチ読み込みに失敗しました。コレクションが不完全な可能性があります</value>
+  </data>
+  <data name="FolderModeToolTip" xml:space="preserve">
+    <value>フォルダーモード</value>
+  </data>
+  <data name="BackToFolders" xml:space="preserve">
+    <value>フォルダー一覧に戻る</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>新規フォルダー</value>
+  </data>
+  <data name="NewFolderWatermark" xml:space="preserve">
+    <value>フォルダー名</value>
+  </data>
+  <data name="FolderItemCount" xml:space="preserve">
+    <value>{0} 個のVPK</value>
+  </data>
+  <data name="FolderNameEmpty" xml:space="preserve">
+    <value>フォルダー名を入力してください。</value>
+  </data>
+  <data name="FolderNameInvalid" xml:space="preserve">
+    <value>フォルダー名に使用できない文字が含まれています。</value>
+  </data>
+  <data name="FolderNameReserved" xml:space="preserve">
+    <value>この名前は予約されています（workshop と SourceMod 関連のフォルダーは表示されません）。</value>
+  </data>
+  <data name="FolderNameExists" xml:space="preserve">
+    <value>同じ名前のフォルダーが既に存在します。</value>
+  </data>
+  <data name="CreateFolderFailedMsg" xml:space="preserve">
+    <value>フォルダーの作成に失敗しました：{0}</value>
+  </data>
+  <data name="MoveToFolder" xml:space="preserve">
+    <value>移動先</value>
+  </data>
+  <data name="MoveFailedTitle" xml:space="preserve">
+    <value>移動に失敗しました</value>
+  </data>
+  <data name="MoveFileExistsMsg" xml:space="preserve">
+    <value>移動先フォルダーに「{0}」が既に存在します。</value>
+  </data>
+  <data name="MoveFailedMsg" xml:space="preserve">
+    <value>「{0}」の移動に失敗しました：{1}</value>
+  </data>
+  <data name="FolderRename" xml:space="preserve">
+    <value>名前の変更</value>
+  </data>
+  <data name="FolderDelete" xml:space="preserve">
+    <value>フォルダーを削除</value>
+  </data>
+  <data name="FolderDeleteMsg" xml:space="preserve">
+    <value>フォルダー「{0}」とその中のすべての内容（{1} 個のファイル）を削除しますか？この操作は元に戻せません。</value>
+  </data>
+  <data name="FolderDeleteEmptyMsg" xml:space="preserve">
+    <value>空のフォルダー「{0}」を削除しますか？</value>
+  </data>
+  <data name="DeleteFolderFailedMsg" xml:space="preserve">
+    <value>フォルダーの削除に失敗しました：{0}</value>
+  </data>
+  <data name="RenameFolderFailedMsg" xml:space="preserve">
+    <value>フォルダーの名前変更に失敗しました：{0}</value>
+  </data>
+  <data name="FolderDeleteMultiMsg" xml:space="preserve">
+    <value>{0} 個のフォルダーとその中のすべての内容（合計 {1} 個のファイル）を削除しますか？この操作は元に戻せません。</value>
+  </data>
+  <data name="FolderInfoName" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="FolderTypeText" xml:space="preserve">
+    <value>フォルダー</value>
+  </data>
+  <data name="FolderInfoModified" xml:space="preserve">
+    <value>更新日時</value>
+  </data>
+  <data name="FolderInfoVpkCount" xml:space="preserve">
+    <value>VPK 数</value>
+  </data>
+  <data name="FolderSelectedCount" xml:space="preserve">
+    <value>{0} 個のフォルダーを選択中</value>
+  </data>
+  <data name="SearchButtonToolTip" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="FolderSelectItem" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="FolderSelectAllToolTip" xml:space="preserve">
+    <value>すべてのフォルダーを選択</value>
+  </data>
+  <data name="FolderDeselectAllToolTip" xml:space="preserve">
+    <value>フォルダーの選択を解除</value>
+  </data>
+  <data name="FolderInvertSelectionToolTip" xml:space="preserve">
+    <value>フォルダーの選択を反転</value>
+  </data>
+  <data name="ThemeColor" xml:space="preserve">
+    <value>テーマカラー</value>
+  </data>
+  <data name="ThemeColorDefault" xml:space="preserve">
+    <value>デフォルト</value>
+  </data>
+  <data name="ThemeColorInvalid" xml:space="preserve">
+    <value>#54A9FF のような色を入力してください。</value>
+  </data>
+  <data name="ThemeColorSystem" xml:space="preserve">
+    <value>システムのアクセントカラーに従う</value>
+  </data>
+  <data name="BackgroundTransparencyLabel" xml:space="preserve">
+    <value>ウィンドウの透明度</value>
   </data>
 </root>

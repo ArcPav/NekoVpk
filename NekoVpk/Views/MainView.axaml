@@ -97,6 +97,21 @@
         </Animation>
       </Style.Animations>
     </Style>
+    <Style Selector="Button.GreenBreathing">
+      <Style.Animations>
+        <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="#3000E676"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="#9000E676"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
     <Style Selector="Button.Primary:flyout-open">
       <Style.Animations>
         <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
@@ -108,6 +123,36 @@
           </KeyFrame>
           <KeyFrame Cue="100%">
             <Setter Property="Background" Value="#50C8FF"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Button.YellowBreathing">
+      <Style.Animations>
+        <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <Animation.Easing>
+            <SineEaseInOut />
+          </Animation.Easing>
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="#30FFC107"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="#90FFC107"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Button.RedFlash">
+      <Style.Animations>
+        <Animation Duration="0:0:0.35" IterationCount="2">
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="Transparent"/>
+          </KeyFrame>
+          <KeyFrame Cue="50%">
+            <Setter Property="Background" Value="#DC2626"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="Transparent"/>
           </KeyFrame>
         </Animation>
       </Style.Animations>
@@ -126,6 +171,46 @@
     </Style>
     <Style Selector="MenuItem">
       <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    <Style Selector="TextBlock.PlusIcon">
+      <Setter Property="Opacity" Value="0.75"/>
+      <Setter Property="RenderTransform" Value="scale(1) rotate(0deg)"/>
+      <Setter Property="RenderTransformOrigin" Value="50%,50%"/>
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="CubicEaseOut"/>
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="BackEaseIn"/>
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Path.DashedFolder">
+      <Setter Property="Opacity" Value="0"/>
+      <Setter Property="RenderTransform" Value="scale(0.5)"/>
+      <Setter Property="RenderTransformOrigin" Value="50%,50%"/>
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="CubicEaseOut"/>
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="BackEaseOut"/>
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="StackPanel.Naming TextBlock.PlusIcon">
+      <Setter Property="Opacity" Value="0"/>
+      <Setter Property="RenderTransform" Value="scale(0.2) rotate(90deg)"/>
+    </Style>
+    <Style Selector="StackPanel.Naming Path.DashedFolder">
+      <Setter Property="Opacity" Value="1"/>
+      <Setter Property="RenderTransform" Value="scale(1)"/>
+      <Style.Animations>
+        <Animation Duration="0:0:1.2" IterationCount="Infinite">
+          <KeyFrame Cue="0%">
+            <Setter Property="StrokeDashOffset" Value="0"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="StrokeDashOffset" Value="14"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
     </Style>
   </UserControl.Styles>
   <Panel Background="Transparent">
@@ -147,9 +232,10 @@
           <Button Click="Settings_Button_Click" 
                   Content="{Binding [Settings], Source={x:Static lang:I18nManager.Instance}}"
                   ToolTip.Tip="{Binding [Settings], Source={x:Static lang:I18nManager.Instance}}"/>
-          <Button Content="☰" 
+          <Button 
                   Height="32" 
                   ToolTip.Tip="{Binding [ListSettings], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="16" Height="16" Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"/>
             <Button.Flyout>
               <Flyout Placement="Bottom">
                 <StackPanel Spacing="5" MinWidth="100">
@@ -163,52 +249,119 @@
                   <CheckBox Content="{Binding [ColumnType], Source={x:Static lang:I18nManager.Instance}}" IsChecked="{Binding ShowColumnType}"/>
                   <CheckBox Content="{Binding [ColumnAddedTime], Source={x:Static lang:I18nManager.Instance}}" IsChecked="{Binding ShowColumnAddedTime}"/>
                   <CheckBox Content="{Binding [ColumnSize], Source={x:Static lang:I18nManager.Instance}}" IsChecked="{Binding ShowColumnSize}"/>
+                <Separator Height="1" Background="Gray" Opacity="0.3" Margin="0,5"/>
+                  <Button Content="{Binding [ThemeColor], Source={x:Static lang:I18nManager.Instance}}"
+                          HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Left"
+                          Background="Transparent"
+                          Click="Menu_ThemeColor_Click"/>
                 </StackPanel>
               </Flyout>
             </Button.Flyout>
           </Button>
           <Button Content="{Binding [AllSelect], Source={x:Static lang:I18nManager.Instance}}" 
-                  ToolTip.Tip="{Binding [AllSelectToolTip], Source={x:Static lang:I18nManager.Instance}}">
+                  ToolTip.Tip="{Binding [AllSelectToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                  IsVisible="{Binding ShowSelectAllButton}">
             <Button.Flyout>
               <MenuFlyout Placement="Bottom">
                 <MenuItem Header="{Binding [Select], Source={x:Static lang:I18nManager.Instance}}" 
                           Click="MenuItem_SelectAll_Click"
+                          IsVisible="{Binding ShowEnableControls}"
                           ToolTip.Tip="{Binding [SelectAllToolTip], Source={x:Static lang:I18nManager.Instance}}"
                           FontFamily="{Binding UserFont}" 
                           FontSize="{Binding UserFontSize}"/>
                 <MenuItem Header="{Binding [Deselect], Source={x:Static lang:I18nManager.Instance}}" 
                           Click="MenuItem_DeselectAll_Click"
+                          IsVisible="{Binding ShowEnableControls}"
                           ToolTip.Tip="{Binding [DeselectAllToolTip], Source={x:Static lang:I18nManager.Instance}}"
                           FontFamily="{Binding UserFont}" 
                           FontSize="{Binding UserFontSize}"/>
                 <MenuItem Header="{Binding [InvertSelection], Source={x:Static lang:I18nManager.Instance}}" 
                           Click="MenuItem_InvertSelection_Click"
+                          IsVisible="{Binding ShowEnableControls}"
                           ToolTip.Tip="{Binding [InvertSelectionToolTip], Source={x:Static lang:I18nManager.Instance}}"
                           FontFamily="{Binding UserFont}" 
+                          FontSize="{Binding UserFontSize}"/>
+                <MenuItem Header="{Binding [FolderSelectItem], Source={x:Static lang:I18nManager.Instance}}"
+                          Click="FolderMenu_SelectAll_Click"
+                          IsVisible="{Binding ShowFolderGrid}"
+                          ToolTip.Tip="{Binding [FolderSelectAllToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                          FontFamily="{Binding UserFont}"
+                          FontSize="{Binding UserFontSize}"/>
+                <MenuItem Header="{Binding [Deselect], Source={x:Static lang:I18nManager.Instance}}"
+                          Click="FolderMenu_DeselectAll_Click"
+                          IsVisible="{Binding ShowFolderGrid}"
+                          ToolTip.Tip="{Binding [FolderDeselectAllToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                          FontFamily="{Binding UserFont}"
+                          FontSize="{Binding UserFontSize}"/>
+                <MenuItem Header="{Binding [InvertSelection], Source={x:Static lang:I18nManager.Instance}}"
+                          Click="FolderMenu_InvertSelection_Click"
+                          IsVisible="{Binding ShowFolderGrid}"
+                          ToolTip.Tip="{Binding [FolderInvertSelectionToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                          FontFamily="{Binding UserFont}"
                           FontSize="{Binding UserFontSize}"/>
               </MenuFlyout>
             </Button.Flyout>
           </Button>
+          <ToggleButton
+                        Height="32"
+                        IsVisible="{Binding IsOnlineMode}"
+                        IsChecked="{Binding IsGridView}"
+                        ToolTip.Tip="{Binding [GridViewToolTip], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="16" Height="16" Data="M3,11H11V3H3M3,21H11V13H3M13,21H21V13H13M13,3V11H21V3"/>
+                </ToggleButton>
         </StackPanel>
         <StackPanel DockPanel.Dock="Left" 
                     VerticalAlignment="Center" 
                     Orientation="Horizontal" 
                     Spacing="10">
-          <Button Content="&lt;"
+          <Button
                   Height="32"
                   Click="Button_ExitCollection_Click"
                   IsVisible="{Binding IsInCollectionDetail}"
-                  ToolTip.Tip="{Binding [BackToCollection], Source={x:Static lang:I18nManager.Instance}}"/>
+                  ToolTip.Tip="{Binding [BackToCollection], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="12" Height="12" Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"/>
+                </Button>
+          <Button
+                  Height="32"
+                  Click="Button_ExitFolder_Click"
+                  IsVisible="{Binding IsInsideFolder}"
+                  ToolTip.Tip="{Binding [BackToFolders], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="12" Height="12" Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"/>
+                </Button>
           <TextBox Text="{Binding SearchKeywords}"
-                   InnerLeftContent="{Binding SearchWatermark}"
-                   Width="600"
+                   Watermark="{Binding SearchWatermark}"
+                   Width="500"
                    Height="32"
                    KeyUp="TextBox_AddonSearch_KeyUp"
-                   TextChanged="TextBox_AddonSearch_TextChanged"/>
-          <Button Content="🏷️" 
+                   TextChanged="TextBox_AddonSearch_TextChanged">
+            <TextBox.InnerRightContent>
+              <StackPanel Orientation="Horizontal">
+                <Button
+                        Padding="6,0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="Button_ClearSearch_Click">
+                  <PathIcon Width="12" Height="12" Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+                </Button>
+                <Button Padding="6,0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ToolTip.Tip="{Binding [SearchButtonToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                        Click="Button_Search_Click">
+                  <PathIcon Width="14"
+                            Height="14"
+                            VerticalAlignment="Center"
+                            Data="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"/>
+                </Button>
+              </StackPanel>
+            </TextBox.InnerRightContent>
+          </TextBox>
+          <Button 
                   Height="32" 
                   ToolTip.Tip="{Binding [TagsFilter], Source={x:Static lang:I18nManager.Instance}}"
                   IsVisible="{Binding IsOnlineMode}">
+                  <PathIcon Width="16" Height="16" Data="M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.41L11.58,21.41C11.95,21.77 12.45,22 13,22C13.55,22 14.05,21.77 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58Z"/>
             <Button.Flyout>
               <Flyout Placement="Bottom">
                 <Border Width="300" Height="450">
@@ -273,27 +426,82 @@
               </Flyout>
             </Button.Flyout>
           </Button>
-          <ToggleButton Content="🌐"
+          <ToggleButton
                         ToolTip.Tip="{Binding [SearchWorkshop], Source={x:Static lang:I18nManager.Instance}}"
                         IsChecked="{Binding IsOnlineMode}"
                         Height="32" 
-                        VerticalAlignment="Center"/>
+                        VerticalAlignment="Center">
+                  <PathIcon Width="18" Height="18" Data="M16.36,14C16.44,13.34 16.5,12.68 16.5,12C16.5,11.32 16.44,10.66 16.36,10H19.74C19.9,10.64 20,11.31 20,12C20,12.69 19.9,13.36 19.74,14M14.59,19.56C15.19,18.45 15.65,17.25 15.97,16H18.92C17.96,17.65 16.43,18.93 14.59,19.56M14.34,14H9.66C9.56,13.34 9.5,12.68 9.5,12C9.5,11.32 9.56,10.65 9.66,10H14.34C14.43,10.65 14.5,11.32 14.5,12C14.5,12.68 14.43,13.34 14.34,14M12,19.96C11.17,18.76 10.5,17.43 10.09,16H13.91C13.5,17.43 12.83,18.76 12,19.96M8,8H5.08C6.03,6.34 7.57,5.06 9.4,4.44C8.8,5.55 8.35,6.75 8,8M5.08,16H8C8.35,17.25 8.8,18.45 9.4,19.56C7.57,18.93 6.03,17.65 5.08,16M4.26,14C4.1,13.36 4,12.69 4,12C4,11.31 4.1,10.64 4.26,10H7.64C7.56,10.66 7.5,11.32 7.5,12C7.5,12.68 7.56,13.34 7.64,14M12,4.03C12.83,5.23 13.5,6.57 13.91,8H10.09C10.5,6.57 11.17,5.23 12,4.03M18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.34 18.92,8M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+                </ToggleButton>
+          <Button x:Name="ButtonCheckUpdates"
+                  FontSize="16"
+                  Height="32"
+                  VerticalAlignment="Center"
+                  IsVisible="{Binding !IsOnlineMode}"
+                  IsEnabled="{Binding !IsUpdateCheckBusy}"
+                  Classes.YellowBreathing="{Binding IsCheckingUpdates}"
+                  Classes.GreenBreathing="{Binding IsDownloadingUpdates}"
+                  Classes.RedFlash="{Binding IsUpdateCheckFailed}"
+                  ToolTip.Tip="{Binding [CheckUpdatesToolTip], Source={x:Static lang:I18nManager.Instance}}"
+                  Click="Button_CheckUpdates_Click">
+                  <PathIcon Width="16" Height="16" Data="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"/>
+                </Button>
+          <ToggleButton
+                        Height="32"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding !IsOnlineMode}"
+                        IsChecked="{Binding IsFolderMode, Mode=TwoWay}"
+                        ToolTip.Tip="{Binding [FolderModeToolTip], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="16" Height="16" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+                </ToggleButton>
+          <StackPanel Orientation="Horizontal"
+                      Spacing="5"
+                      VerticalAlignment="Center"
+                      IsVisible="{Binding ShowPagingControls}">
+            <ComboBox ItemsSource="{Binding ItemsPerPageOptions}"
+                      SelectedItem="{Binding ItemsPerPage}"
+                      Width="70"
+                      Height="32"
+                      ToolTip.Tip="{Binding [ItemsPerPageToolTip], Source={x:Static lang:I18nManager.Instance}}"/>
+            <Button
+                    Height="32"
+                    Width="32"
+                    Padding="0"
+                    HorizontalContentAlignment="Center"
+                    IsEnabled="{Binding CanGoPrevPage}"
+                    Click="Button_PrevPage_Click"
+                    ToolTip.Tip="{Binding [PrevPageToolTip], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="12" Height="12" Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"/>
+                </Button>
+            <TextBlock Text="{Binding CurrentPageDisplay}"
+                       VerticalAlignment="Center"
+                       MinWidth="16"
+                       TextAlignment="Center"/>
+            <Button
+                    Height="32"
+                    Width="32"
+                    Padding="0"
+                    HorizontalContentAlignment="Center"
+                    IsEnabled="{Binding HasMoreResults}"
+                    Click="Button_NextPage_Click"
+                    ToolTip.Tip="{Binding [NextPageToolTip], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="12" Height="12" Data="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/>
+                </Button>
+          </StackPanel>
           <StackPanel Orientation="Horizontal" 
                       Spacing="5" 
                       VerticalAlignment="Center"
                       IsVisible="{Binding IsDownloading}">
-              <ProgressBar Value="{Binding DownloadProgress}" 
-                           Minimum="0" Maximum="100" 
-                           Width="100" Height="20"
-                           ShowProgressText="True"/>
-              <Button Content="❌" 
+              <Button 
                       Height="32" Width="32"
-                      Classes="Danger"
+                      Classes="Danger GreenBreathing"
                       Padding="0"
                       HorizontalContentAlignment="Center"
                       VerticalContentAlignment="Center"
                       Click="Button_CancelDownload_Click"
-                      ToolTip.Tip="{Binding [CancelDownload], Source={x:Static lang:I18nManager.Instance}}"/>
+                      ToolTip.Tip="{Binding [CancelDownload], Source={x:Static lang:I18nManager.Instance}}">
+                  <PathIcon Width="14" Height="14" Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+                </Button>
           </StackPanel>
         </StackPanel>
       </DockPanel>
@@ -307,6 +515,86 @@
             RowDefinitions="*"
             MinHeight="360">
         <Panel Grid.Column="0">
+            <ListBox Name="FolderGridView"
+                     ItemsSource="{Binding FolderItems}"
+                     IsVisible="{Binding ShowFolderGrid}"
+                     Background="Transparent"
+                     SelectionMode="Multiple"
+                     Tapped="FolderGridView_Tapped"
+                     DoubleTapped="FolderGridView_DoubleTapped"
+                     SelectionChanged="FolderGridView_SelectionChanged">
+              <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+              </ListBox.ItemsPanel>
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel Width="130" Margin="6" Spacing="4" Background="Transparent"
+                              Classes.Naming="{Binding IsNaming}">
+                    <Panel Height="90">
+                      <PathIcon Width="80"
+                                Height="80"
+                                Foreground="{DynamicResource NekoAccentForeground}"
+                                Data="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                IsVisible="{Binding IsFolder}"/>
+                      <Path Classes="DashedFolder"
+                            Width="80" Height="80"
+                            Stretch="Uniform"
+                            Stroke="{DynamicResource NekoAccentForeground}"
+                            StrokeThickness="2"
+                            StrokeDashArray="4,3"
+                            StrokeLineCap="Round"
+                            StrokeJoin="Round"
+                            Fill="#0AFFFFFF"
+                            Data="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding IsAddTile}"/>
+                      <TextBlock Classes="PlusIcon"
+                                Text="+"
+                                FontSize="72"
+                                FontWeight="Light"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                IsVisible="{Binding IsAddTile}"/>
+                    </Panel>
+                    <TextBlock Text="{Binding Name}"
+                              FontWeight="Bold"
+                              HorizontalAlignment="Center"
+                              TextTrimming="CharacterEllipsis"
+                              ToolTip.Tip="{Binding Name}"
+                              IsVisible="{Binding IsFolder}"/>
+                    <TextBlock Text="{Binding ItemCountText}"
+                              FontSize="12"
+                              Opacity="0.6"
+                              HorizontalAlignment="Center"
+                              IsVisible="{Binding IsFolder}"/>
+                    <TextBlock Text="{Binding [NewFolder], Source={x:Static lang:I18nManager.Instance}}"
+                              Opacity="0.75"
+                              HorizontalAlignment="Center"
+                              TextTrimming="CharacterEllipsis"
+                              IsVisible="{Binding IsAddTile}"/>
+                  </StackPanel>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+              <ListBox.ContextMenu>
+                <ContextMenu Opening="FolderGridView_ContextMenu_Opening">
+                  <MenuItem Header="{Binding [Open], Source={x:Static lang:I18nManager.Instance}}"
+                            Tag="open"
+                            Click="FolderMenu_Open"/>
+                  <MenuItem Header="{Binding [FolderRename], Source={x:Static lang:I18nManager.Instance}}"
+                            Tag="rename"
+                            Click="FolderMenu_Rename"/>
+                  <MenuItem Header="{Binding [CheckUpdatesMenuItem], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="FolderMenu_CheckUpdates"/>
+                  <MenuItem Header="{Binding [FolderDelete], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="FolderMenu_Delete"/>
+                </ContextMenu>
+              </ListBox.ContextMenu>
+            </ListBox>
             <ListBox Name="CollectionListView"
                      ItemsSource="{Binding CollectionList}"
                      IsVisible="{Binding ShowCollectionList}"
@@ -333,14 +621,18 @@
                            Source="{Binding PreviewBitmap}"/>
                     <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*, auto" Margin="10,0,0,5">
                       <TextBlock Grid.Column="0" Text="{Binding Title}" FontWeight="Bold" FontSize="18" TextTrimming="CharacterEllipsis"/>
-                      <TextBlock Grid.Column="1" Text="{Binding Stars}" Foreground="#FFD700" FontSize="16" Margin="10,0,10,0" VerticalAlignment="Center"/>
+                      <views:StarRating Stars="{Binding Stars}"
+                                        Grid.Column="1"
+                                        IconSize="16"
+                                        Margin="10,0,10,0"
+                                        VerticalAlignment="Center"/>
                     </Grid>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,5">
                       <TextBlock Text="{Binding AuthorName}" Foreground="LightGray" Margin="0,0,15,0"/>
                       <TextBlock Text="{Binding ItemCountString}" Foreground="LightGray"/>
                     </StackPanel>
                     <TextBlock Grid.Row="2" Grid.Column="1" 
-                               Text="{Binding Description}" 
+                               Text="{Binding DescriptionPreview}" 
                                TextWrapping="Wrap" 
                                TextTrimming="CharacterEllipsis" 
                                Foreground="Gray" Margin="10,0,0,0"/>
@@ -350,6 +642,7 @@
             </ListBox>
             <DataGrid Name="AddonList"
                       ItemsSource="{Binding Addons}"
+                      SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
                       IsVisible="{Binding ShowDataGrid}"
                       HorizontalScrollBarVisibility="Auto"
                       IsReadOnly="False"
@@ -363,29 +656,43 @@
                       DoubleTapped="AddonList_DoubleTapped"
                       Sorting="DataGrid_Sorting">
               <DataGrid.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Opening="AddonList_ContextMenu_Opening">
                   <MenuItem Header="{Binding [OpenDirectory], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_LocateFile"
                             IsVisible="{Binding #AddonList.SelectedItem.IsInstalled}"/>
                   <MenuItem Header="{Binding [DeleteAddon], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_Delete"
-                            IsVisible="{Binding !DataContext.IsOnlineMode, ElementName=RootView}"/>
+                            IsVisible="{Binding #AddonList.SelectedItem.IsInstalled}"/>
                   <MenuItem Header="{Binding [OpenWebpage], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_OpenPage"
                             IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}"/>
                   <MenuItem Header="{Binding [DownloadAddon], Source={x:Static lang:I18nManager.Instance}}"
                             Click="AddonList_Menu_Download"
                             IsVisible="{Binding !#AddonList.SelectedItem.IsInstalled}"/>
+                  <MenuItem Header="{Binding [CheckUpdatesMenuItem], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="AddonList_Menu_CheckUpdates"
+                            IsVisible="{Binding !#AddonList.SelectedItem.IsWorkshopManaged}"/>
                 </ContextMenu>
               </DataGrid.ContextMenu>
               <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="{Binding [ColumnEnable], Source={x:Static lang:I18nManager.Instance}}"
                                         Binding="{Binding Enable}"
                                         Width="85"
-                                        IsVisible="{Binding !DataContext.IsOnlineMode, ElementName=RootView}"/>   
-                <DataGridTextColumn Header="{Binding [ColumnTitle], Source={x:Static lang:I18nManager.Instance}}"
-                                    Binding="{Binding Title}"
-                                    Width="360"/>
+                                        IsVisible="{Binding DataContext.ShowEnableControls, ElementName=RootView}"/>   
+                <DataGridTemplateColumn Header="{Binding [ColumnTitle], Source={x:Static lang:I18nManager.Instance}}"
+                                        SortMemberPath="Title"
+                                        Width="360">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Title}"
+                                 Height="24"
+                                 VerticalAlignment="Center"
+                                 TextTrimming="CharacterEllipsis"
+                                 ToolTip.Tip="{Binding Title}"
+                                 ClipToBounds="True"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="{Binding [ColumnSource], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding Source}"
                                     Width="auto"/>
@@ -419,10 +726,20 @@
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{Binding [ColumnType], Source={x:Static lang:I18nManager.Instance}}"
-                                    Binding="{Binding Type}"
-                                    Width="100"
-                                    IsVisible="{Binding IsTypeColumnVisible}"/>
+                <DataGridTemplateColumn Header="{Binding [ColumnType], Source={x:Static lang:I18nManager.Instance}}"
+                                        Width="100"
+                                        SortMemberPath="TypeDisplay"
+                                        IsVisible="{Binding IsTypeColumnVisible}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding TypeDisplay}"
+                                 ToolTip.Tip="{Binding Type}"
+                                 VerticalAlignment="Center"
+                                 Margin="8,0"
+                                 TextTrimming="CharacterEllipsis"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="{Binding [ColumnAddedTime], Source={x:Static lang:I18nManager.Instance}}"
                                     Binding="{Binding CreationTimeStr}"
                                     SortMemberPath="CreationTime"
@@ -442,6 +759,80 @@
                                     IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}"/>
               </DataGrid.Columns>
             </DataGrid>
+            <ListBox Name="AddonGridView"
+                     ItemsSource="{Binding Addons}"
+                     SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
+                     IsVisible="{Binding ShowAddonGrid}"
+                     Background="Transparent"
+                     SelectionMode="Multiple"
+                     DoubleTapped="AddonGridView_DoubleTapped">
+              <ListBox.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="{Binding [OpenWebpage], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="AddonGridView_Menu_OpenPage"/>
+                  <MenuItem Header="{Binding [DownloadAddon], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="AddonGridView_Menu_Download"
+                            IsVisible="{Binding !#AddonGridView.SelectedItem.IsInstalled}"/>
+                  <MenuItem Header="{Binding [DeleteAddon], Source={x:Static lang:I18nManager.Instance}}"
+                            Click="AddonGridView_Menu_Delete"
+                            IsVisible="{Binding #AddonGridView.SelectedItem.IsInstalled}"/>
+                </ContextMenu>
+              </ListBox.ContextMenu>
+              <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+              </ListBox.ItemsPanel>
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Border Width="220"
+                          Margin="6"
+                          CornerRadius="6"
+                          ClipToBounds="True"
+                          Background="{StaticResource ThemeBackgroundBrush}">
+                    <StackPanel>
+                      <Panel Height="220">
+                        <Image Source="{Binding PreviewBitmap}"
+                               Stretch="UniformToFill"
+                               Width="220" Height="220"/>
+                        <Border Background="#CC000000"
+                                Height="20"
+                                VerticalAlignment="Bottom"
+                                IsVisible="{Binding IsInstalled}">
+                          <TextBlock Text="{Binding [Downloaded], Source={x:Static lang:I18nManager.Instance}}"
+                                     Foreground="#8CFF8C"
+                                     FontSize="11"
+                                     HorizontalAlignment="Center"/>
+                        </Border>
+                        <Border Background="#CC000000"
+                                Height="20"
+                                VerticalAlignment="Bottom"
+                                IsVisible="{Binding IsDownloadingNow}">
+                          <ProgressBar Value="{Binding DataContext.DownloadProgress, ElementName=RootView}"
+                                       Minimum="0" Maximum="100"
+                                       Height="14"
+                                       Margin="8,0"
+                                       ShowProgressText="True"/>
+                        </Border>
+                      </Panel>
+                      <StackPanel Margin="8,6,8,8" Spacing="2" Background="{Binding ConflictBackgroundBrush}">
+                        <views:StarRating Stars="{Binding Stars}"
+                                          IconSize="13"/>
+                        <TextBlock Text="{Binding Title}"
+                                   FontWeight="Bold"
+                                   TextTrimming="CharacterEllipsis"
+                                   ToolTip.Tip="{Binding Title}"/>
+                        <TextBlock Foreground="LightGray" FontSize="12" TextTrimming="CharacterEllipsis">
+                          <Run Text="{Binding [ColumnAuthor], Source={x:Static lang:I18nManager.Instance}}"/>
+                          <Run Text="-"/>
+                          <Run Text="{Binding Author}"/>
+                        </TextBlock>
+                      </StackPanel>
+                    </StackPanel>
+                  </Border>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
             <TextBlock Text="{Binding [UnknownException], Source={x:Static lang:I18nManager.Instance}}"
                        FontSize="24"
                        FontWeight="Bold"
@@ -454,11 +845,11 @@
         <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
         <ScrollViewer Grid.Column="2" AllowAutoHide="True">
           <Panel>
-            <Panel IsVisible="{Binding ShowDataGrid}">
+            <Panel IsVisible="{Binding ShowAddonDetail}">
               <StackPanel Name="AddonDetailPanel"
                           Orientation="Vertical"
-                          IsVisible="{Binding !!#AddonList.SelectedItem}"
-                          DataContext="{Binding #AddonList.SelectedItem}">
+                          IsVisible="{Binding !!DataContext.SelectedAddon, ElementName=RootView}"
+                          DataContext="{Binding DataContext.SelectedAddon, ElementName=RootView}">
                 <Border Background="{StaticResource ThemeBackgroundBrush}"
                         Margin="10">
                   <Image Name="AddonImage"
@@ -466,7 +857,7 @@
                          MinWidth="256"/>
                 </Border>
                 <Grid Margin="10"
-                      RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto"
+                      RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto"
                       ColumnDefinitions="*">
                   <TextBox Grid.Row="0"
                            InnerLeftContent="{Binding [ColumnTitle], Source={x:Static lang:I18nManager.Instance}}"
@@ -485,40 +876,64 @@
                            IsReadOnly="True"
                            Classes="s1 Small Bordered"/>
                   <TextBox Grid.Row="2"
+                           InnerLeftContent="{Binding [ColumnSub], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding SubscriptionsStr}"
+                           IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox Grid.Row="3"
                            InnerLeftContent="{Binding [ColumnAuthor], Source={x:Static lang:I18nManager.Instance}}"
                            Text="{Binding Author}"
                            Classes="s1 Small Bordered"/>
-                  <TextBox Grid.Row="3"
+                  <TextBox Grid.Row="4"
                            InnerLeftContent="{Binding [File], Source={x:Static lang:I18nManager.Instance}}"
                            Text="{Binding FileName}"
                            Classes="s1 Small Bordered"/>
-                  <StackPanel Grid.Row="4" Margin="2,10,2,5" IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}">
+                  <StackPanel Grid.Row="5" Margin="2,10,2,5" IsVisible="{Binding DataContext.IsOnlineMode, ElementName=RootView}">
                       <Button Classes="Accent"
                               HorizontalAlignment="Stretch"
                               HorizontalContentAlignment="Center"
-                              IsVisible="{Binding !IsInstalled}"
+                              IsVisible="{Binding ShowDownloadButton}"
                               Click="Button_Download_Click">
                           <StackPanel Orientation="Horizontal" Spacing="5">
-                              <TextBlock Text="☁"/>
+                              <PathIcon Width="16" Height="16" VerticalAlignment="Center" Data="M19.35,10.04C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.04C2.34,8.36 0,10.91 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.04Z"/>
                               <TextBlock Text="{Binding [DownloadToAddons], Source={x:Static lang:I18nManager.Instance}}"/>
                           </StackPanel>
                       </Button>
+                      <Grid IsVisible="{Binding IsDownloadingNow}">
+                          <ProgressBar Value="{Binding DataContext.DownloadProgress, ElementName=RootView}"
+                                       Minimum="0" Maximum="100"
+                                       Height="32"
+                                       ShowProgressText="False"/>
+                          <Button HorizontalAlignment="Stretch"
+                                  HorizontalContentAlignment="Center"
+                                  VerticalContentAlignment="Center"
+                                  Height="32"
+                                  Padding="0"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Click="Button_CancelDownload_Click"
+                                  ToolTip.Tip="{Binding [CancelDownload], Source={x:Static lang:I18nManager.Instance}}">
+                              <TextBlock Text="{Binding [CancelDownload], Source={x:Static lang:I18nManager.Instance}}"
+                                         FontWeight="Bold"/>
+                          </Button>
+                      </Grid>
                       <Button IsEnabled="False"
                               HorizontalAlignment="Stretch"
                               HorizontalContentAlignment="Center"
                               IsVisible="{Binding IsInstalled}">
                           <StackPanel Orientation="Horizontal" Spacing="5">
-                              <TextBlock Text="✔"/>
+                              <PathIcon Width="16" Height="16" VerticalAlignment="Center" Data="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
                               <TextBlock Text="{Binding [Downloaded], Source={x:Static lang:I18nManager.Instance}}"/>
                           </StackPanel>
                       </Button>
                   </StackPanel>
-                  <ScrollViewer Grid.Row="5" MaxHeight="300" Margin="0,5">
+                  <ScrollViewer Grid.Row="6" MaxHeight="300" Margin="0,5">
                       <SelectableTextBlock views:SteamBBCodeHelper.BBCode="{Binding Description}"
                                            TextWrapping="Wrap"
                                            Padding="10 8"/>
                   </ScrollViewer>
-                  <Panel Grid.Row="6"
+                  <Panel Grid.Row="7"
                          HorizontalAlignment="Center"
                          Margin="3,10,3,10">
                     <HyperlinkButton NavigateUri="{Binding Url}">
@@ -526,7 +941,7 @@
                                  TextDecorations="Underline"/>
                     </HyperlinkButton>
                   </Panel>
-                  <StackPanel Grid.Row="7">
+                  <StackPanel Grid.Row="8">
                     <ComboBox ItemsSource="{Binding Variants}"
                               SelectedItem="{Binding ActiveVariant}"
                               IsVisible="{Binding HasMultipleVariants}"
@@ -587,6 +1002,52 @@
                 </Grid>
               </StackPanel>
             </Panel>
+            <Panel IsVisible="{Binding ShowFolderDetail}">
+              <StackPanel Orientation="Vertical"
+                          DataContext="{Binding FolderDetail}">
+                <Border Background="{StaticResource ThemeBackgroundBrush}"
+                        Margin="10">
+                  <Panel Height="140">
+                    <Image Source="{Binding Icon}"
+                           MaxHeight="128"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding HasIcon}"/>
+                    <PathIcon Width="112"
+                              Height="112"
+                              Foreground="{DynamicResource NekoAccentForeground}"
+                                Data="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsVisible="{Binding !HasIcon}"/>
+                  </Panel>
+                </Border>
+                <StackPanel Margin="10" Spacing="4">
+                  <TextBox InnerLeftContent="{Binding [FolderInfoName], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding Title}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox InnerLeftContent="{Binding [ColumnType], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding TypeText}"
+                           IsVisible="{Binding IsSingle}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox InnerLeftContent="{Binding [FolderInfoModified], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding ModifiedText}"
+                           IsVisible="{Binding IsSingle}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox InnerLeftContent="{Binding [ColumnSize], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding SizeText}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                  <TextBox InnerLeftContent="{Binding [FolderInfoVpkCount], Source={x:Static lang:I18nManager.Instance}}"
+                           Text="{Binding VpkCountText}"
+                           IsReadOnly="True"
+                           Classes="s1 Small Bordered"/>
+                </StackPanel>
+              </StackPanel>
+            </Panel>
             <Panel IsVisible="{Binding ShowCollectionList}">
               <StackPanel Name="CollectionDetailPanel"
                           Orientation="Vertical"
@@ -599,13 +1060,13 @@
                 <StackPanel Grid.Row="3" Margin="2,10,2,5">
                     <Button Classes="Accent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsVisible="{Binding !IsInstalled}" Click="Button_DownloadCollection_Click">
                         <StackPanel Orientation="Horizontal" Spacing="5">
-                            <TextBlock Text="☁"/>
+                            <PathIcon Width="16" Height="16" VerticalAlignment="Center" Data="M19.35,10.04C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.04C2.34,8.36 0,10.91 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.04Z"/>
                             <TextBlock Text="{Binding [DownloadCollection], Source={x:Static lang:I18nManager.Instance}}"/>
                         </StackPanel>
                     </Button>
                     <Button IsEnabled="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsVisible="{Binding IsInstalled}">
                         <StackPanel Orientation="Horizontal" Spacing="5">
-                            <TextBlock Text="✔"/>
+                            <PathIcon Width="16" Height="16" VerticalAlignment="Center" Data="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
                             <TextBlock Text="{Binding [Downloaded], Source={x:Static lang:I18nManager.Instance}}"/>
                         </StackPanel>
                     </Button>
@@ -614,9 +1075,12 @@
                 <TextBox Grid.Row="5" InnerLeftContent="{Binding [ColumnAddedTime], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding TimeCreatedStr}" Classes="s1 Small Bordered" IsReadOnly="True" Margin="0,5,0,0"/>
                 <TextBox Grid.Row="6" InnerLeftContent="{Binding [ColumnLastUpdate], Source={x:Static lang:I18nManager.Instance}}" Text="{Binding TimeUpdatedStr}" Classes="s1 Small Bordered" IsReadOnly="True" Margin="0,5,0,0"/>
 
-                <ScrollViewer Grid.Row="7" MaxHeight="300" Margin="0,5">
-                    <SelectableTextBlock views:SteamBBCodeHelper.BBCode="{Binding DescriptionBBCode}" TextWrapping="Wrap" Padding="10 8"/>
-                </ScrollViewer>
+                <TextBlock Grid.Row="7"
+                           Text="{Binding DescriptionPreview}"
+                           TextWrapping="Wrap"
+                           Foreground="Gray"
+                           Margin="0,5"
+                           Padding="10 8"/>
               </Grid>
               </StackPanel>
             </Panel>

@@ -88,6 +88,69 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 the key may be invalid or revoked 的本地化字符串。
+        /// </summary>
+        public static string ApiKeyErrorInvalid {
+            get {
+                return ResourceManager.GetString("ApiKeyErrorInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 could not reach the network 的本地化字符串。
+        /// </summary>
+        public static string ApiKeyErrorNetwork {
+            get {
+                return ResourceManager.GetString("ApiKeyErrorNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 the request timed out 的本地化字符串。
+        /// </summary>
+        public static string ApiKeyErrorTimeout {
+            get {
+                return ResourceManager.GetString("ApiKeyErrorTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Click to verify the key 的本地化字符串。
+        /// </summary>
+        public static string ApiKeyValidateHint {
+            get {
+                return ResourceManager.GetString("ApiKeyValidateHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Verifying... 的本地化字符串。
+        /// </summary>
+        public static string ApiKeyValidating {
+            get {
+                return ResourceManager.GetString("ApiKeyValidating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Failed - {0} 的本地化字符串。
+        /// </summary>
+        public static string ApiKeyValidFailed {
+            get {
+                return ResourceManager.GetString("ApiKeyValidFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Verified 的本地化字符串。
+        /// </summary>
+        public static string ApiKeyValidSuccess {
+            get {
+                return ResourceManager.GetString("ApiKeyValidSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Apply 的本地化字符串。
         /// </summary>
         public static string Apply {
@@ -126,6 +189,15 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Auto-Fit Columns When List Updates 的本地化字符串。
+        /// </summary>
+        public static string AutoSizeColumnsOnSearch {
+            get {
+                return ResourceManager.GetString("AutoSizeColumnsOnSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Background Brightness: 的本地化字符串。
         /// </summary>
         public static string BackgroundBrightnessLabel {
@@ -135,11 +207,29 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Window transparency 的本地化字符串。
+        /// </summary>
+        public static string BackgroundTransparencyLabel {
+            get {
+                return ResourceManager.GetString("BackgroundTransparencyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Back to Collections 的本地化字符串。
         /// </summary>
         public static string BackToCollection {
             get {
                 return ResourceManager.GetString("BackToCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Back to folders 的本地化字符串。
+        /// </summary>
+        public static string BackToFolders {
+            get {
+                return ResourceManager.GetString("BackToFolders", resourceCulture);
             }
         }
         
@@ -252,6 +342,105 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Update the following addons? 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesConfirmMsg {
+            get {
+                return ResourceManager.GetString("CheckUpdatesConfirmMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The following addons failed to update: 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesDownloadFailedMsg {
+            get {
+                return ResourceManager.GetString("CheckUpdatesDownloadFailedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Update Check Failed 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesFailedTitle {
+            get {
+                return ResourceManager.GetString("CheckUpdatesFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Updates Available 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesFoundTitle {
+            get {
+                return ResourceManager.GetString("CheckUpdatesFoundTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Check for Updates 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesMenuItem {
+            get {
+                return ResourceManager.GetString("CheckUpdatesMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ...and {0} more 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesMoreCount {
+            get {
+                return ResourceManager.GetString("CheckUpdatesMoreCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 No addons need updating. 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesNoneMsg {
+            get {
+                return ResourceManager.GetString("CheckUpdatesNoneMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Update Check Complete 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesNoneTitle {
+            get {
+                return ResourceManager.GetString("CheckUpdatesNoneTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Check for Updates 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesToolTip {
+            get {
+                return ResourceManager.GetString("CheckUpdatesToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 This addon doesn&apos;t support update checking. 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesUnsupportedMsg {
+            get {
+                return ResourceManager.GetString("CheckUpdatesUnsupportedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Can&apos;t Check for Updates 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdatesUnsupportedTitle {
+            get {
+                return ResourceManager.GetString("CheckUpdatesUnsupportedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Clear 的本地化字符串。
         /// </summary>
         public static string ClearBtn {
@@ -284,6 +473,15 @@ namespace NekoVpk.Lang {
         public static string CollectionMode {
             get {
                 return ResourceManager.GetString("CollectionMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 {0} batch(es) failed to load - the collection may be incomplete. 的本地化字符串。
+        /// </summary>
+        public static string CollectionPartialLoadMsg {
+            get {
+                return ResourceManager.GetString("CollectionPartialLoadMsg", resourceCulture);
             }
         }
         
@@ -504,6 +702,15 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Failed to create the folder: {0} 的本地化字符串。
+        /// </summary>
+        public static string CreateFolderFailedMsg {
+            get {
+                return ResourceManager.GetString("CreateFolderFailedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Delete Addon 的本地化字符串。
         /// </summary>
         public static string DeleteAddon {
@@ -537,6 +744,15 @@ namespace NekoVpk.Lang {
         public static string DeleteFailedTitle {
             get {
                 return ResourceManager.GetString("DeleteFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Failed to delete the folder: {0} 的本地化字符串。
+        /// </summary>
+        public static string DeleteFolderFailedMsg {
+            get {
+                return ResourceManager.GetString("DeleteFolderFailedMsg", resourceCulture);
             }
         }
         
@@ -678,11 +894,200 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Delete folder 的本地化字符串。
+        /// </summary>
+        public static string FolderDelete {
+            get {
+                return ResourceManager.GetString("FolderDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete the empty folder &quot;{0}&quot;? 的本地化字符串。
+        /// </summary>
+        public static string FolderDeleteEmptyMsg {
+            get {
+                return ResourceManager.GetString("FolderDeleteEmptyMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete the folder &quot;{0}&quot; and everything inside it ({1} files)? This cannot be undone. 的本地化字符串。
+        /// </summary>
+        public static string FolderDeleteMsg {
+            get {
+                return ResourceManager.GetString("FolderDeleteMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete {0} folders and everything inside them ({1} files)? This cannot be undone. 的本地化字符串。
+        /// </summary>
+        public static string FolderDeleteMultiMsg {
+            get {
+                return ResourceManager.GetString("FolderDeleteMultiMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Clear the folder selection 的本地化字符串。
+        /// </summary>
+        public static string FolderDeselectAllToolTip {
+            get {
+                return ResourceManager.GetString("FolderDeselectAllToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Date modified 的本地化字符串。
+        /// </summary>
+        public static string FolderInfoModified {
+            get {
+                return ResourceManager.GetString("FolderInfoModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Name 的本地化字符串。
+        /// </summary>
+        public static string FolderInfoName {
+            get {
+                return ResourceManager.GetString("FolderInfoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 VPK files 的本地化字符串。
+        /// </summary>
+        public static string FolderInfoVpkCount {
+            get {
+                return ResourceManager.GetString("FolderInfoVpkCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Invert the folder selection 的本地化字符串。
+        /// </summary>
+        public static string FolderInvertSelectionToolTip {
+            get {
+                return ResourceManager.GetString("FolderInvertSelectionToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 {0} VPK(s) 的本地化字符串。
+        /// </summary>
+        public static string FolderItemCount {
+            get {
+                return ResourceManager.GetString("FolderItemCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Folder mode 的本地化字符串。
+        /// </summary>
+        public static string FolderModeToolTip {
+            get {
+                return ResourceManager.GetString("FolderModeToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Please enter a folder name. 的本地化字符串。
+        /// </summary>
+        public static string FolderNameEmpty {
+            get {
+                return ResourceManager.GetString("FolderNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 A folder with this name already exists. 的本地化字符串。
+        /// </summary>
+        public static string FolderNameExists {
+            get {
+                return ResourceManager.GetString("FolderNameExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The folder name contains invalid characters. 的本地化字符串。
+        /// </summary>
+        public static string FolderNameInvalid {
+            get {
+                return ResourceManager.GetString("FolderNameInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 This name is reserved (workshop and SourceMod related folders are not shown). 的本地化字符串。
+        /// </summary>
+        public static string FolderNameReserved {
+            get {
+                return ResourceManager.GetString("FolderNameReserved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Rename 的本地化字符串。
+        /// </summary>
+        public static string FolderRename {
+            get {
+                return ResourceManager.GetString("FolderRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Select all folders 的本地化字符串。
+        /// </summary>
+        public static string FolderSelectAllToolTip {
+            get {
+                return ResourceManager.GetString("FolderSelectAllToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 {0} folders selected 的本地化字符串。
+        /// </summary>
+        public static string FolderSelectedCount {
+            get {
+                return ResourceManager.GetString("FolderSelectedCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Select 的本地化字符串。
+        /// </summary>
+        public static string FolderSelectItem {
+            get {
+                return ResourceManager.GetString("FolderSelectItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Folder 的本地化字符串。
+        /// </summary>
+        public static string FolderTypeText {
+            get {
+                return ResourceManager.GetString("FolderTypeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Go to apply page 的本地化字符串。
         /// </summary>
         public static string GoToApplyPage {
             get {
                 return ResourceManager.GetString("GoToApplyPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Grid view 的本地化字符串。
+        /// </summary>
+        public static string GridViewToolTip {
+            get {
+                return ResourceManager.GetString("GridViewToolTip", resourceCulture);
             }
         }
         
@@ -746,6 +1151,15 @@ namespace NekoVpk.Lang {
         public static string InvertSelectionToolTip {
             get {
                 return ResourceManager.GetString("InvertSelectionToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Items requested per page 的本地化字符串。
+        /// </summary>
+        public static string ItemsPerPageToolTip {
+            get {
+                return ResourceManager.GetString("ItemsPerPageToolTip", resourceCulture);
             }
         }
         
@@ -831,6 +1245,42 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Failed to move &quot;{0}&quot;: {1} 的本地化字符串。
+        /// </summary>
+        public static string MoveFailedMsg {
+            get {
+                return ResourceManager.GetString("MoveFailedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Move failed 的本地化字符串。
+        /// </summary>
+        public static string MoveFailedTitle {
+            get {
+                return ResourceManager.GetString("MoveFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 &quot;{0}&quot; already exists in the target folder. 的本地化字符串。
+        /// </summary>
+        public static string MoveFileExistsMsg {
+            get {
+                return ResourceManager.GetString("MoveFileExistsMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Move to 的本地化字符串。
+        /// </summary>
+        public static string MoveToFolder {
+            get {
+                return ResourceManager.GetString("MoveToFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 No 的本地化字符串。
         /// </summary>
         public static string MsgBoxNo {
@@ -854,6 +1304,33 @@ namespace NekoVpk.Lang {
         public static string MsgBoxYes {
             get {
                 return ResourceManager.GetString("MsgBoxYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 New folder 的本地化字符串。
+        /// </summary>
+        public static string NewFolder {
+            get {
+                return ResourceManager.GetString("NewFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Folder name 的本地化字符串。
+        /// </summary>
+        public static string NewFolderWatermark {
+            get {
+                return ResourceManager.GetString("NewFolderWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Next page 的本地化字符串。
+        /// </summary>
+        public static string NextPageToolTip {
+            get {
+                return ResourceManager.GetString("NextPageToolTip", resourceCulture);
             }
         }
         
@@ -890,6 +1367,24 @@ namespace NekoVpk.Lang {
         public static string OpenWebpage {
             get {
                 return ResourceManager.GetString("OpenWebpage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Page 的本地化字符串。
+        /// </summary>
+        public static string PageLabel {
+            get {
+                return ResourceManager.GetString("PageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Previous page 的本地化字符串。
+        /// </summary>
+        public static string PrevPageToolTip {
+            get {
+                return ResourceManager.GetString("PrevPageToolTip", resourceCulture);
             }
         }
         
@@ -932,6 +1427,15 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Failed to rename the folder: {0} 的本地化字符串。
+        /// </summary>
+        public static string RenameFolderFailedMsg {
+            get {
+                return ResourceManager.GetString("RenameFolderFailedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Reset Tags 的本地化字符串。
         /// </summary>
         public static string ResetTags {
@@ -955,6 +1459,15 @@ namespace NekoVpk.Lang {
         public static string Scan {
             get {
                 return ResourceManager.GetString("Scan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Search 的本地化字符串。
+        /// </summary>
+        public static string SearchButtonToolTip {
+            get {
+                return ResourceManager.GetString("SearchButtonToolTip", resourceCulture);
             }
         }
         
@@ -1085,11 +1598,20 @@ namespace NekoVpk.Lang {
         }
         
         /// <summary>
-        ///   查找类似 API Key 的本地化字符串。
+        ///   查找类似 Steam Web API Key 的本地化字符串。
         /// </summary>
         public static string SettingWebApiKey {
             get {
                 return ResourceManager.GetString("SettingWebApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Don&apos;t create backup when switching variant 的本地化字符串。
+        /// </summary>
+        public static string SkipVariantBackup {
+            get {
+                return ResourceManager.GetString("SkipVariantBackup", resourceCulture);
             }
         }
         
@@ -1172,6 +1694,39 @@ namespace NekoVpk.Lang {
         public static string TagsFilter {
             get {
                 return ResourceManager.GetString("TagsFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Theme color 的本地化字符串。
+        /// </summary>
+        public static string ThemeColor {
+            get {
+                return ResourceManager.GetString("ThemeColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Default 的本地化字符串。
+        /// </summary>
+        public static string ThemeColorDefault {
+            get {
+                return ResourceManager.GetString("ThemeColorDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Enter a color such as #54A9FF. 的本地化字符串。
+        /// </summary>
+        public static string ThemeColorInvalid {
+            get {
+                return ResourceManager.GetString("ThemeColorInvalid", resourceCulture);
+            }
+        }
+        
+        public static string ThemeColorSystem {
+            get {
+                return ResourceManager.GetString("ThemeColorSystem", resourceCulture);
             }
         }
         

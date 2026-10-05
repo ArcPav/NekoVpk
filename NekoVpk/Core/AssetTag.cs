@@ -2,6 +2,7 @@
 using NekoVpk.ViewModels;
 using ReactiveUI;
 using SteamDatabase.ValvePak;
+using System.Linq;
 
 namespace NekoVpk.Core
 {
@@ -14,6 +15,8 @@ namespace NekoVpk.Core
         public Glob[] Globs { get; set; }
 
         public string[]? Type { get; set; }
+
+        public string[]? Mutex { get; set; }
 
         public AssetTagProperty(string name, Glob[] globs, string color = "", string[]? alias = null) {
             Name = name; Color = color; Globs = globs; Type = alias;
@@ -35,6 +38,21 @@ namespace NekoVpk.Core
         public override int GetHashCode()
         {
             return Name.GetHashCode();
+        }
+
+        static bool DeclaresMutex(AssetTagProperty from, AssetTagProperty to)
+        {
+            if (from.Mutex == null) return false;
+            return from.Mutex.Contains("All") || from.Mutex.Contains(to.Name);
+        }
+
+        public static bool AreMutuallyExclusive(AssetTagProperty a, AssetTagProperty b)
+        {
+            if (a.Name == b.Name) return false;
+            if (a.Type == null || b.Type == null) return false;
+            if (!a.Type.Intersect(b.Type).Any()) return false;
+
+            return DeclaresMutex(a, b) || DeclaresMutex(b, a);
         }
 
         public bool IsMatch(string path)
@@ -63,6 +81,8 @@ namespace NekoVpk.Core
         public Glob[] Globs { get => TaggedAssets.Tags[Index].Globs; }
 
         public string[]? Type { get => TaggedAssets.Tags[Index]?.Type; }
+
+        public string[]? Mutex { get => TaggedAssets.Tags[Index]?.Mutex; }
 
         bool _Enable;
 
