@@ -66,9 +66,16 @@ namespace NekoVpk.Views
             if (storageProvider is null) return;
 
             IStorageFolder? suggestedStartLocation = null;
-            if (NekoSettings.Default.GameDir != "")
+            if (!string.IsNullOrWhiteSpace(NekoSettings.Default.GameDir)
+                && Uri.TryCreate(NekoSettings.Default.GameDir, UriKind.Absolute, out var startUri))
             {
-                suggestedStartLocation = await storageProvider.TryGetFolderFromPathAsync(new Uri(NekoSettings.Default.GameDir));
+                try
+                {
+                    suggestedStartLocation = await storageProvider.TryGetFolderFromPathAsync(startUri);
+                }
+                catch (Exception)
+                {
+                }
             }
             var result = await storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
             {
@@ -108,7 +115,6 @@ namespace NekoVpk.Views
             }
             catch (Exception ex)
             {
-                //System.Diagnostics.Debug.WriteLine($"打开申请页面失败: {ex.Message}");
             }
         }
     }

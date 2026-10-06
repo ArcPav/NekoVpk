@@ -672,3 +672,14 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
+
+
+--------------------------------------------------
+
+
+The interface icons in this project are from Material Design Icons
+(Pictogrammers / Google Material Design), licensed under the
+Apache License 2.0.
+
+  Source:  <https://pictogrammers.com/library/mdi/>
+  License: <https://www.apache.org/licenses/LICENSE-2.0>

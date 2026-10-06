@@ -150,6 +150,9 @@
   <data name="AllSelectToolTip" xml:space="preserve">
     <value>全选</value>
   </data>
+  <data name="GridViewToolTip" xml:space="preserve">
+    <value>网格/大图模式</value>
+  </data>
   <data name="Select" xml:space="preserve">
     <value>勾选</value>
   </data>
@@ -176,6 +179,18 @@
   </data>
   <data name="SearchWorkshop" xml:space="preserve">
     <value>搜索创意工坊</value>
+  </data>
+  <data name="ItemsPerPageToolTip" xml:space="preserve">
+    <value>每次请求的数量</value>
+  </data>
+  <data name="PrevPageToolTip" xml:space="preserve">
+    <value>上一页</value>
+  </data>
+  <data name="NextPageToolTip" xml:space="preserve">
+    <value>下一页</value>
+  </data>
+  <data name="PageLabel" xml:space="preserve">
+    <value>第</value>
   </data>
   <data name="CancelDownload" xml:space="preserve">
     <value>取消下载</value>
@@ -238,13 +253,34 @@
     <value>游戏目录</value>
   </data>
   <data name="SettingWebApiKey" xml:space="preserve">
-    <value>API Key</value>
+    <value>Steam Web API Key</value>
   </data>
   <data name="GoToApplyPage" xml:space="preserve">
     <value>跳转到申请页</value>
   </data>
   <data name="SteamApiKeyRequired" xml:space="preserve">
     <value>*🌐要使用在线搜索功能必须填写此项</value>
+  </data>
+  <data name="ApiKeyValidateHint" xml:space="preserve">
+    <value>点击以验证密钥是否有效</value>
+  </data>
+  <data name="ApiKeyValidating" xml:space="preserve">
+    <value>验证中...</value>
+  </data>
+  <data name="ApiKeyValidSuccess" xml:space="preserve">
+    <value>验证通过</value>
+  </data>
+  <data name="ApiKeyValidFailed" xml:space="preserve">
+    <value>失败 {0}</value>
+  </data>
+  <data name="ApiKeyErrorInvalid" xml:space="preserve">
+    <value>密钥无效或已被吊销</value>
+  </data>
+  <data name="ApiKeyErrorTimeout" xml:space="preserve">
+    <value>请求超时</value>
+  </data>
+  <data name="ApiKeyErrorNetwork" xml:space="preserve">
+    <value>网络请求失败</value>
   </data>
   <data name="CompressionLevel" xml:space="preserve">
     <value>压缩等级</value>
@@ -266,6 +302,9 @@
   </data>
   <data name="IgnoreVpkErrors" xml:space="preserve">
     <value>忽略 VPK 读取错误</value>
+  </data>
+  <data name="SkipVariantBackup" xml:space="preserve">
+    <value>切换包体时不生成备份</value>
   </data>
   <data name="ClearSearchAfterDownload" xml:space="preserve">
     <value>下载完成后清空搜索框</value>
@@ -491,6 +530,9 @@
   <data name="EnableConflictDetection" xml:space="preserve">
     <value>模组冲突检测</value>
   </data>
+  <data name="AutoSizeColumnsOnSearch" xml:space="preserve">
+    <value>刷新自动调整列宽</value>
+  </data>
   <data name="SortOrder" xml:space="preserve">
     <value>热度排序</value>
   </data>
@@ -505,5 +547,149 @@
   </data>
   <data name="SortUpdated" xml:space="preserve">
     <value>最近更新</value>
+  </data>
+  <data name="CheckUpdatesToolTip" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="CheckUpdatesMenuItem" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="CheckUpdatesNoneTitle" xml:space="preserve">
+    <value>检查更新完成</value>
+  </data>
+  <data name="CheckUpdatesNoneMsg" xml:space="preserve">
+    <value>未发现需要更新的模组</value>
+  </data>
+  <data name="CheckUpdatesFoundTitle" xml:space="preserve">
+    <value>检测到更新</value>
+  </data>
+  <data name="CheckUpdatesConfirmMsg" xml:space="preserve">
+    <value>是否更新以下模组:</value>
+  </data>
+  <data name="CheckUpdatesMoreCount" xml:space="preserve">
+    <value>...等 {0} 个</value>
+  </data>
+  <data name="CheckUpdatesFailedTitle" xml:space="preserve">
+    <value>检查更新失败</value>
+  </data>
+  <data name="CheckUpdatesDownloadFailedMsg" xml:space="preserve">
+    <value>以下模组更新失败:</value>
+  </data>
+  <data name="CheckUpdatesUnsupportedTitle" xml:space="preserve">
+    <value>无法检查更新</value>
+  </data>
+  <data name="CheckUpdatesUnsupportedMsg" xml:space="preserve">
+    <value>该模组不支持检查更新</value>
+  </data>
+  <data name="CollectionPartialLoadMsg" xml:space="preserve">
+    <value>有 {0} 批加载失败,合集可能未完全显示</value>
+  </data>
+  <data name="FolderModeToolTip" xml:space="preserve">
+    <value>文件夹模式</value>
+  </data>
+  <data name="BackToFolders" xml:space="preserve">
+    <value>返回文件夹列表</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>新建文件夹</value>
+  </data>
+  <data name="NewFolderWatermark" xml:space="preserve">
+    <value>文件夹名称</value>
+  </data>
+  <data name="FolderItemCount" xml:space="preserve">
+    <value>{0} 个VPK</value>
+  </data>
+  <data name="FolderNameEmpty" xml:space="preserve">
+    <value>请输入文件夹名称。</value>
+  </data>
+  <data name="FolderNameInvalid" xml:space="preserve">
+    <value>文件夹名称包含非法字符。</value>
+  </data>
+  <data name="FolderNameReserved" xml:space="preserve">
+    <value>该名称为保留名称（workshop 和 SourceMod 相关文件夹不会显示）。</value>
+  </data>
+  <data name="FolderNameExists" xml:space="preserve">
+    <value>已存在同名文件夹。</value>
+  </data>
+  <data name="CreateFolderFailedMsg" xml:space="preserve">
+    <value>创建文件夹失败：{0}</value>
+  </data>
+  <data name="MoveToFolder" xml:space="preserve">
+    <value>移动</value>
+  </data>
+  <data name="MoveFailedTitle" xml:space="preserve">
+    <value>移动失败</value>
+  </data>
+  <data name="MoveFileExistsMsg" xml:space="preserve">
+    <value>目标文件夹中已存在“{0}”。</value>
+  </data>
+  <data name="MoveFailedMsg" xml:space="preserve">
+    <value>移动“{0}”失败：{1}</value>
+  </data>
+  <data name="FolderRename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="FolderDelete" xml:space="preserve">
+    <value>删除文件夹</value>
+  </data>
+  <data name="FolderDeleteMsg" xml:space="preserve">
+    <value>确定删除文件夹“{0}”及其中的全部内容（{1} 个文件）吗？此操作无法撤销。</value>
+  </data>
+  <data name="FolderDeleteEmptyMsg" xml:space="preserve">
+    <value>确定删除空文件夹“{0}”吗？</value>
+  </data>
+  <data name="DeleteFolderFailedMsg" xml:space="preserve">
+    <value>删除文件夹失败：{0}</value>
+  </data>
+  <data name="RenameFolderFailedMsg" xml:space="preserve">
+    <value>重命名文件夹失败：{0}</value>
+  </data>
+  <data name="FolderDeleteMultiMsg" xml:space="preserve">
+    <value>确定删除这 {0} 个文件夹及其中的全部内容（共 {1} 个文件）吗？此操作无法撤销。</value>
+  </data>
+  <data name="FolderInfoName" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="FolderTypeText" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="FolderInfoModified" xml:space="preserve">
+    <value>修改日期</value>
+  </data>
+  <data name="FolderInfoVpkCount" xml:space="preserve">
+    <value>VPK 数量</value>
+  </data>
+  <data name="FolderSelectedCount" xml:space="preserve">
+    <value>已选择 {0} 个文件夹</value>
+  </data>
+  <data name="SearchButtonToolTip" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="FolderSelectItem" xml:space="preserve">
+    <value>选中</value>
+  </data>
+  <data name="FolderSelectAllToolTip" xml:space="preserve">
+    <value>选中所有文件夹</value>
+  </data>
+  <data name="FolderDeselectAllToolTip" xml:space="preserve">
+    <value>取消选中所有文件夹</value>
+  </data>
+  <data name="FolderInvertSelectionToolTip" xml:space="preserve">
+    <value>反选文件夹</value>
+  </data>
+  <data name="ThemeColor" xml:space="preserve">
+    <value>主题颜色</value>
+  </data>
+  <data name="ThemeColorDefault" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="ThemeColorInvalid" xml:space="preserve">
+    <value>请输入形如 #54A9FF 的颜色。</value>
+  </data>
+  <data name="ThemeColorSystem" xml:space="preserve">
+    <value>跟随系统主题色</value>
+  </data>
+  <data name="BackgroundTransparencyLabel" xml:space="preserve">
+    <value>窗口透明度</value>
   </data>
 </root>

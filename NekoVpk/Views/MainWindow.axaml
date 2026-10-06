@@ -8,7 +8,7 @@
         x:Class="NekoVpk.Views.MainWindow"
         Icon="/Assets/NekoVpk.ico"
         Title="NekoVpk"
-        Width="1366" Height="768"
+        Width="1366" Height="768" MinWidth="1100" MinHeight="500"
         WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Mica,AcrylicBlur,Blur,None"
         ExtendClientAreaToDecorationsHint="True"
@@ -19,7 +19,8 @@
         FontSize="{Binding UserFontSize}">
     <Grid>
         <Image Source="{Binding BackgroundImage}" Stretch="{Binding BackgroundStretch}" IsHitTestVisible="False"/>
-        <Rectangle Fill="Black" Opacity="{Binding BackgroundDimOpacity}" IsHitTestVisible="False"/>
+        <Rectangle Fill="Black" Opacity="{Binding BackgroundDimOpacity}" IsHitTestVisible="False" IsVisible="{Binding HasBackgroundImage}"/>
+        <Rectangle Fill="{DynamicResource SemiColorBackground0}" Opacity="{Binding BackgroundDimOpacity}" IsHitTestVisible="False" IsVisible="{Binding !HasBackgroundImage}"/>
         <Grid RowDefinitions="25, *">
             <StackPanel Grid.Row="0" 
                         Orientation="Horizontal" 
